@@ -1,0 +1,23 @@
+# Craft CMS (typical layout after `composer create-project craftcms/cms`)
+/.env
+/.env.*
+!/.env.example
+
+/vendor/
+/node_modules/
+
+# Runtime / generated
+/storage/*
+!/storage/.gitignore
+!/storage/rebrand/.gitignore
+
+/web/cpresources/
+/web/assets/*
+!/web/assets/.gitignore
+
+# IDE / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
