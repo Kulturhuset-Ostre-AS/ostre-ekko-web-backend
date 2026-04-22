@@ -1,0 +1,20 @@
+# Copy to terraform.tfvars (gitignored) and adjust.
+
+project_id = "my-customer-project-id"
+region     = "europe-north1"
+name_prefix = "ekko"
+
+# Optional: use a custom VPC if default was removed by org policy.
+# vpc_network_name = "my-vpc"
+
+# Start small; bump for production traffic.
+# db_tier = "db-custom-2-7680"
+
+# Turn on after first successful apply if you want Terraform destroy blocked.
+# sql_deletion_protection = true
+
+# Temporary: allow MySQL client from your home IP over public IP (not required for gcloud sql import).
+# sql_public_ip = true
+# sql_authorized_cidrs = {
+#   home = "203.0.113.10/32"
+# }

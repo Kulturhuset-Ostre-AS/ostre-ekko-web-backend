@@ -18,6 +18,17 @@
 # IDE / OS
 .DS_Store
 .idea/
-.vscode/
 *.swp
 *.swo
+
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+!terraform/terraform.tfvars.example
+terraform/crash.log
+terraform/crash.*.log
+terraform/override.tf
+terraform/*_override.tf

@@ -1,0 +1,14 @@
+{
+  "terminal.integrated.env.osx": {
+    "CLOUDSDK_CORE_PROJECT": "ostre-ekko-web-backend",
+    "CLOUDSDK_CORE_ACCOUNT": "admin@ekko.no"
+  },
+  "terminal.integrated.env.linux": {
+    "CLOUDSDK_CORE_PROJECT": "ostre-ekko-web-backend",
+    "CLOUDSDK_CORE_ACCOUNT": "admin@ekko.no"
+  },
+  "terminal.integrated.env.windows": {
+    "CLOUDSDK_CORE_PROJECT": "ostre-ekko-web-backend",
+    "CLOUDSDK_CORE_ACCOUNT": "admin@ekko.no"
+  }
+}
