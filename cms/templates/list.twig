@@ -1,0 +1,55 @@
+{#
+ # Homepage template
+ # ---------------
+ #
+ # When this template gets loaded, it will be because someone has accessed
+ # http://yoursite.com/ (without any URI). Craft checks to see if you have
+ # a Single section set to be the Homepage (as you do, by default), and
+ # loads the section’s Template (this file). A special ‘entry’ variable
+ # will already be set for you, assigned to the Homepage entry.
+ #
+ # It's worth noting that even if you didn't have a Homepage Single section,
+ # as long as this template remains at craft/templates/index.html, it
+ # would still be the one to get loaded when accessing http://yoursite.com/,
+ # albeit without an ‘entry’ variable already set for you.
+ #
+ # See this page for more details on how Craft routes requests:
+ # http://buildwithcraft.com/docs/routing
+ #}
+
+{% extends "_layout" %}
+
+{% block content %}
+
+	<form class="newsletter-form" action="" method="POST">
+	  <input type="hidden" name="action" value="mailchimpSubscribe/list/Subscribe">
+
+	  {% if mailchimpSubscribe is defined %}
+	    {% if (not mailchimpSubscribe.success) and (mailchimpSubscribe.errorCode!='1000') %}
+	      <p>An error occured. Please try again.</p>
+	    {% endif %}
+
+	    {% if mailchimpSubscribe.success %}
+	      <p>Thank you for signing up!</p>
+	    {% endif %}
+	  {% endif %}
+
+	  <div class="field-line">
+	    <label>First name:</label>
+	    <input type="text" name="mcvars[FNAME]" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.vars.FNAME }}{% endif %}"/>
+	  </div>
+
+	  <div class="field-line">
+	    <label>Last name:</label>
+	    <input type="text" name="mcvars[LNAME]" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.vars.LNAME }}{% endif %}"/>
+	  </div>
+
+	  <div class="field-line">
+	    <label{% if (mailchimpSubscribe is defined) and (mailchimpSubscribe.errorCode=='1000') %} class="error"{% endif %}>Email:</label>
+	    <input type="text" name="email" value="{% if (mailchimpSubscribe is defined) and (not mailchimpSubscribe.success) %}{{ mailchimpSubscribe.values.email }}{% endif %}"/>
+	  </div>
+
+	  <input type="submit" name="" value="Subscribe"/>
+	</form>
+
+{% endblock %}

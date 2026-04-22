@@ -1,0 +1,38 @@
+fieldLayouts:
+  91843676-81cd-462b-9434-cbd2ba994c8e:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\AssetTitleField
+            warning: null
+            width: 100
+        name: Innhold
+        sortOrder: 1
+handle: eventPhoto
+hasUrls: true
+name: 'Event Photo'
+settings:
+  path: '@assetBasePath/photos/events'
+sortOrder: 2
+type: craft\volumes\Local
+url: '@assetBaseUrl/photos/events'

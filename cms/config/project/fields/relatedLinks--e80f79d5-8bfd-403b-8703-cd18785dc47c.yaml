@@ -1,0 +1,16 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 3626e6f0-4597-4098-b20a-fb662ff583a7 # Artist
+handle: relatedLinks
+instructions: ''
+name: 'Related links'
+searchable: true
+settings:
+  contentTable: '{{%matrixcontent_relatedlinks}}'
+  maxBlocks: null
+  minBlocks: null
+  propagationKeyFormat: null
+  propagationMethod: none
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

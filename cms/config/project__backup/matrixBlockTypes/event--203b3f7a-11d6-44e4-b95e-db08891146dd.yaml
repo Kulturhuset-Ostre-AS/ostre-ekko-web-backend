@@ -1,0 +1,141 @@
+field: 7e6f5fa9-c7c3-4df8-b0f8-c98ee2362329
+fieldLayouts:
+  77c534d4-4463-48f1-812c-bf89758303fd:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 735e30e0-3a6a-43dd-b34f-281cd6d87761
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: eba0ecfa-bdbc-40c1-a6c7-0c553f1f2cfb
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 6db46c9d-527e-48d0-957a-3d79690d4d79
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 748a4e8a-77d5-4e80-aabd-bf595e378994
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 457d2dfa-5bc9-453a-87c3-b20147d4ea1b
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  457d2dfa-5bc9-453a-87c3-b20147d4ea1b:
+    contentColumnType: text
+    fieldGroup: null
+    handle: artists
+    instructions: 'List artists each one on a separate line.'
+    name: Artists
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: '1'
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  6db46c9d-527e-48d0-957a-3d79690d4d79:
+    contentColumnType: datetime
+    fieldGroup: null
+    handle: date
+    instructions: ''
+    name: 'Start date'
+    searchable: true
+    settings:
+      max: null
+      min: null
+      minuteIncrement: '30'
+      showDate: 1
+      showTime: 0
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Date
+  735e30e0-3a6a-43dd-b34f-281cd6d87761:
+    contentColumnType: text
+    fieldGroup: null
+    handle: eventTitle
+    instructions: ''
+    name: Title
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  748a4e8a-77d5-4e80-aabd-bf595e378994:
+    contentColumnType: datetime
+    fieldGroup: null
+    handle: dateEnd
+    instructions: ''
+    name: 'End date'
+    searchable: true
+    settings:
+      max: null
+      min: null
+      minuteIncrement: '30'
+      showDate: 1
+      showTime: 0
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Date
+  eba0ecfa-bdbc-40c1-a6c7-0c553f1f2cfb:
+    contentColumnType: boolean
+    fieldGroup: null
+    handle: isFestival
+    instructions: ''
+    name: 'Is festival'
+    searchable: true
+    settings:
+      default: true
+      offLabel: null
+      onLabel: null
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Lightswitch
+handle: event
+name: Event
+sortOrder: 1

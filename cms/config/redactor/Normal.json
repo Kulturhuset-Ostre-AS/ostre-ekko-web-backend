@@ -1,0 +1,44 @@
+{
+	"lang": "en",
+	"buttons": [
+		"format",
+		"bold",
+		"italic",
+		"underline",
+		"lists",
+		"link",
+		"file",
+		"html"
+	],
+	"plugins": [
+		"fullscreen"
+	],
+	"formatting": [
+		"p"
+	],
+	"formattingAdd": {
+		"header-normal": {
+			"title": "Header",
+			"api": "module.block.format",
+			"args": {
+				"tag": "h2"
+			}
+		},
+		"paragraph-small": {
+			"title": "Small text",
+			"api": "module.block.format",
+			"args": {
+				"tag": "p",
+				"class": "small",
+				"type": "toggle"
+			}
+		},
+		"header-small": {
+			"title": "Small header",
+			"api": "module.block.format",
+			"args": {
+				"tag": "h4"
+			}
+		}
+	}
+}

@@ -1,0 +1,17 @@
+columnSuffix: null
+contentColumnType: datetime
+fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f # Default
+handle: date
+instructions: ''
+name: Date
+searchable: true
+settings:
+  max: null
+  min: null
+  minuteIncrement: '30'
+  showDate: 1
+  showTime: 0
+  showTimeZone: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Date

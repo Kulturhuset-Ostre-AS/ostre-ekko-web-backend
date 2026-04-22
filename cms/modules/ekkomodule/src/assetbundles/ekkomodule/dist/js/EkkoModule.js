@@ -1,0 +1,11 @@
+/**
+ * Ekko module for Craft CMS
+ *
+ * Ekko JS
+ *
+ * @author    Paulius Friedt
+ * @copyright Copyright (c) 2020 Paulius Friedt
+ * @link      http://pauliusfriedt.com
+ * @package   EkkoModule
+ * @since     1.0.0
+ */

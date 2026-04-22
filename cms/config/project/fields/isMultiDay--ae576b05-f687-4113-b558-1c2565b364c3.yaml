@@ -1,0 +1,14 @@
+columnSuffix: null
+contentColumnType: boolean
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
+handle: isMultiDay
+instructions: ''
+name: 'Multiple Day Event'
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

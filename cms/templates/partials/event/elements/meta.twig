@@ -1,0 +1,49 @@
+{#
+ # Meta block for single event page.
+ # Display information related to whole event (day).
+ #
+ # available fields:
+ # - event
+ #}
+
+{% set location = craft.ekko.prepLocation(event.location) %}
+
+<div class="meta-block meta-block--top">
+	<div class="meta-block__row-container">
+		{# Date/Time #}
+		<div class="meta-block__row">
+			<div class="meta-block__title">{{ 'Dato/Tid'|t }}</div>
+			<div class="meta-block__content">
+				{{ event.date|date('D d.F')|replace('. ', ' ')|replace('.', '. ')|title }}{{ event.dateEnd ? ' - '~event.dateEnd|date('D d.F')|replace('. ', ' ')|replace('.', '. ')|title : '' }}<br>
+				{% if not event.isMultiDay %}
+					{{ event.openingTime|date('H:i') }}{{ event.closingTime ? ' - ' ~ event.closingTime|date('H:i') : '' }}
+				{% endif %}
+			</div>
+		</div>
+
+		{# Location #}
+		<div class="meta-block__row">
+			<div class="meta-block__title">{{ 'Sted'|t }}</div>
+			<div class="meta-block__content">
+				{% if location is defined %}
+					{{ location.fullTitle }}
+				{% endif %}
+			</div>
+		</div>
+
+		{# Ticket Description #}
+		{% if event.ticketDescription|length %}
+			<div class="meta-block__row">
+				<div class="meta-block__title">{{ 'Billetter'|t }}</div>
+				<div class="meta-block__content">
+					{{ event.ticketDescription|nl2br|raw }}
+				</div>
+			</div>
+		{% endif %}
+	</div>
+
+	{# Ticket Link #}
+	{% if event.ticketLink|length %}
+		<a class="ticket-button" href="{{ event.ticketLink }}" target="_blank">{{ 'Kjøp billetter'|t }}</a>
+	{% endif %}
+</div>

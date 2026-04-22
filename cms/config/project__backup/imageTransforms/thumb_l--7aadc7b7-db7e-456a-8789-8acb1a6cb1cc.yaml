@@ -1,0 +1,9 @@
+format: null
+handle: thumb_l
+height: 1000
+interlace: none
+mode: crop
+name: 'Thumb (large)'
+position: center-center
+quality: 82
+width: 1000

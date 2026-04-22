@@ -1,0 +1,92 @@
+fieldLayouts:
+  74ebd6c8-6b9a-4f7a-a5d7-e57f563412f9:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: aac99d83-a88a-4a4b-b3fd-6c95266a5b49
+            instructions: ''
+            label: ''
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 56271c8c-5fe9-413c-bcb0-4c1e876ffe55
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 744a5e0e-c714-4887-88b3-31071a9077da
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 6b9c6d34-b4f1-4d0b-8d3f-f93f629303a5
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 2ca9087d-6867-4b6b-9f29-096d9d6c0206
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 59128b6e-6a78-4cb2-b45d-de838ae65db7
+            instructions: ''
+            label: ''
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Schedule
+        sortOrder: 1
+handle: performance
+hasTitleField: false
+name: Performance
+section: 8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5
+sortOrder: 0
+titleFormat: '{date|date("Y-m-d")} - {artist.first().title|default("")|wordLimit(10)}'
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

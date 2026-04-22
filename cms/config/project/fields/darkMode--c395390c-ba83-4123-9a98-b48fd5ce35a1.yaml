@@ -1,0 +1,14 @@
+columnSuffix: fxfbepdj
+contentColumnType: boolean
+fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f # Default
+handle: darkMode
+instructions: 'Turn on page dark mode'
+name: 'Dark mode'
+searchable: false
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

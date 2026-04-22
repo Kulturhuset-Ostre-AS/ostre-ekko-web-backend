@@ -1,0 +1,33 @@
+{% set autoplay = autoplay|default(0) %}
+{% set embed = craft.videoEmbedder.embed(project.videoUrl, { autoplay: autoplay }) %}
+
+{# {% set title = project.title %} #}
+{% set title =  project.projectTitle ? "#{project.artistName} «#{project.projectTitle}»" : project.artistName %}
+{% set sectionUrlFormat = 'digitalarena' %}
+
+<div class="media-grid reverse">
+  <div class="arena-content-container {{ project.pageContent ? 'with-content' : '' }}" data-playing-dim>
+    <div class="title-container">
+      <h2 class="project-title">{{ title }}</h2>
+      <div class="project-tag tags-container">
+        {% for tag in project.projectTag.all() %}
+          <a class="content-link" href="{{ url("/#{sectionUrlFormat}/tag/#{tag.slug}")}}">#{{ tag.title }}</a>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if project.pageContent %}
+      <div class="description-container" data-hide-content>{{ project.pageContent }}</div>
+      {% set artistEntry = project.artist.one() %}
+      {% if artistEntry %}
+        <p data-hide-content>
+          <a href="{{ artistEntry.url }}">Les mer om {{ project.artistName }}</a>
+        </p>
+      {% endif %}
+    {% endif %}
+  </div>
+  
+  <div class="media-container" js-video-embed>
+    <div class="fitvid">{{ embed }}</div>
+  </div>
+</div>

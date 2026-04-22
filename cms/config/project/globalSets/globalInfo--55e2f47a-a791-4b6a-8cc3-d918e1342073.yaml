@@ -1,0 +1,55 @@
+fieldLayouts:
+  3a2d1a05-53a7-4bcf-975f-db73cc851704:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: b8829325-5023-46d1-b8a7-03d6dc33525b # Description
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 64644874-c3eb-45b1-bef6-5d51b056c516 # Facebook
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 20aece2a-ee02-4c26-b0ad-5006ad525667 # Instagram
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: a2b3d641-b542-4391-a1f7-26d081db16c6 # Twitter
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: e80f79d5-8bfd-403b-8703-cd18785dc47c # Related links
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Innhold
+        sortOrder: 1
+handle: globalInfo
+name: 'Global Information'
+sortOrder: 2

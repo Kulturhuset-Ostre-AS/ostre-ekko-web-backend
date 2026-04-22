@@ -1,0 +1,46 @@
+
+{# 
+ # Festival lineup
+ #}
+
+{# {% cache %} #}
+
+<div class="section__lineup cf">
+    {% for block in entry.lineupStructure %}
+      {% if loop.index == 1 %}
+        <div class="lineup__column">
+          <div class="section__header-content">
+            {{ entry.intro }}
+          </div>
+          <ul>
+      {% endif %}
+
+      {% if block.type == "columnSeparator" %}
+        </ul></div><div class="lineup__column"><ul>
+      {% endif %}
+
+      {% if block.type == "lineupEntry" %}
+        {% if block.performance|length %}
+          {% set p = block.performance.one() %}
+          {% set a = p.artist.one() %}
+
+          {% set meta = a.artistMeta ? a.artistMeta : '' %}
+          
+          {% if '/' in meta %}
+            {% set meta = meta|split('/')[1]|trim %}
+          {% endif %}
+          
+          <li class="lineup__entry lineup__entry--{{ block.textSize }}">
+            {# <a href="#{{ a.slug }}">{{ block.customTitle ? block.customTitle : a.title }}</a> #}
+            <a href="#{{ a.slug }}"><span>{{ a.shortTitle ? a.shortTitle : a.title }}</span>{% if meta %}<span class="meta">({{ meta }})</span>{% endif %}</a>
+          </li>
+        {% endif %}
+      {% endif %}
+
+      {% if loop.last %}
+        </ul></div>
+      {% endif %}
+    {% endfor %}
+</div>
+
+{# {% endcache %} #}

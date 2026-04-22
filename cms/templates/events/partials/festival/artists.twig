@@ -1,0 +1,34 @@
+
+{# 
+ # Artist section list of artist blocks
+ #}
+
+{% for artist in artists %}
+  {% if artist.isVisible %}
+
+    {% set performance = attribute(performancesByArtist, artist.id)[0] %}
+
+    <div id="{{ artist.slug }}" class="block {{ not artist.isFeatured ? 'block--narrow' : 'block--full' }} artist waypoint">
+      <a href="{{ artist.url }}">
+        {% if artist.isFeatured %}
+          {% include "partials/assets/artistFeaturedImage" %}
+        {% else %}
+          {% include "partials/assets/artistFeaturedSmallImage" %}
+        {% endif %}
+      </a>
+      <div class="block__content-wrapper">
+        <header class="block__header -over">
+          {# <div class="block__header-item -side -left">
+            {% include "partials/artist/datetime" %}
+          </div> #}
+          <div class="artist__title block__header-item -center">
+            {% include "partials/artist/title_link" %}
+          </div>
+          {# <div class="block__header-item -side -right">
+            {% include "partials/artist/location" %}
+          </div> #}
+        </header>
+      </div>
+    </div>
+  {% endif %}
+{% endfor %}

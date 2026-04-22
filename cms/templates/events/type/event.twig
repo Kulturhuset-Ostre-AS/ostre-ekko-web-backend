@@ -1,0 +1,82 @@
+
+{# 
+ # Event - event
+ #}
+
+{% extends "_layout" %}
+
+{% set class = 'single event-page' %}
+{% set title = entry.title %}
+
+{# Set variables used in template #}
+{% set event = entry %}
+
+{% set performances = craft.ekko.eventPerformances(event) %}
+{% set artists = craft.ekko.artists(performances) %}
+
+{% set rawPerformances = performances.with(['artist', 'location']).all() %}
+
+{% set currentPerformance = craft.ekko.currentPerformance(performances) %}
+{% set performances = craft.ekko.prepPerformances(rawPerformances) %}
+
+{% set isSingleArtist = artists|length == 1 %}
+
+{# Main content block #}
+
+{% block content %}
+	<section class="section cf">
+
+		<div class="section__side-header u-stick">
+			{% include "partials/assets/eventFeaturedImage" %}
+		</div>
+
+		<div class="section__main">
+
+			<div class="event block">
+
+				<div class="block__content-wrapper">
+					{# Event title #}
+					<header class="block__header block__header--small -over">
+						<div class="block__header-item -center">
+							{{ event.title }}
+						</div>
+					</header>
+
+					{# Event artist list #}
+					<div class="event__header -center">
+						{% include "partials/event/elements/artists" with { withLink: true } %}
+					</div>
+				</div>
+
+				<article class="content content-container event__content">
+					{# Artist description #}
+					{% if isSingleArtist %}
+						{# Used to load content from 'events/partials/event/single-artist-content' #}
+						{% include 'partials/artist/meta' %}
+					{% else %}
+						{# Used to load content from 'events/partials/event/multi-artist-content' #}
+						{% include 'partials/event/elements/meta' %}
+					{% endif %}
+
+					{# Event description #}
+					<div class="content-text">
+						<div class="content-text-wrapper">
+							{% if event.intro or event.description %}
+								{{ event.intro }}
+								{{ event.description }}
+							{% elseif isSingleArtist %}
+								{% set artist = artists|first %}
+								{% include 'partials/elements/content' with {'complexContent': artist.complexContent, content: artist.description} %}
+							{% endif %}
+						</div>
+					</div>
+
+					{# Back link #}
+					<div class="button-wrapper cf">
+						<a class="button button--right" href="{{ siteUrl ~ '#prosjekter' }}">{{ 'Arrangementer'|t }}</a>
+					</div>
+				</article>
+			</div>
+		</div>
+	</section>
+{% endblock %}

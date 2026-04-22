@@ -1,0 +1,14 @@
+columnSuffix: null
+contentColumnType: boolean
+fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b # Index
+handle: festivalLinkEnabled
+instructions: ''
+name: 'Enable link to festival entry'
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

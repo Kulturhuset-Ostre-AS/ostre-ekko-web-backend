@@ -1,0 +1,46 @@
+{#
+ # Festival section partial for use in Homepage (templates/index.twig)
+ #}
+
+{% set hasGraphicElement = indexEntry.festivalSectionGraphicElements|length > 0 %}
+
+{% set sectionContent %}
+    <div {{ indexEntry.festivalSectionTextColor ? 'style=color:' ~ indexEntry.festivalSectionTextColor ~ '!important'}}>
+        {% if indexEntry.festivalSectionTitle %}
+            <h1>{{indexEntry.festivalSectionTitle}}</h1>
+        {% endif %}
+        {% if indexEntry.festivalSectionSubtitle %}
+            <p>{{indexEntry.festivalSectionSubtitle}}</p>
+        {% endif %}
+    </div>
+{% endset %}
+
+{% set festivalSlug  = festivalEntry.slug %}
+{% if festivalSlug == 'ekko-festival-nr-17' %}
+    {% set festivalSlug = 'ekko-festival-2020' %}
+{% endif %}
+
+<div class="section-wrapper">
+    <div class="festival-hero {{festivalSlug}}"
+        {{ indexEntry.festivalSectionBgColor and not hasGraphicElement ? 'style=background-color:' ~ indexEntry.festivalSectionBgColor }}>
+        <div class="festival-hero__wrapper">
+            {% if festivalSlug == 'ekko-festival-2020' %}
+                {% include 'partials/index/festival_media/2020' %}
+            {% elseif hasGraphicElement %}
+                {% for asset in indexEntry.festivalSectionGraphicElements %}
+                    <img src="{{ asset.url }}" class="festival-hero__background-image lazyload" alt="{{ asset.title }}">
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="festival-hero__header">
+            {% if indexEntry.festivalLinkEnabled %}
+                <a href={{festivalEntry.url()}}>
+                    {{ sectionContent }}
+                </a>
+            {% else %}
+                {{ sectionContent }}
+            {% endif %}
+        </div>
+    </div>
+</div>

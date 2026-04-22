@@ -1,0 +1,9 @@
+baseUrl: '@web/en/'
+enabled: true
+handle: en
+hasUrls: true
+language: en
+name: 'EKKO (en)'
+primary: false
+siteGroup: f84c68dd-7976-4d13-9e29-b5f0a95b7320
+sortOrder: 2

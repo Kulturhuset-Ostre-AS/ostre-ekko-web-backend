@@ -1,0 +1,150 @@
+fieldLayouts:
+  74ebd6c8-6b9a-4f7a-a5d7-e57f563412f9:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 496d2b10-36b1-43fb-b114-c61c558b9c57 # Full Title
+            instructions: 'Short title to add to an artists name.'
+            label: 'Performance/Project Title'
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: aac99d83-a88a-4a4b-b3fd-6c95266a5b49 # Date
+            instructions: ''
+            label: ''
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 56271c8c-5fe9-413c-bcb0-4c1e876ffe55 # Time
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 744a5e0e-c714-4887-88b3-31071a9077da # End Time
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: dc8b8360-0719-4c2c-a380-700ba0fb559c # Opening Time
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: a83084f4-78bc-49ff-b261-5a07cc42602f # Closing Time
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 6b9c6d34-b4f1-4d0b-8d3f-f93f629303a5 # Parsed date & time
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 2ca9087d-6867-4b6b-9f29-096d9d6c0206 # Location
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 59128b6e-6a78-4cb2-b45d-de838ae65db7 # Artist
+            instructions: ''
+            label: ''
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: ffb359c7-60c8-490b-8731-0943d3dc9130 # Ekstra info
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Schedule
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: df7b834e-e4f7-4ceb-ae3a-07aa0cd8ca9a # Featured Photo
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 8c14763b-6183-46a0-be68-963de453e209 # Description
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 2
+handle: performance
+hasTitleField: false
+name: Performance
+section: 8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5 # Performance
+sortOrder: 0
+titleFormat: '{date|date("Y-m-d")} - {artist.first().title|default("")|wordLimit(10)}'
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

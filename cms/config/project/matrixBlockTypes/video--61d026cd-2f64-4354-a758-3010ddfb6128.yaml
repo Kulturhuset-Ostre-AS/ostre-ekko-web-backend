@@ -1,0 +1,32 @@
+field: b1f43e32-e00a-4259-837c-60b67111e847 # Content
+fieldLayouts:
+  e109318e-b280-4fce-ae05-ec4dd7cc48ac:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 06c49665-084c-41df-9b0a-7d5cad1989e3 # Video URL
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  06c49665-084c-41df-9b0a-7d5cad1989e3: # Video URL
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: videoUrl
+    instructions: 'Full youtube or vimeo video URL.'
+    name: 'Video URL'
+    searchable: true
+    translationKeyFormat: null
+    translationMethod: none
+    type: mikestecker\videoembedder\fields\Video
+handle: video
+name: 'Video block'
+sortOrder: 2

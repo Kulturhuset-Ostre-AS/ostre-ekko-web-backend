@@ -1,0 +1,32 @@
+contentColumnType: string
+fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b
+handle: festivalSectionGraphicElements
+instructions: 'Choose one graphic element for the festival section on the front-page. Elements should be in landscape format.'
+name: 'Graphic element'
+searchable: true
+settings:
+  allowSelfRelations: false
+  allowedKinds:
+    - image
+  defaultUploadLocationSource: 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  defaultUploadLocationSubpath: ''
+  limit: '1'
+  localizeRelations: false
+  previewMode: full
+  restrictFiles: '1'
+  selectionLabel: ''
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: true
+  singleUploadLocationSource: 'volume:51241002-1701-4f06-ae6e-59496b8a42a2' # Artist Photos
+  singleUploadLocationSubpath: ''
+  source: null
+  sources:
+    - 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  targetSiteId: null
+  useSingleFolder: false
+  validateRelatedElements: false
+  viewMode: large
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Assets

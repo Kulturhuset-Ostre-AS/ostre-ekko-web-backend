@@ -1,0 +1,33 @@
+handle: about
+instructions: ''
+maxNodes: ''
+name: 'Foreningen Ekko'
+permissions:
+  craft\elements\Asset:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Category:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Entry:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Tag:
+    enabled: ''
+    permissions: '*'
+  custom:
+    enabled: '1'
+  verbb\navigation\nodetypes\PassiveType:
+    enabled: '1'
+  verbb\navigation\nodetypes\SiteType:
+    enabled: '1'
+propagateNodes: false
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: # EKKO (en)
+    enabled: '1'
+  cc892d6a-abac-456e-83a9-260fd5616d45: # EKKO (nb)
+    enabled: '1'
+sortOrder: 5
+structure:
+  maxLevels: null
+  uid: ed20c47c-b546-48bd-a04b-a1b8809cabe6

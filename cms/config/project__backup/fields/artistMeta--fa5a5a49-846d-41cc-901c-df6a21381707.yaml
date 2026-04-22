@@ -1,0 +1,18 @@
+contentColumnType: text
+fieldGroup: 3626e6f0-4597-4098-b20a-fb662ff583a7
+handle: artistMeta
+instructions: ''
+name: 'Label / Land'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  columnType: text
+  initialRows: '4'
+  multiline: ''
+  placeholder: ''
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

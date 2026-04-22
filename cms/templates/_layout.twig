@@ -1,0 +1,61 @@
+{% set isArena = 'arena' in class|default('home') %}
+
+<!doctype html>
+<html lang="{{ craft.app.locale.languageId }}" class="supports_no-js">
+	{# {% set ticketFrames = {} %} #}
+	
+	{# Include head part #}
+	{% include "partials/head" %}
+	
+	{# Custom imports for body class based pages #}
+	{% if isArena %}
+		<script src="https://player.vimeo.com/api/player.js"></script>
+		{# {% do view.registerCssFile('https://player.vimeo.com/api/player.js') %} #}
+	{% endif %}
+
+	<body class="{{ class|default('home') }}">
+		{% include "partials/upgrade" %}
+
+		<div class="wrapper" id="top">
+
+			<header class="header">
+				{% include "partials/header" %}
+			</header><!-- .header -->
+
+			<main class="main">
+				{% block content %}{% endblock %}
+			</main><!--.main-->
+
+		</div><!--.wrapper-->
+
+		<footer class="footer">
+			{% include "partials/footer" %}
+		</footer>
+
+		{# {% include "partials/newsletter-modal" %} #}
+		{% include "partials/ticket-modal" %}
+
+		{% if devMode %}
+			<div id="debug"></div>
+		{% endif %}
+
+		{# jquery #}
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<script>window.jQuery || document.write('<script src="{{siteUrl}}assets/js/components/jquery.min.js"><\/script>')</script>
+
+		{{ endBody() }}
+
+		{# conditional js in child templates #}
+		{% block initScripts %}{% endblock %}
+
+		{% if craft.app.env == 'production' %}
+			{% js%}
+				var _gaq=[['_setAccount','UA-35067440-2'],['_trackPageview']];
+				(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+				g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+				s.parentNode.insertBefore(g,s)}(document,'script'));
+			{% endjs %}
+		{% endif %}
+
+	</body>
+</html>

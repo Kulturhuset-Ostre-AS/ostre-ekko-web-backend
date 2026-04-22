@@ -1,0 +1,37 @@
+{% set alt_text = asset.title %}
+
+{% set width = asset.getWidth() %}
+{% set height = asset.getHeight() %}
+
+{% set ratio = width / height %}
+
+
+{# The Imager way #}
+{# https://github.com/aelvan/Imager-Craft#usage #}
+
+{# Default transformation parameters #}
+{% set transformDefaults = { ratio: ratio, position: 'center-center', jpegQuality: 80 } %}
+
+{# Specific transformation parameters #}
+{% set transform = [
+  { width: 1000 },
+  { width: 600 },
+  { width: 400, jpegQuality: 65 }
+] %}
+
+{# Srcset sizes parameters #}
+{% if sizes is not defined %}
+	{% set sizes = [
+		'500px'
+	] %}
+{% endif %}
+
+{# Transform images #}
+{% set transformedImages = craft.imager.transformImage(asset, transform, transformDefaults) %}
+
+<figure style="padding-bottom:{{100 / ratio}}%;" class="artist__image">
+	<img src="{{ craft.imager.base64Pixel(ratio, 1) }}" data-srcset="{{ craft.imager.srcset(transformedImages) }}" data-sizes="{{ sizes|join(', ') }}" class="lazyload">
+	<noscript>
+		<img src="{{ asset.getUrl() }}" width="{{ width }}" height="{{ height }}" alt="{{alt_text}}" />
+	</noscript>
+</figure>

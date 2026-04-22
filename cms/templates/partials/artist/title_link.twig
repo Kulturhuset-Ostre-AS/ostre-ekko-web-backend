@@ -1,0 +1,8 @@
+{% spaceless %}
+	{% set class = "" %}
+	{% if artist.title|length > 30 %}
+		{% set class = "-small" %}
+	{% endif %}
+
+	<a href="{{ artist.url }}" title="{{artist.title}}" class="{{ class }}">{{ artist.title }}{% if artist.artistMeta %}<span class="meta">({{ artist.artistMeta }})</span>{% endif %}</a>
+{% endspaceless %}

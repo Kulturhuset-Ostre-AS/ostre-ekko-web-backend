@@ -1,0 +1,31 @@
+contentColumnType: string
+fieldGroup: eb356161-6f1c-45f0-a453-18af378140dd
+handle: pagePhoto
+instructions: ''
+name: 'Cover photo'
+searchable: true
+settings:
+  allowSelfRelations: false
+  allowedKinds:
+    - image
+  defaultUploadLocationSource: 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  defaultUploadLocationSubpath: ''
+  limit: '1'
+  localizeRelations: false
+  previewMode: full
+  restrictFiles: '1'
+  selectionLabel: 'Legg til bilde'
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: true
+  singleUploadLocationSource: 'volume:51241002-1701-4f06-ae6e-59496b8a42a2' # Artist Photos
+  singleUploadLocationSubpath: ''
+  source: null
+  sources: '*'
+  targetSiteId: null
+  useSingleFolder: false
+  validateRelatedElements: false
+  viewMode: large
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Assets

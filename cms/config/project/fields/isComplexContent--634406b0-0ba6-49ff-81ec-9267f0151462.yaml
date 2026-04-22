@@ -1,0 +1,14 @@
+columnSuffix: hncpufth
+contentColumnType: boolean
+fieldGroup: 2a64c7df-fa74-4b9e-aa76-94dceee51474 # Arena
+handle: isComplexContent
+instructions: ''
+name: 'Content type'
+searchable: false
+settings:
+  default: false
+  offLabel: Simple
+  onLabel: Complex
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

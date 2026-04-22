@@ -1,0 +1,81 @@
+field: 000db67a-24a2-4bcf-9791-76def17c6393
+fieldLayouts:
+  bbf42191-2ef6-4e9c-8c65-3ca91bf95176:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 9fb128a7-501d-4957-a791-b5d87348c98b
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 89a9a51c-1962-45a8-ba0b-bc67a8384dc5
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  9fb128a7-501d-4957-a791-b5d87348c98b:
+    contentColumnType: string
+    fieldGroup: null
+    handle: image
+    instructions: ''
+    name: Image
+    searchable: true
+    settings:
+      allowSelfRelations: false
+      allowedKinds:
+        - image
+      defaultUploadLocationSource: 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+      defaultUploadLocationSubpath: ''
+      limit: '1'
+      localizeRelations: false
+      previewMode: full
+      restrictFiles: '1'
+      selectionLabel: 'Add an image'
+      showSiteMenu: true
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: true
+      singleUploadLocationSource: 'volume:51241002-1701-4f06-ae6e-59496b8a42a2' # Artist Photos
+      singleUploadLocationSubpath: ''
+      source: null
+      sources: '*'
+      targetSiteId: null
+      useSingleFolder: false
+      validateRelatedElements: false
+      viewMode: large
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Assets
+  89a9a51c-1962-45a8-ba0b-bc67a8384dc5:
+    contentColumnType: text
+    fieldGroup: null
+    handle: textOverlay
+    instructions: ''
+    name: 'Text overlay'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: image
+name: 'Image block'
+sortOrder: 3

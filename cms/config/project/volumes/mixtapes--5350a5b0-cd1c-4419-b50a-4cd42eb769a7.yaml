@@ -1,0 +1,40 @@
+fieldLayouts:
+  fbd60a6e-133e-422f-89f0-64973c65e1ee:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\AssetTitleField
+            warning: null
+            width: 100
+        name: Innhold
+        sortOrder: 1
+handle: mixtapes
+hasUrls: true
+name: Mixtapes
+settings:
+  path: '@assetBasePath/mixtapes'
+sortOrder: 4
+titleTranslationKeyFormat: null
+titleTranslationMethod: none
+type: craft\volumes\Local
+url: '@assetBaseUrl/mixtapes'

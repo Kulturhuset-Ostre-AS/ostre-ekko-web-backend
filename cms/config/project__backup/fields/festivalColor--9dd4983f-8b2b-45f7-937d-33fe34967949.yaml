@@ -1,0 +1,11 @@
+contentColumnType: string(7)
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: festivalColor
+instructions: 'Background color for alternative stamp box background. If stamp has a color, this color should be light.'
+name: 'Festival background color'
+searchable: true
+settings:
+  defaultColor: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Color

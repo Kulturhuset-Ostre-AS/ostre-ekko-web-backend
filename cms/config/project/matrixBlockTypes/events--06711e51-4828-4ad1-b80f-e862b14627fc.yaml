@@ -1,0 +1,111 @@
+field: 000db67a-24a2-4bcf-9791-76def17c6393 # Page Structure
+fieldLayouts:
+  1794a43a-c44a-4377-8ac6-abada88396c0:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 7c91a948-4afd-4cfd-9278-1f1851d6fb1b # Event section title
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 901575ef-4d5f-429c-911b-817847ffb9bf # Event entries
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: dbbc363e-8e44-41d8-b264-8a4d0c9af24e # Section description
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  7c91a948-4afd-4cfd-9278-1f1851d6fb1b: # Event section title
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionTitle
+    instructions: ''
+    name: 'Event section title'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: 'Andre prosjekter'
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\PlainText
+  901575ef-4d5f-429c-911b-817847ffb9bf: # Event entries
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: eventEntries
+    instructions: ''
+    name: 'Event entries'
+    searchable: true
+    settings:
+      allowSelfRelations: false
+      limit: ''
+      localizeRelations: false
+      selectionLabel: 'Select event entries'
+      showSiteMenu: true
+      source: null
+      sources:
+        - 'section:301645ea-e60b-4a0b-bb67-58f74bdbca11' # Events
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  dbbc363e-8e44-41d8-b264-8a4d0c9af24e: # Section description
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionDescription
+    instructions: ''
+    name: 'Section description'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      cleanupHtml: '1'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: null
+      purifyHtml: '1'
+      redactorConfig: Simple.json
+      removeEmptyTags: true
+      removeInlineStyles: true
+      removeNbsp: true
+      showHtmlButtonForNonAdmins: false
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: true
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+handle: events
+name: Events
+sortOrder: 1

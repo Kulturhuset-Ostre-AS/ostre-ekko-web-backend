@@ -1,0 +1,137 @@
+{#
+ # Homepage template
+ #}
+
+{% extends "_layout" %}
+
+{% block content %}
+  {% set events = craft.entries.section('events').date('>= ' ~ "now"|date("Y-m-d")).type('event').orderBy('date asc').with(['location']).all() %}
+
+  {# Festival block #}
+  {% set festivalEntry = entry.linkedFestival.one() %}
+
+  {# TEMP: Show the live stream block #}
+  {# {% if festivalEntry %}
+            <section class="section section-front">
+                {% include 'partials/index/festival-section' with { indexEntry: entry, festivalEntry: festivalEntry } %}
+            </section>
+        {% endif %} #}
+
+{% if festivalEntry %}
+  {% set indexEntry = entry %}
+  <section class="section section-front">
+    {# <div class="section-wrapper"> #}
+    <div class="container">
+      <div class="festival-hero ekko-2021">
+        <div class="festival-hero__wrapper fp-hero__wrapper">
+            <div class="fp-hero__content">
+                {% if indexEntry.festivalSectionTitle %}
+                    <h1><a href="{{ festivalEntry.url }}">{{indexEntry.festivalSectionTitle}}</a></h1>
+                {% endif %}
+                {% if  indexEntry.festivalSectionContent %}
+                  <div class="fp-hero__lineup">
+                    {# {{ festivalEntry.lineup }} #}
+                    {{ indexEntry.festivalSectionContent}}
+                  </div>
+                {% endif %}
+                {% if indexEntry.festivalSectionSubtitle %}
+                    <p>{{indexEntry.festivalSectionSubtitle}}</p>
+                {% endif %}
+            </div>
+            <div class="fp-hero__image-background">
+               {% include "partials/grid/square" with { size: 6 } %}
+            </div>
+            <div class="fp-hero__image-wrapper">
+              <a class="-noHover" href="{{festivalEntry.url}}">
+                {% if entry.festivalSectionGraphicElements|length %}
+                  {% set asset = entry.festivalSectionGraphicElements.one() %}
+                  <img src="{{ asset.url }}" class="fp-hero__image lazyload" alt="Ekko Festival"/>
+                {% else %}
+                  <img src="{{ url('/assets/img/ekko-2021.gif') }}" class="fp-hero__image lazyload" alt="Ekko Festival "/>
+                {% endif %}
+              </a>
+            </div>
+            {% if festivalEntry.ticketLink %}
+              <div class="fp-test">
+                {% include "partials/grid/general" with { col: 1, row: 1 } %}
+              </div>
+              <div class="fp-test -fest">
+                {% include "partials/grid/general" with { col: 1, row: 1 } %}
+              </div>
+              <div class="fp-hero__button fp-hero__ticket-button"><a href="{{festivalEntry.ticketLink}}" target="_blank">{{ 'Billetter'|t }}</a></div>
+              <div class="fp-hero__button fp-hero__fest-button"><a href="{{festivalEntry.url}}">{{ 'Program'|t }}</a></div>
+            {% endif %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% else %}
+  
+  {# TEMP: Show the live stream block #}
+  {# If events are available, take first event and show it as first Homepage section #}
+  {# {% elseif events|length %}
+            {% set event = events|first %}
+            {% set events = events|slice(1) %}
+            {% set performances = event.performances.find({ with: ['artist'] }) %}
+            
+            <section id="prosjekter" class="section section-front cf">
+                <div class="section__header"></div>
+                <div class="section__main">
+                    <div id="artister" class="content-block cf">
+                        {% include "partials/event/block/block_image_full" %}
+                    </div>
+                </div>
+            </section>
+        {% endif %} #}
+
+<div class="section-wrapper">
+            <div class="festival-hero mono-2021">
+                <div class="festival-hero__wrapper fp-hero__wrapper">
+                    <a class="-noHover" href="/digitalarena/tag/mono" title="Mono - Digital Arena">
+                        <img src="{{ url('/assets/img/mono_logo-white.png') }}" class="festival-hero__background-image fp-hero__image lazyload" alt="Mono - Digital Arena" />
+                    </a>
+                </div>
+            </div>
+            </div>
+        {% endif %}
+
+  {# News block #}
+    <section class="section section-front cf"> {% include 'partials/index/news' %}
+  </section>
+
+  {# Output Events section #}
+  {% if events|length %}
+    <section id="prosjekter" class="section event-list waypoint cf">
+
+      <div class="section__header">
+        {% if entry.eventSectionTitle %}
+          <h1 class="section__title">{{ entry.eventSectionTitle }}</h1>
+        {% endif %}
+
+        {% if entry.eventSectionDescription %}
+          <div class="section__header-content">
+            {{ entry.eventSectionDescription }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="section__main">
+        <div
+          id="artister" class="content-block waypoint cf">
+          {# {% for event in entry.linkedEvents.with(['location']) %} #}
+          {% for event in events %}
+
+            {% set performances = event.performances.find({ with: ['artist'] }) %}
+
+            {% if loop.index == 1 %}
+              {% include "partials/event/block/block_image_full" %}
+            {% else %}
+              {% include "partials/event/block/block_" ~ event.layout %}
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+{% endblock %}

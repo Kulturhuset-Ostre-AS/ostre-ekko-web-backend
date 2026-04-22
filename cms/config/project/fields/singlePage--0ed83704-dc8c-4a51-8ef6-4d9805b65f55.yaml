@@ -1,0 +1,14 @@
+columnSuffix: null
+contentColumnType: boolean
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
+handle: singlePage
+instructions: 'If single page is selected, there is no need for artist pages or event image and you can use the intro field to describe the artists.'
+name: 'Single Page'
+searchable: false
+settings:
+  default: true
+  offLabel: 'Multiple Page'
+  onLabel: 'Single Page'
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

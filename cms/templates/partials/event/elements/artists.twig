@@ -1,0 +1,36 @@
+
+{# 
+ # List of artists performing in an event
+ # param: artists - array of artist entries
+ #
+ # Used in:
+ # - Frontpage event block header
+ # - Single event page header
+ #}
+
+ {% set withLink = withLink|default(false) %}
+
+{# {% set performances = craft.ekko.eventPerformances(event) %} #}
+{# {% set artists = craft.ekko.artists(performances) %} #}
+
+{# {% set allArtists = artists.all() %} #}
+{% set allArtists = artists %}
+{% for artist in allArtists %}
+	{% set title = artist.shortTitle|length ? artist.shortTitle : artist.title %}
+	
+	{% if artist.isVisible %}
+		<div class="artist__title">
+			{% if withLink %}
+				<a href="{{artist.url}}">{{title}}</a>
+			{% else %}
+				{{title}}
+			{% endif %}
+
+			{% if artist.artistMeta %}
+				<span class="meta">({{ artist.artistMeta }})</span>
+			{% else %}
+				<span class="meta">&nbsp;</span>
+			{% endif %}
+		</div>
+	{% endif %}
+{% endfor %}

@@ -1,0 +1,35 @@
+
+{#
+ # Artists section single entry template
+ #}
+
+{% extends "_layout" %}
+
+{# Festival entry #}
+{% set event = craft.entries.section('events').slug(festivalSlug).one() %}
+
+{% set entry = craft.entries.section('artists').slug(artistSlug).one() %}
+{% set artist = entry %}
+
+{% set class = 'single artist-page' %}
+{% set title = entry.title %}
+
+{% if event.darkMode %}
+  {% set class = class ~ ' theme-dark' %}
+{% endif %}
+
+{# Performances that are part of the festival #}
+{% set performances = craft.entries({
+		'section': 'performance',
+		'with': ['location']
+	})
+	.relatedTo({ targetElement: artist })
+	.andRelatedTo({sourceElement: event})
+	.orderBy('date desc')
+%}
+
+{% set currentPerformance = craft.ekko.currentPerformance(performances) %}
+
+{% block content %}
+	{% include 'artists/type/' ~ event.type ~ '_artist' %}
+{% endblock %}

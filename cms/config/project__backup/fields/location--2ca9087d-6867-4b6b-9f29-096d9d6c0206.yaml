@@ -1,0 +1,23 @@
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: location
+instructions: 'Location set on the event will override the locations set at the single artist entries.'
+name: Location
+searchable: true
+settings:
+  allowLimit: false
+  allowMultipleSources: false
+  allowSelfRelations: false
+  branchLimit: '2'
+  limit: null
+  localizeRelations: false
+  selectionLabel: 'Add the location'
+  showSiteMenu: true
+  source: 'group:b85882d9-26fb-4d9a-bd5d-6dce69ed358e'
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Categories

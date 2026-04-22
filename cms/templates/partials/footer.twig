@@ -1,0 +1,51 @@
+
+{# <div class="containter cf">
+	vienas
+</div>
+ #}
+{# <article class="container cf">
+
+	<a class="to-top" href="#top"><span class="icon-up-med"></span></a>
+
+	<hr />
+
+	<div class="col two small">
+		<h4 class="bold">Opening hours</h4>
+		<ul>
+			<li><span class="tabbed">{{galleryInformation.weekdays|raw}}: </span>{{galleryInformation.weekdayhours|raw}}</li>
+			<li><span class="tabbed">{{galleryInformation.weekends|raw}}: </span>{{galleryInformation.weekendhours|raw}}</li>
+		</ul>
+	</div>
+
+	<div class="col two small">
+		<h4 class="bold">Address</h4>
+		<a href="{{ galleryInformation.googlemaps }}">
+			<ul>
+				<li>{{ galleryInformation.address_1 }}</li>
+				<li>{{ galleryInformation.address_2 }}</li>
+			</ul>
+		</a>
+	</div>
+
+	<div class="col two small">
+		<h4 class="bold">Contact</h4>			
+		<ul>
+			<li>Tel: {{galleryInformation.contactPhone}}</li>
+			<li><a href="mailto:{{galleryInformation.contactEmail}}">E-mail OSL</a></li>
+		</ul>
+	</div>
+
+	<div class="col two small">
+		<h4 class="bold">Follow O S L</h4>
+		<ul>
+			<li><a href="{{socialMedia.facebook}}">Facebook</a></li>
+			<li><a href="{{socialMedia.instagram}}">Instagram</a></li>
+		</ul>
+	</div>
+
+	<div class="col four micro">
+		<p><a tabindex="-1" href="{{ siteUrl }}">{{ metaInformation.pagename }} &copy; {{ now|date("Y") }}</a></p>
+		<p><a tabindex="-1" href="http://slettenostvold.com">Site by Sletten &amp; Østvold</a> and <a tabindex="-1" href="mailto:paulius.friedt@gmail.com">Paulius Friedt</a></p>
+	</div>
+
+</article> #}

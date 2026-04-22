@@ -1,0 +1,9 @@
+contentColumnType: text
+fieldGroup: 2a64c7df-fa74-4b9e-aa76-94dceee51474 # Arena
+handle: videoUrl
+instructions: ''
+name: Video
+searchable: false
+translationKeyFormat: null
+translationMethod: none
+type: mikestecker\videoembedder\fields\Video

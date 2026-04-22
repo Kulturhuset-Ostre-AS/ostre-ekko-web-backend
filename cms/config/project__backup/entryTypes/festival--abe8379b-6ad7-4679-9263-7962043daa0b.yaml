@@ -1,0 +1,188 @@
+fieldLayouts:
+  38b3c3de-47ab-4cac-85d5-529cbf42c3c1:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: Title
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 356f072d-7d91-4223-80eb-d842012888a3
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 92d9f6e4-d8a9-4c6f-90b2-d79ee4de3fc8
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Information
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: df7b834e-e4f7-4ceb-ae3a-07aa0cd8ca9a
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: c59fbaac-b3c9-4fa8-9884-60514bdfce35
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 54f6a4ae-b35f-48e8-8bed-2be391f3e8d9
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 9dd4983f-8b2b-45f7-937d-33fe34967949
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Media
+        sortOrder: 2
+      -
+        elements:
+          -
+            fieldUid: aac99d83-a88a-4a4b-b3fd-6c95266a5b49
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: e870c8fc-0214-40e0-8ad6-7d0629c6a6dc
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 62db04ec-3204-4ab4-8ecc-ef980ab2e2e2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Program
+        sortOrder: 3
+      -
+        elements:
+          -
+            fieldUid: e615d2b1-f4e4-4e6b-895c-957eff051ea2
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Performances
+        sortOrder: 4
+      -
+        elements:
+          -
+            fieldUid: 822157ba-1ba2-424b-974b-5407629ba433
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Lineup
+        sortOrder: 5
+      -
+        elements:
+          -
+            fieldUid: 501c383f-cb02-4039-973f-c098638b4b84
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 618b9f1d-5720-4c34-a4b0-b5e0caedf06a
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Tickets
+        sortOrder: 6
+      -
+        elements:
+          -
+            fieldUid: c160fb14-bd1a-4690-9b04-2932d04eaca0
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: 'Additional Information'
+        sortOrder: 7
+handle: festival
+hasTitleField: true
+name: Festival
+section: 301645ea-e60b-4a0b-bb67-58f74bdbca11
+sortOrder: 0
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: none

@@ -1,19 +1,38 @@
-# Craft CMS (typical layout after `composer create-project craftcms/cms`)
+# Craft — local secrets
+/cms/.env
+/cms/.env.*
+!/cms/.env.example
+/cms/config/license.key
+
+/cms/vendor/
+/node_modules/
+
+# Craft — runtime (keep directory + .gitignore only)
+/cms/storage/logs/*
+!/cms/storage/logs/.gitignore
+/cms/storage/runtime/*
+!/cms/storage/runtime/.gitignore
+/cms/storage/backups/*
+!/cms/storage/backups/.gitignore
+
+# Web root — generated / large (sync from legacy host or GCS)
+/public_html/cpresources/
+/public_html/imager/
+/public_html/error_log
+/public_html/uploads/*
+!/public_html/uploads/.gitignore
+
+# Legacy flat layout (if introduced later)
 /.env
 /.env.*
 !/.env.example
-
 /vendor/
-/node_modules/
-
-# Runtime / generated
-/storage/*
-!/storage/.gitignore
-!/storage/rebrand/.gitignore
-
 /web/cpresources/
 /web/assets/*
 !/web/assets/.gitignore
+/storage/*
+!/storage/.gitignore
+!/storage/rebrand/.gitignore
 
 # IDE / OS
 .DS_Store

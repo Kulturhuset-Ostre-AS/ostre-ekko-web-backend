@@ -1,0 +1,20 @@
+
+{# 
+ #
+ #}
+
+<div>
+	{% include 'partials/artist/meta' %}
+</div>
+
+<div class="content-text">
+	<div class="content-text-wrapper">
+		{{ event.intro }}
+		{{ event.description }}
+	</div>
+</div>
+
+
+{% set artist = artists.one() %}
+{% include 'partials/elements/content' with {'complexContent': artist.complexContent, content: artist.description} %}
+{% include 'partials/artist/links_meta' with {'meta': artist.relatedLinks} only %} 

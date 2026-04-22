@@ -1,0 +1,127 @@
+field: 822157ba-1ba2-424b-974b-5407629ba433 # Lineup
+fieldLayouts:
+  15266725-6e25-474a-a66b-95ec18244874:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: fffeb58b-3093-45bc-b7ef-eb4c7c880d02 # Artist / Performance
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 3516ab22-88df-4b6b-bf3d-adcb02010f1a # Custom title
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 1ceba5f7-5a1f-400e-b60f-e5e541a4ac84 # Text size
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  1ceba5f7-5a1f-400e-b60f-e5e541a4ac84: # Text size
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: textSize
+    instructions: ''
+    name: 'Text size'
+    searchable: true
+    settings:
+      optgroups: true
+      options:
+        -
+          __assoc__:
+            -
+              - label
+              - Normal
+            -
+              - value
+              - normal
+            -
+              - default
+              - '1'
+        -
+          __assoc__:
+            -
+              - label
+              - Small
+            -
+              - value
+              - small
+            -
+              - default
+              - ''
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\Dropdown
+  3516ab22-88df-4b6b-bf3d-adcb02010f1a: # Custom title
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: customTitle
+    instructions: ''
+    name: 'Custom title'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      cleanupHtml: '1'
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: null
+      purifyHtml: '1'
+      redactorConfig: Lineup.json
+      removeEmptyTags: true
+      removeInlineStyles: true
+      removeNbsp: true
+      showHtmlButtonForNonAdmins: false
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: true
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\redactor\Field
+  fffeb58b-3093-45bc-b7ef-eb4c7c880d02: # Artist / Performance
+    columnSuffix: null
+    contentColumnType: string
+    fieldGroup: null
+    handle: performance
+    instructions: ''
+    name: 'Artist / Performance'
+    searchable: true
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Choose performance'
+      showSiteMenu: true
+      source: null
+      sources:
+        - 'section:8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5' # Performance
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+handle: lineupEntry
+name: 'Lineup entry'
+sortOrder: 2

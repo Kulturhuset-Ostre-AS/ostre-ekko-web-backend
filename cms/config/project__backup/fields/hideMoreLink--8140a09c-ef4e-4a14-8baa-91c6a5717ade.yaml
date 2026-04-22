@@ -1,0 +1,13 @@
+contentColumnType: boolean
+fieldGroup: 3626e6f0-4597-4098-b20a-fb662ff583a7
+handle: hideMoreLink
+instructions: 'Activate if you want to show all artist information on the event page. If activ, only first text block from description will be shown on the event page as the artist description.'
+name: 'Hide "read more"'
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

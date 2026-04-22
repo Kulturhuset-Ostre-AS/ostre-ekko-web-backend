@@ -1,0 +1,33 @@
+handle: festival
+instructions: ''
+maxNodes: ''
+name: 'Ekko Festival'
+permissions:
+  craft\elements\Asset:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Category:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Entry:
+    enabled: '1'
+    permissions: '*'
+  craft\elements\Tag:
+    enabled: ''
+    permissions: '*'
+  custom:
+    enabled: '1'
+  verbb\navigation\nodetypes\PassiveType:
+    enabled: '1'
+  verbb\navigation\nodetypes\SiteType:
+    enabled: '1'
+propagateNodes: false
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: # EKKO (en)
+    enabled: '1'
+  cc892d6a-abac-456e-83a9-260fd5616d45: # EKKO (nb)
+    enabled: '1'
+sortOrder: 3
+structure:
+  maxLevels: null
+  uid: eb54a194-7f30-4947-a741-3ad2f5460f7d

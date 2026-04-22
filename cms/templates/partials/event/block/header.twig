@@ -1,0 +1,38 @@
+
+{# 
+ # Event block header
+ #}
+
+
+<header class="block__header {{ headerClass|default('-over') }}">
+	<div class="block__header-item -side -left">
+		{# {% include "partials/event/elements/location" %} #}
+		{% include "partials/event/elements/datetime" %}
+	</div>
+	<div class="event__title block__header-item -center">
+		{{ event.title }}
+	</div>
+	<div class="block__header-item -side -right">
+		{# {% include "partials/event/elements/datetime" %} #}
+		{% include "partials/event/elements/location" %}
+	</div>
+</header>
+
+<div class="event__header -center">
+	{% if performances|length %}
+		{% set artists = craft.ekko.prepArtists(performances) %}
+		<a href="{{ event.url }}" title="{{event.title}}">
+			{% include "partials/event/elements/artists" %}
+		</a>
+	{% elseif event.intro %}
+		<div class="event__intro">{{ event.intro }}</div>
+	{% endif %}
+</div>
+
+<footer class="event__footer cf">
+	<a class="link-button more right" href="{{ event.url }}">Les mer</a>
+
+	{% if event.ticketLink|length %}
+		<a class="link-button left" href="{{ event.ticketLink }}" target="_blank">{{ 'Kjøp billetter'|t }}</a>
+	{% endif %}
+</footer>

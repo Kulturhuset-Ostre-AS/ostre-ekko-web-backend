@@ -1,6 +1,6 @@
 # Ekko — Craft CMS (backend)
 
-This repository will contain the **Craft CMS** installation that powers content and APIs for the public **Ekko** website: the music festival, the **Østre** venue, and the wider association. **Craft is installed into this directory** (for example with Composer’s official project template); treat this repo as the canonical home for `composer.json`, `config/`, `web/`, and the rest of the Craft tree.
+This repository contains the **Craft CMS** installation that powers content and APIs for the public **Ekko** website: the music festival, the **Østre** venue, and the wider association. The tree follows the **legacy hosting layout** (`cms/` application root + `public_html/` web root) migrated from classic PHP hosting so paths match production while you patch and plan upgrades.
 
 On GitHub it lives alongside the public site:
 
@@ -43,35 +43,40 @@ Craft is the **system of record** for structured content, assets, and global set
 
 ## Repository layout
 
-After a standard Craft install (for example via Composer’s `craftcms/cms` project), the tree typically matches the ignores already defined in this repo:
-
 | Path | Role |
 | ---- | ---- |
-| `vendor/` | PHP dependencies (Composer); not committed |
-| `web/` | Web root (`index.php`, CP, uploaded assets under `web/assets/`) |
-| `storage/` | Runtime files, caches, logs; not fully committed |
-| `config/` | Craft configuration (`general.php`, `project/` for Project Config, etc.) |
-| `templates/` | Twig templates (if you serve any HTML from Craft) |
-| `modules/` | Custom PHP modules |
+| `cms/composer.json` / `cms/vendor/` | PHP dependencies (Composer); `vendor/` is not committed |
+| `cms/config/` | Craft configuration (`general.php`, `project/` Project Config, etc.) |
+| `cms/storage/` | Runtime (logs, cache, etc.); only empty dirs + `.gitignore` patterns are committed |
+| `cms/templates/` | Twig templates |
+| `cms/modules/` | Custom PHP modules (for example `ekkomodule`) |
+| `public_html/` | Web root (`index.php`, static assets, **volumes map under `public_html/uploads/`** on production) |
+| `terraform/` | GCP baseline (Cloud SQL, GCS, IAM); see `terraform/README.md` |
 
-Until Craft is installed, only shared files (for example `.gitignore` and this README) may be present. When you add Craft, follow [Craft’s installation guide](https://craftcms.com/docs/5.x/install.html) so the application root matches this repository (either run `composer create-project` into this folder from an empty state, or install into a temp directory and move the generated files here, then commit the result).
+Large or generated paths (`public_html/uploads/`, `public_html/imager/`, `public_html/cpresources/`) are **gitignored**; sync them from your backup or GCS when running locally.
+
+Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation starts at [Craft CMS 3.x](https://craftcms.com/docs/3.x/).
 
 ## Prerequisites
 
 - **PHP** compatible with your target Craft version (see Craft’s requirements for the major version you install)
 - **Composer** for PHP dependencies
 - A **database** supported by Craft (commonly MariaDB or MySQL; PostgreSQL is supported in recent Craft versions)
-- Optional but common for teams: **DDEV**, Laravel Valet, Herd, or another local stack that provides PHP, the database, and a virtual host pointing at `web/`
+- Optional but common for teams: **DDEV**, Laravel Valet, Herd, or another local stack that provides PHP, the database, and a virtual host pointing at **`public_html/`** (not the repo root).
 
 ## Local development
 
-High-level steps (exact commands depend on your stack and Craft version):
+1. **PHP 7.4** (or the lowest version you deploy) is appropriate for **Craft 3.7**; newer PHP may not be supported until you upgrade Craft.
+2. Install dependencies from the **`cms/`** directory:
 
-1. Install dependencies: `composer install` (after the project is created or cloned with `composer.json` present).
-2. Copy `.env.example` to `.env` and set `DB_*`, `PRIMARY_SITE_URL`, and other variables your environment needs.
-3. Point the web server document root at **`web/`**, not the repository root.
-4. Run Craft’s setup or apply existing Project Config so the database schema and settings match the team’s baseline.
-5. Open the control panel URL you configured (often `/admin`) and sign in with an admin account.
+   ```bash
+   cd cms && composer install
+   ```
+
+3. Copy **`cms/.env.example`** to **`cms/.env`** and set `DB_*`, `SECURITY_KEY`, `SITE_URL`, and any other variables your environment needs.
+4. Point the web server document root at **`public_html/`** (same as legacy production).
+5. Import a database dump and sync **`public_html/uploads/`** if you need assets locally (see `docs/database-export.md`).
+6. Open the control panel (this project uses trigger **`admin`**, not `/cp` — see `cms/config/general.php`).
 
 For day-to-day work, use Craft’s documented workflows for migrations, Project Config, and backups rather than editing production data directly.
 

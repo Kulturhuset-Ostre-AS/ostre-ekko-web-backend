@@ -1,0 +1,22 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b # Index
+handle: linkedEvents
+instructions: ''
+name: 'Linked events'
+searchable: true
+settings:
+  allowSelfRelations: false
+  limit: ''
+  localizeRelations: false
+  selectionLabel: 'Select events'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:301645ea-e60b-4a0b-bb67-58f74bdbca11' # Events
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

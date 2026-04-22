@@ -1,0 +1,35 @@
+{#
+ #
+ # - artist (artist section entry)
+ # - currentPerformance (performance section entry)
+ # - event (event section entry)
+ #
+ # - day (only if the artist is part of a festival)
+ # - allPerformances (all performances related to the festival)
+ #}
+
+<div class="meta-block cf">
+
+	{# Date/Time #}
+	<div class="meta-block__row cf">
+		<div class="meta-block__title"><span class="u-day-program">{{ 'Dagens Program'|t }}</span></div>
+		<div class="meta-block__content program">
+
+		{% set dayPerformances = allPerformances.date('=' ~ currentPerformance.date|date("Y-m-d")) %}
+		{% set dayProgram = craft.ekko.prepProgram(dayPerformances) %}
+
+		{% for day, events in dayProgram %}
+			{% for location, perfs in events %}
+		    <span class="location">{{ location }}</span>
+		  	<ul class="cf">
+		      {% for p in perfs %}
+		      	{% set a = p.artist[0] %}
+		        <li><span class="time">{{ p.time|date("H:i") }}</span><a href="{{ a.url }}" title="{{ a.title }}">{{ a.shortTitle ? a.shortTitle : a.title }}</a></li>
+	      	{% endfor %}
+	    	</ul>
+			{% endfor %}
+		{% endfor %}
+
+		</div>
+	</div>
+</div>

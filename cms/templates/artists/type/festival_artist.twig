@@ -1,0 +1,53 @@
+
+{#
+ # Single artist page
+ # Artist related to a festival entry
+ #
+ # - event
+ # - artist
+ # - performances
+ #}
+
+{% set day = event.program.date('=' ~ currentPerformance.date|date("Y-m-d")).one() %}
+
+{% set allPerformances = craft.entries.section('performance').relatedTo({
+		sourceElement: event,
+		field: 'performances'
+	}).orderBy('parsedDateTime asc')
+%}
+
+<section id="{{ artist.title|lower|kebab}}" class="section cf">
+
+	<div class="section__side-header u-stick">
+		{% include "partials/assets/artistFeaturedImage" %}
+	</div>
+
+	<div class="section__main">
+ 		<div class="artist block">
+			<div class="block__content-wrapper">
+				{% include 'partials/artist/header' %}
+			</div>
+
+			{# Description #}
+			<article class="content content-container artist__content">
+
+				<div>
+					{% include 'partials/artist/meta' with { isFestival: true } %}
+				</div>
+
+				{% include 'partials/elements/content' with {'complexContent': artist.complexContent, 'content': artist.description} %}
+
+				<div class="meta-block-wrapper">
+					{% include 'partials/artist/links_meta' with {'meta': artist.relatedLinks} only %}
+					{% include 'partials/artist/festival_meta' %}
+				</div>
+
+				<div class="button-wrapper cf">
+					{% include 'partials/artist/festival_meta_nav' %}
+				</div>
+
+			</article>
+		</div>
+	</div>
+
+</section>

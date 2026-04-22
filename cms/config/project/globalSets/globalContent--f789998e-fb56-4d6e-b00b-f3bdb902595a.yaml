@@ -1,0 +1,37 @@
+fieldLayouts:
+  13e97dcc-3800-4222-8400-a9b8fc150d89:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: d81dc4d7-3875-487c-b4dd-a5a86aeef6c3 # Newsletter modal content
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 569cc5f7-c3c6-4624-9070-cd060ecff171 # Newsletter disclaimer
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: a24b012b-7bc1-487e-9244-96fcc5574445 # Ticket modal content
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Innhold
+        sortOrder: 1
+handle: globalContent
+name: 'Global Content'
+sortOrder: 1

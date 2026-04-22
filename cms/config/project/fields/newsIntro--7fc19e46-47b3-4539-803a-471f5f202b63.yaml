@@ -1,0 +1,28 @@
+columnSuffix: null
+contentColumnType: text
+fieldGroup: 9e233a7f-8f79-4de8-9450-ffd21b8baeb6 # News
+handle: newsIntro
+instructions: "Short teaser text to be displayed on the front-page. This text won't be displayed in the single news entry page.\r\n\r\nIf this field is empty, then first 30 words of main content will be displayed on the frontpage (NOTE: it can cut off links)"
+name: Intro
+searchable: true
+settings:
+  availableTransforms: '*'
+  availableVolumes: '*'
+  cleanupHtml: '1'
+  columnType: text
+  configSelectionMode: choose
+  defaultTransform: ''
+  manualConfig: ''
+  purifierConfig: ''
+  purifyHtml: '1'
+  redactorConfig: Normal.json
+  removeEmptyTags: true
+  removeInlineStyles: true
+  removeNbsp: true
+  showHtmlButtonForNonAdmins: false
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: true
+  uiMode: enlarged
+translationKeyFormat: null
+translationMethod: site
+type: craft\redactor\Field

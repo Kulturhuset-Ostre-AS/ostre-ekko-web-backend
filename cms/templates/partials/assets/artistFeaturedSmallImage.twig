@@ -1,0 +1,15 @@
+{% if artist.artistFeaturedPhoto|length %}
+	{% set asset = artist.artistFeaturedPhoto[0] ?? null %}
+	{% set sizes = [
+		'(max-width: 768px) 100vw',
+		'(max-width: 1045px) 325px',
+		'25vw'
+	] %}
+
+	{% include "partials/assets/image-types/square" with {"sizes": sizes} %}
+{% else %}
+	{# Show placeholder image #}
+	<figure style="padding-bottom:100%;opacity:0.3;" class="artist__image">
+		<img src="{{ craft.imager.base64Pixel(1, 1) }}" data-src="{{ url('assets/img/placeholder-general-s.jpg') }}" class="lazyload">
+	</figure>
+{% endif %}

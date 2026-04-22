@@ -1,0 +1,11 @@
+{% if event.eventFeaturedPhoto|length %}
+
+	{% set asset = event.eventFeaturedPhoto.one() %}
+	{% set sizes = [
+		'(max-width: 700px) 100vw',
+		'(max-width: 1045px) 650px',
+		'50vw'
+	] %}
+
+	{% include "partials/assets/image-types/square" with {"sizes": sizes} %}
+{% endif %}

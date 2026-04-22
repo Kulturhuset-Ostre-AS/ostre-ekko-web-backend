@@ -1,0 +1,20 @@
+columnSuffix: null
+contentColumnType: text
+fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f # Default
+handle: parsedDateTime
+instructions: ''
+name: 'Parsed date & time'
+searchable: true
+settings:
+  allowSelect: false
+  columnType: text
+  decimals: 0
+  displayType: hidden
+  fieldTwig: "{% set date = entry.date|date('Ymd') %}\r\n{% set timeHour = '10' %}\r\n{% set timeMin = entry.time|date('i') %}\r\n\r\n{% switch entry.time|date('H') %}\r\n{% case '00' %}\r\n  {% set timeHour = '25' %}\r\n{% case '01' %}\r\n  {% set timeHour = '26' %}\r\n{% case '02' %}\r\n  {% set timeHour = '27' %}\r\n{% case '03' %}\r\n  {% set timeHour = '28' %}\r\n{% default %}\r\n  {% set timeHour = entry.time|date('H') %}\r\n{% endswitch %}\r\n\r\n{{ date }}:{{ timeHour }}:{{ timeMin }}"
+  parseBeforeSave: '1'
+  parseOnMove: false
+  showField: ''
+  textareaRows: 5
+translationKeyFormat: null
+translationMethod: none
+type: besteadfast\preparsefield\fields\PreparseFieldType

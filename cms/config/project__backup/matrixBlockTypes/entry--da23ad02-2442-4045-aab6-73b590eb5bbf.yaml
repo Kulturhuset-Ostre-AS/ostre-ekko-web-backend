@@ -1,0 +1,105 @@
+field: c160fb14-bd1a-4690-9b04-2932d04eaca0
+fieldLayouts:
+  bc93e8ba-f507-4ef5-92c3-8506e913dcb4:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: fe7864fc-1423-4b7f-b731-3d69261b7765
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: f63b15ea-6503-4137-9f87-96cc3152d0fd
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: e2bb1603-0d05-4682-9124-496596dec40e
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  e2bb1603-0d05-4682-9124-496596dec40e:
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionId
+    instructions: "ID, that can be used to create the link in festival sub-navigation. To link to this section, use '#....' format.\r\nBy default, the value from Section Title is used."
+    name: 'Section ID'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+  f63b15ea-6503-4137-9f87-96cc3152d0fd:
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionBody
+    instructions: ''
+    name: 'Section Body'
+    searchable: true
+    settings:
+      availableTransforms: '*'
+      availableVolumes: '*'
+      cleanupHtml: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: ''
+      purifyHtml: ''
+      redactorConfig: Normal.json
+      removeEmptyTags: true
+      removeInlineStyles: true
+      removeNbsp: true
+      showHtmlButtonForNonAdmins: false
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: true
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\redactor\Field
+  fe7864fc-1423-4b7f-b731-3d69261b7765:
+    contentColumnType: text
+    fieldGroup: null
+    handle: sectionTitle
+    instructions: ''
+    name: 'Section Title'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\PlainText
+handle: entry
+name: Entry
+sortOrder: 1

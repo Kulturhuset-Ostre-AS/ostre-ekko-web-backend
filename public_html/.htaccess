@@ -1,0 +1,20 @@
+# Block WordPress xmlrpc.php requests
+<Files xmlrpc.php>
+  order deny,allow
+  deny from all
+</Files>
+# END protect xmlrpc.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    RewriteCond %{HTTP_HOST} ^ekko\.no$ [OR]
+    RewriteCond %{HTTP_HOST} ^www\.ekko\.no$
+    RewriteRule ^live$ "https\:\/\/www\.mixcloud\.com\/live\/ekkobergen\/" [R=301,L]
+
+    # Send would-be 404 requests to Craft
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_URI} !^/(favicon\.ico|apple-touch-icon.*\.png)$ [NC]
+    RewriteRule (.+) index.php?p=$1 [QSA,L]
+</IfModule>

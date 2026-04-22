@@ -1,0 +1,21 @@
+{% set col = col|default(6) %}
+{% set row = row|default(6) %}
+
+{% set step = 100 %}
+{% set width = col * step %}
+{% set height = row * step %}
+{% set stroke = 2 %}
+
+{% set tWidth = width + stroke %}
+{% set tHeight = height + stroke %}
+
+<svg width="{{ tWidth }}" height="{{ tHeight }}" viewBox="0 0 {{ tWidth }} {{ tHeight }}" fill="none" xmlns="http://www.w3.org/2000/svg">
+  {% for i in range(0, col) %}
+    {% set pos = i * step + 1 %}
+    <line vector-effect="non-scaling-stroke" x1="{{ pos }}" y2="{{ tHeight }}" x2="{{ pos}}" stroke="#E53E24" stroke-width="2"/>
+  {% endfor %}
+  {% for i in range(0, row) %}
+    {% set pos = i * step + 1 %}
+    <line vector-effect="non-scaling-stroke" y1="{{ pos }}" x2="{{ tWidth }}" y2="{{ pos }}" stroke="#E53E24" stroke-width="2"/>  
+  {% endfor %}
+</svg>

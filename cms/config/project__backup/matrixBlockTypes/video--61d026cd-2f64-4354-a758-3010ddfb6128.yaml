@@ -1,0 +1,35 @@
+field: b1f43e32-e00a-4259-837c-60b67111e847
+fieldLayouts:
+  e109318e-b280-4fce-ae05-ec4dd7cc48ac:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 06c49665-084c-41df-9b0a-7d5cad1989e3
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  06c49665-084c-41df-9b0a-7d5cad1989e3:
+    contentColumnType: string
+    fieldGroup: null
+    handle: videoUrl
+    instructions: 'Full youtube or vimeo video URL.'
+    name: 'Video URL'
+    searchable: true
+    settings:
+      errorMessage: 'Unable to find component class ''Embedder''.'
+      expectedType: Embedder
+      settings: '[]'
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\MissingField
+handle: video
+name: 'Video Content'
+sortOrder: 2

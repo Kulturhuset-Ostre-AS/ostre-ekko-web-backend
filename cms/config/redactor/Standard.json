@@ -1,0 +1,21 @@
+{
+  "lang": "en",
+  "buttons": [
+    "formatting",
+    "bold",
+    "italic",
+    "underline",
+    "unorderedlist",
+    "orderedlist",
+    "link",
+    "image",
+    "video",
+    "html"
+  ],
+  "plugins": [
+    "fullscreen",
+    "video"
+  ],
+  "linkNewTab": "true",
+  "toolbarFixed": "true"
+}

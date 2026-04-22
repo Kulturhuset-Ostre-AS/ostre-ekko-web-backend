@@ -1,0 +1,49 @@
+field: b1f43e32-e00a-4259-837c-60b67111e847
+fieldLayouts:
+  33048b94-64f3-4a05-98b5-a60f01f2d2cc:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 52683e7a-7c6a-4386-b481-0dfee40ad8db
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  52683e7a-7c6a-4386-b481-0dfee40ad8db:
+    contentColumnType: text
+    fieldGroup: null
+    handle: text
+    instructions: ''
+    name: Content
+    searchable: true
+    settings:
+      availableTransforms: ''
+      availableVolumes: ''
+      cleanupHtml: ''
+      columnType: text
+      configSelectionMode: choose
+      defaultTransform: ''
+      manualConfig: ''
+      purifierConfig: null
+      purifyHtml: ''
+      redactorConfig: Normal.json
+      removeEmptyTags: true
+      removeInlineStyles: true
+      removeNbsp: true
+      showHtmlButtonForNonAdmins: false
+      showUnpermittedFiles: false
+      showUnpermittedVolumes: true
+      uiMode: enlarged
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\redactor\Field
+handle: text
+name: 'Text Content'
+sortOrder: 1

@@ -1,0 +1,9 @@
+format: null
+handle: thumb_m
+height: 500
+interlace: none
+mode: crop
+name: 'Thumb (medium)'
+position: center-center
+quality: 82
+width: 500

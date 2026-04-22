@@ -1,0 +1,19 @@
+columnSuffix: null
+contentColumnType: text
+fieldGroup: e1c561c4-1d4c-4087-8ea9-ef82839fa7bd # Tickets
+handle: ticketFrame
+instructions: 'TicketCo ticket iFrame template with the <ID> placeholder.'
+name: 'Ticket Frame Code'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  columnType: text
+  initialRows: '4'
+  multiline: '1'
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

@@ -1,0 +1,36 @@
+{# 
+  # Partial to output content from complexContent matrix field
+  #}
+ 
+ {% if complexContent|length %}
+   {% for block in complexContent.all() %}
+     {% if block.type == "text" %}
+       <div class="content-text">
+         <div class="content-text-wrapper">{{ block.text }}</div>
+       </div>
+     {% elseif block.type == "embed" %}
+       <div class="embed">
+         {{ block.code|raw }}
+       </div>
+     {% else %}
+       {% set video = craft.videoEmbedder.embed(block.videoUrl, {
+         showinfo: '0',
+         rel: '0',
+         byline: 'false',
+         title: 'false',
+         portrait:'false'
+       }) %}
+       
+       {% if video %}
+         <div class="video-embed" js-video-embed>
+           <div class="fitvid">{{ video }}</div>
+         </div>
+       {% endif %}
+     {% endif %}
+   {% endfor %}
+ {% elseif content|default('') %}
+   <div class="content-text">
+     <div class="content-text-wrapper">{{ content }}</div>
+   </div>
+ {% endif %}
+   

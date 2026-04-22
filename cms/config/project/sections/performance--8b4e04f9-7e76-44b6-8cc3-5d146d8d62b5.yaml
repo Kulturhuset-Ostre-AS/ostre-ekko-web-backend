@@ -1,0 +1,20 @@
+defaultPlacement: end
+enableVersioning: false
+handle: performance
+name: Performance
+propagationMethod: all
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: # EKKO (en)
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+  cc892d6a-abac-456e-83a9-260fd5616d45: # EKKO (nb)
+    enabledByDefault: true
+    hasUrls: false
+    template: null
+    uriFormat: null
+structure:
+  maxLevels: 1
+  uid: a3ec221d-ca74-4e53-bd2e-2d408491c97b
+type: structure

@@ -1,0 +1,9 @@
+handle: mainMenu
+instructions: ''
+maxNodes: ''
+name: 'Main navigation'
+propagateNodes: false
+sortOrder: 1
+structure:
+  maxLevels: '2'
+  uid: d772fb9a-a860-43d0-9ecc-9f86d3df719f

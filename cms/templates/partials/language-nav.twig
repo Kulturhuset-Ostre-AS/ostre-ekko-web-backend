@@ -1,0 +1,15 @@
+
+{#
+ # Language navigation menu partial
+ #}
+
+<nav class="nav nav--lang">
+	<ul>
+		{% set element = entry ?? null %}
+		{% for site in craft.app.sites.allSites %}
+			<li class="nav-item lang-{{ site.handle }} {{ craft.app.language == site.language ? 'active-nav' : '' }}">
+				<a href="{{ siteSwitcher(site.handle, element) }}">{{ site.handle|upper }}</a>
+			</li>
+		{% endfor %}
+	</ul>
+</nav>

@@ -1,0 +1,28 @@
+enableVersioning: true
+handle: arena
+name: 'Digital Arena'
+previewTargets:
+  -
+    __assoc__:
+      -
+        - label
+        - 'Primary entry page'
+      -
+        - urlFormat
+        - '{url}'
+      -
+        - refresh
+        - '1'
+propagationMethod: all
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af:
+    enabledByDefault: true
+    hasUrls: true
+    template: arena/_entry
+    uriFormat: 'arena/{slug}'
+  cc892d6a-abac-456e-83a9-260fd5616d45:
+    enabledByDefault: true
+    hasUrls: true
+    template: arena/_entry
+    uriFormat: 'arena/{slug}'
+type: channel

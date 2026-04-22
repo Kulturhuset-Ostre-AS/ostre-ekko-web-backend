@@ -1,0 +1,45 @@
+defaultPlacement: end
+fieldLayouts:
+  6e01f58c-64ba-4b4e-9458-be822e61a534:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: organizersCategory
+name: Organizers
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: # EKKO (en)
+    hasUrls: true
+    template: null
+    uriFormat: 'organizer/{slug}'
+  cc892d6a-abac-456e-83a9-260fd5616d45: # EKKO (nb)
+    hasUrls: true
+    template: null
+    uriFormat: 'organizer/{slug}'
+structure:
+  maxLevels: 1
+  uid: b73714f8-c05d-4aa7-a456-2daf58d4bb61

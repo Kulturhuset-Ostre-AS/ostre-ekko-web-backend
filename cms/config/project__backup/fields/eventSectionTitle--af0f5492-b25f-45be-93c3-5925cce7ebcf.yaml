@@ -1,0 +1,18 @@
+contentColumnType: text
+fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b
+handle: eventSectionTitle
+instructions: ''
+name: 'Section title (events)'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  columnType: text
+  initialRows: '4'
+  multiline: ''
+  placeholder: ''
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\PlainText

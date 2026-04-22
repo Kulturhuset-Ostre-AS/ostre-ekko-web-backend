@@ -1,0 +1,53 @@
+fieldLayouts:
+  61bdf684-8473-4d0b-9b37-a769dd8dcc78:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\TitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 496d2b10-36b1-43fb-b114-c61c558b9c57
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Information
+        sortOrder: 1
+handle: locationsCategory
+name: Locations
+siteSettings:
+  2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af:
+    hasUrls: false
+    template: null
+    uriFormat: null
+  cc892d6a-abac-456e-83a9-260fd5616d45:
+    hasUrls: false
+    template: null
+    uriFormat: null
+structure:
+  maxLevels: 2
+  uid: 10540efc-e07e-40cc-880f-693476d95af0

@@ -1,0 +1,9 @@
+siteUid: null
+sortOrder: 1
+template: arena/_tag
+uriParts:
+  - arena/tag/
+  -
+    - tag
+    - '[^\/]+'
+uriPattern: 'arena/tag/<tag:[^\/]+>'

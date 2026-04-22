@@ -1,0 +1,18 @@
+fieldLayouts:
+  2d982b76-bc21-48d3-a592-6d2ff49ca475:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 8c14763b-6183-46a0-be68-963de453e209
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+handle: testtags
+name: Test

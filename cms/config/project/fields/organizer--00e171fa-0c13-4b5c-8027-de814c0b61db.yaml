@@ -1,0 +1,24 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
+handle: organizer
+instructions: ''
+name: Organizer
+searchable: false
+settings:
+  allowLimit: false
+  allowMultipleSources: false
+  allowSelfRelations: false
+  branchLimit: '1'
+  limit: null
+  localizeRelations: false
+  selectionLabel: 'Select event organizer'
+  showSiteMenu: false
+  source: 'group:83dec1cb-a705-4029-9aaf-3ec28ce4a629' # Organizers
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Categories

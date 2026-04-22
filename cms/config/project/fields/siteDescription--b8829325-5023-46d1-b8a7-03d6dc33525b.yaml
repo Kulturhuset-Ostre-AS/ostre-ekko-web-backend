@@ -1,0 +1,19 @@
+columnSuffix: null
+contentColumnType: text
+fieldGroup: 7f4be85f-cd38-42ea-afed-25ab3fd2648e # Globals
+handle: siteDescription
+instructions: 'Website and organization description that will be visible in search and sharing (max 150 characters).'
+name: Description
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  columnType: text
+  initialRows: '4'
+  multiline: ''
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\PlainText

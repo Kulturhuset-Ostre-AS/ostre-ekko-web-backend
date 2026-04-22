@@ -1,0 +1,31 @@
+
+{#
+ # Single artist page
+ # Artist related to an event entry
+ #
+ # - event
+ # - artist
+ #}
+
+<section id="{{ artist.title|lower|kebab}}" class="section cf">
+
+	<div class="section__side-header u-stick">
+		{% include "partials/assets/artistFeaturedImage" %}
+	</div>
+
+	<div class="section__main">
+
+		<div class="artist block ">
+			<div class="block__content-wrapper">
+				{% include 'partials/artist/header' with { hideEvent: true } %}
+			</div>
+
+			{# Description #}
+			<article class="content content-container artist__content">
+				{% include 'partials/elements/content' with {'complexContent': artist.complexContent, content: artist.description} %}
+				{% include 'partials/artist/links_meta' with {'meta': artist.relatedLinks} only %}
+			</article>
+		</div>
+	</div>
+
+	</section>

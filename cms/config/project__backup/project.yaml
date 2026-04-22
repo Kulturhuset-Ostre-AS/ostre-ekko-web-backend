@@ -1,0 +1,135 @@
+dateModified: 1623263985
+email:
+  fromEmail: pasidejau@gmail.com
+  fromName: EKKO
+  template: null
+  transportType: craft\mail\transportadapters\Sendmail
+plugins:
+  am-nav:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.7.4
+    settings:
+      canDoActions: ''
+      pluginName: Navigasjon
+      quietErrors: ''
+  asset-rev:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  assetrev:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  cp-sort-cols:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: '1.0'
+    settings: null
+  ekko:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  embedder:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  focal-point-field:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  hacksaw:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  imager:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  imager-x:
+    edition: lite
+    enabled: true
+    licenseKey: OPG3EEV4QPEEEQRNJKP9IQQE
+    schemaVersion: 3.0.0
+  kint:
+    enabled: '0'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings:
+      kintDisplayTheme: aante-light
+  mailchimp-subscribe:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 2.0.0
+    settings:
+      mcsubApikey: ''
+      mcsubDoubleOptIn: '1'
+      mcsubListId: 4512f2003b
+  mix:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 0.1.0
+    settings: null
+  navigation:
+    edition: standard
+    enabled: true
+    licenseKey: IQYN2X1GDL0K976TE35AFR82
+    schemaVersion: 1.0.19
+  preparse-field:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.5
+    settings: null
+  reasons:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 2.1.1
+    settings: null
+  redactor:
+    edition: standard
+    enabled: true
+    schemaVersion: 2.3.0
+  site-switcher:
+    edition: standard
+    enabled: true
+    schemaVersion: 0.0.0
+  spectrum:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  super-sort:
+    enabled: '1'
+    licenseKey: null
+    schemaVersion: 1.0.0
+    settings: null
+  supersort:
+    edition: standard
+    enabled: true
+    schemaVersion: 0.0.0.0
+  typogrify:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+  video-embedder:
+    edition: standard
+    enabled: true
+    schemaVersion: 1.0.0
+system:
+  edition: pro
+  live: true
+  name: EKKO
+  schemaVersion: 3.6.8
+  timeZone: UTC
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  requireEmailVerification: true

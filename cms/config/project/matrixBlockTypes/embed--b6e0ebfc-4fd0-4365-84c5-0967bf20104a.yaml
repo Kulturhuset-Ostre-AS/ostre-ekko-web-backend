@@ -1,0 +1,41 @@
+field: b1f43e32-e00a-4259-837c-60b67111e847 # Content
+fieldLayouts:
+  7688365d-c752-4d72-b62e-2c1ad3fb861e:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 546e7d61-2286-49b4-98c7-d48bbf65bc65 # Code
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  546e7d61-2286-49b4-98c7-d48bbf65bc65: # Code
+    columnSuffix: null
+    contentColumnType: text
+    fieldGroup: null
+    handle: code
+    instructions: 'Place iframe code for other embeds than Youtube and Vimeo (for example Soundcloud)'
+    name: Code
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: ''
+      columnType: text
+      initialRows: '4'
+      multiline: '1'
+      placeholder: null
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: embed
+name: 'Embed block'
+sortOrder: 3

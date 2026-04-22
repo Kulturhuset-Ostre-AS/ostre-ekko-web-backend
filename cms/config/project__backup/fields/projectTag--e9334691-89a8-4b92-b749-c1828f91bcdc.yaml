@@ -1,0 +1,22 @@
+contentColumnType: string
+fieldGroup: 2a64c7df-fa74-4b9e-aa76-94dceee51474 # Arena
+handle: projectTag
+instructions: ''
+name: 'Project Tag'
+searchable: false
+settings:
+  allowLimit: false
+  allowMultipleSources: false
+  allowSelfRelations: false
+  limit: null
+  localizeRelations: false
+  selectionLabel: ''
+  showSiteMenu: false
+  source: 'taggroup:bcef1f94-457a-4ebe-8250-016d2af30d83' # Digital Arena Projects
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Tags

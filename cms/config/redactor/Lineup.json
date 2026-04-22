@@ -1,0 +1,24 @@
+{
+	"lang": "en",
+	"buttons": [
+		"formatting",
+		"bold",
+		"italic"
+	],
+	"plugins": [],
+	"formatting": [
+		"p"
+	],
+	"formattingAdd": {
+		"small": {
+			"title": "Small text",
+			"args": [
+				"p",
+				"class",
+				"small",
+				"toggle"
+			]
+		}
+	},
+	"toolbarFixed": "true"
+}

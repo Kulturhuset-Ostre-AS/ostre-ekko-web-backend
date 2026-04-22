@@ -1,0 +1,9 @@
+baseUrl: 'https://ekko.no'
+enabled: true
+handle: nb
+hasUrls: true
+language: nb-NO
+name: 'EKKO (nb)'
+primary: true
+siteGroup: f84c68dd-7976-4d13-9e29-b5f0a95b7320 # EKKO
+sortOrder: 1

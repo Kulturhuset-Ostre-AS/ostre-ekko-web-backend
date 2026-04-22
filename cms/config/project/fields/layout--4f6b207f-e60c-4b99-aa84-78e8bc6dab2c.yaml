@@ -1,0 +1,46 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
+handle: layout
+instructions: 'Select layout for event display on the front-page. The first event will always use the tall image block layout.'
+name: Layout
+searchable: true
+settings:
+  optgroups: true
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - 'Image block (tall)'
+        -
+          - value
+          - image_full
+        -
+          - default
+          - ''
+    -
+      __assoc__:
+        -
+          - label
+          - 'Text block (full width)'
+        -
+          - value
+          - text_full
+        -
+          - default
+          - '1'
+    -
+      __assoc__:
+        -
+          - label
+          - 'Text block (narrow)'
+        -
+          - value
+          - text_narrow
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

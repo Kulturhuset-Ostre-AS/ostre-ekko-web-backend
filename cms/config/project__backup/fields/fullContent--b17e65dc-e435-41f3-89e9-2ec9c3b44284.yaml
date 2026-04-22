@@ -1,0 +1,13 @@
+contentColumnType: boolean
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: fullContent
+instructions: 'Select if full artist descriptions should be visible on the event page. By default only the intro with a "read more" link will be visible.'
+name: 'Full Content Visible'
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

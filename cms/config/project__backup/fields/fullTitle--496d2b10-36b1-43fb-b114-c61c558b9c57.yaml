@@ -1,0 +1,18 @@
+contentColumnType: text
+fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f
+handle: fullTitle
+instructions: 'The title, that will be shown in the website. Can''t be blank, make it the same as the title.'
+name: 'Full Title'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  columnType: text
+  initialRows: '2'
+  multiline: ''
+  placeholder: ''
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\PlainText

@@ -1,0 +1,13 @@
+siteUid: null
+sortOrder: 3
+template: arena/_tag_entry
+uriParts:
+  0: digitalarena/tag/
+  1:
+    - tag
+    - '[^\/]+'
+  3: /
+  4:
+    - slug
+    - '[^\/]+'
+uriPattern: 'digitalarena/tag/<tag:[^\/]+>/<slug:[^\/]+>'

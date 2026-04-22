@@ -1,0 +1,154 @@
+fieldLayouts:
+  bd6b38d1-46b2-4625-a8b8-a31ec3104602:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: c869bdc9-08cf-4e74-bcc8-ad30e1d3fe41 # Content
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Home
+        sortOrder: 1
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: null
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 06b58602-3190-496b-95cc-833c4c279b62 # Linked festival
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 38e3689e-6c07-47c2-af7f-406ac6e25708 # Graphic element
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 4359dca9-1b0a-4ea5-8fd1-3aaa64ce2756 # Festival section title
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 7558bbac-b043-4d73-a6ae-be776de1486f # Festival section subtitle
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 4eb54b91-847f-49d3-85af-6fd97c2661b0 # Festival Section content
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: d7896b02-ef89-4b2d-bed9-2a1687ddaaa7 # Enable link to festival entry
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 2abbde3f-ca06-4440-8377-78cca305429c # Background color
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 77fadfa1-64d4-4d65-9f1b-d96ecdfdf404 # Text color
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Festival
+        sortOrder: 2
+      -
+        elements:
+          -
+            fieldUid: af0f5492-b25f-45be-93c3-5925cce7ebcf # Section title (events)
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 897a6dab-8ede-4c25-8a93-b0e5f5d6abf6 # Section description (events)
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: bfad235c-53cd-431f-b5d9-b21b16c7dca3 # Linked events
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Konserter
+        sortOrder: 3
+handle: homepage
+hasTitleField: false
+name: Homepage
+section: 77eeaf4a-a76a-4b31-992b-a91edf496610 # Homepage
+sortOrder: 0
+titleFormat: Homepage
+titleTranslationKeyFormat: null
+titleTranslationMethod: site

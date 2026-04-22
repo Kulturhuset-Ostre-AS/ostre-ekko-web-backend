@@ -1,0 +1,16 @@
+columnSuffix: null
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
+handle: lineupStructure
+instructions: ''
+name: Lineup
+searchable: true
+settings:
+  contentTable: '{{%matrixcontent_lineupstructure}}'
+  maxBlocks: null
+  minBlocks: null
+  propagationKeyFormat: null
+  propagationMethod: all
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Matrix

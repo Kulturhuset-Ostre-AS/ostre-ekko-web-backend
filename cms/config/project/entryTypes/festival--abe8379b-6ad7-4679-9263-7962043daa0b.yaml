@@ -1,0 +1,246 @@
+fieldLayouts:
+  38b3c3de-47ab-4cac-85d5-529cbf42c3c1:
+    tabs:
+      -
+        elements:
+          -
+            autocapitalize: true
+            autocomplete: false
+            autocorrect: true
+            class: null
+            disabled: false
+            id: null
+            instructions: null
+            label: Title
+            max: null
+            min: null
+            name: null
+            orientation: null
+            placeholder: null
+            readonly: false
+            requirable: false
+            size: null
+            step: null
+            tip: null
+            title: null
+            type: craft\fieldlayoutelements\EntryTitleField
+            warning: null
+            width: 100
+          -
+            fieldUid: 356f072d-7d91-4223-80eb-d842012888a3 # Intro
+            instructions: ''
+            label: 'Time / Date Header'
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 92d9f6e4-d8a9-4c6f-90b2-d79ee4de3fc8 # Lineup
+            instructions: ''
+            label: 'Additional Lineup Information'
+            required: ''
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: e80f79d5-8bfd-403b-8703-cd18785dc47c # Related links
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: ab8d9801-10ec-48fd-82bc-044e20cc18c4 # linkedNews
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Information
+        sortOrder: 1
+      -
+        elements:
+          -
+            fieldUid: df7b834e-e4f7-4ceb-ae3a-07aa0cd8ca9a # Featured Photo
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: c59fbaac-b3c9-4fa8-9884-60514bdfce35 # Festival stamp
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 54f6a4ae-b35f-48e8-8bed-2be391f3e8d9 # Festival stamp - mobile
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 9dd4983f-8b2b-45f7-937d-33fe34967949 # Festival background color
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 38e3689e-6c07-47c2-af7f-406ac6e25708 # Graphic element
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Media
+        sortOrder: 2
+      -
+        elements:
+          -
+            fieldUid: aac99d83-a88a-4a4b-b3fd-6c95266a5b49 # Date
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: e870c8fc-0214-40e0-8ad6-7d0629c6a6dc # End Date
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 62db04ec-3204-4ab4-8ecc-ef980ab2e2e2 # Program
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Program
+        sortOrder: 3
+      -
+        elements:
+          -
+            fieldUid: e615d2b1-f4e4-4e6b-895c-957eff051ea2 # Performances
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: bfad235c-53cd-431f-b5d9-b21b16c7dca3 # Linked events
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Performances
+        sortOrder: 4
+      -
+        elements:
+          -
+            fieldUid: 822157ba-1ba2-424b-974b-5407629ba433 # Lineup
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Lineup
+        sortOrder: 5
+      -
+        elements:
+          -
+            fieldUid: 501c383f-cb02-4039-973f-c098638b4b84 # Ticket Link
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 618b9f1d-5720-4c34-a4b0-b5e0caedf06a # Tickets
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 6b9c6d34-b4f1-4d0b-8d3f-f93f629303a5 # Parsed date & time
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Tickets
+        sortOrder: 6
+      -
+        elements:
+          -
+            fieldUid: c160fb14-bd1a-4690-9b04-2932d04eaca0 # Sections
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: 'Additional Information'
+        sortOrder: 7
+      -
+        elements:
+          -
+            fieldUid: 0f8e83d0-47dc-4eeb-89ba-c2ec7db13cc1 # Gallery
+            instructions: null
+            label: null
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Gallery
+        sortOrder: 8
+handle: festival
+hasTitleField: true
+name: Festival
+section: 301645ea-e60b-4a0b-bb67-58f74bdbca11 # Events
+sortOrder: 0
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: none

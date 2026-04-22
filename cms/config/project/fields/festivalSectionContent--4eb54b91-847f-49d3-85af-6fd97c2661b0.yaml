@@ -1,0 +1,28 @@
+columnSuffix: ipdjucxj
+contentColumnType: text
+fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b # Index
+handle: festivalSectionContent
+instructions: ''
+name: 'Festival Section content'
+searchable: false
+settings:
+  availableTransforms: '*'
+  availableVolumes: '*'
+  cleanupHtml: true
+  columnType: text
+  configSelectionMode: choose
+  defaultTransform: ''
+  manualConfig: ''
+  purifierConfig: ''
+  purifyHtml: '1'
+  redactorConfig: Normal.json
+  removeEmptyTags: '1'
+  removeInlineStyles: '1'
+  removeNbsp: '1'
+  showHtmlButtonForNonAdmins: ''
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: false
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\redactor\Field

@@ -1,0 +1,32 @@
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: eventFeaturedPhoto
+instructions: ''
+name: 'Featured Photo'
+searchable: true
+settings:
+  allowSelfRelations: false
+  allowedKinds:
+    - image
+  defaultUploadLocationSource: 'volume:51241002-1701-4f06-ae6e-59496b8a42a2' # Artist Photos
+  defaultUploadLocationSubpath: ''
+  limit: '1'
+  localizeRelations: false
+  previewMode: full
+  restrictFiles: '1'
+  selectionLabel: 'Add a photo'
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: true
+  singleUploadLocationSource: 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  singleUploadLocationSubpath: ''
+  source: null
+  sources:
+    - 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  targetSiteId: null
+  useSingleFolder: true
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Assets

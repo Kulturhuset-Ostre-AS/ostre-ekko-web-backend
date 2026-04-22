@@ -1,0 +1,21 @@
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: performances
+instructions: 'List of performances during the event.'
+name: Performances
+searchable: true
+settings:
+  allowSelfRelations: false
+  limit: ''
+  localizeRelations: false
+  selectionLabel: 'Add a performance'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries

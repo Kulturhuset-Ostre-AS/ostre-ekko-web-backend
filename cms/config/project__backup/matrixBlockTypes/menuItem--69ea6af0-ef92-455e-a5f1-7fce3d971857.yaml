@@ -1,0 +1,100 @@
+field: 56e90857-ea30-4ad1-8953-612cf97562e1
+fieldLayouts:
+  98dd39fa-570b-4fa3-b681-30c302c0759f:
+    tabs:
+      -
+        elements:
+          -
+            fieldUid: 41a34b95-1505-4c00-b475-992edeec3dd3
+            instructions: null
+            label: null
+            required: '1'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: c497f883-d2d9-46aa-9d6d-50f91ed90ba3
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+          -
+            fieldUid: 04ad8bc5-41ba-46fc-83ee-9e939a4af8d4
+            instructions: null
+            label: null
+            required: '0'
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            warning: null
+            width: 100
+        name: Content
+        sortOrder: 1
+fields:
+  04ad8bc5-41ba-46fc-83ee-9e939a4af8d4:
+    contentColumnType: string
+    fieldGroup: null
+    handle: menuItemEntry
+    instructions: ''
+    name: 'Menu item entry'
+    searchable: true
+    settings:
+      allowSelfRelations: false
+      limit: '1'
+      localizeRelations: false
+      selectionLabel: 'Velg en side'
+      showSiteMenu: true
+      source: null
+      sources:
+        - 'section:301645ea-e60b-4a0b-bb67-58f74bdbca11'
+        - singles
+      targetSiteId: null
+      validateRelatedElements: false
+      viewMode: null
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\Entries
+  41a34b95-1505-4c00-b475-992edeec3dd3:
+    contentColumnType: text
+    fieldGroup: null
+    handle: menuItemTitle
+    instructions: ''
+    name: 'Menu item title'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: site
+    type: craft\fields\PlainText
+  c497f883-d2d9-46aa-9d6d-50f91ed90ba3:
+    contentColumnType: text
+    fieldGroup: null
+    handle: menuItemUrl
+    instructions: 'Add only local url (as hash)'
+    name: 'Menu item url'
+    searchable: true
+    settings:
+      byteLimit: null
+      charLimit: null
+      code: false
+      columnType: text
+      initialRows: '4'
+      multiline: ''
+      placeholder: ''
+      uiMode: normal
+    translationKeyFormat: null
+    translationMethod: none
+    type: craft\fields\PlainText
+handle: menuItem
+name: 'Menu item'
+sortOrder: 1

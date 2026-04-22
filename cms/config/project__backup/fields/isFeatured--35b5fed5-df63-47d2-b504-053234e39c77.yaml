@@ -1,0 +1,13 @@
+contentColumnType: boolean
+fieldGroup: 3626e6f0-4597-4098-b20a-fb662ff583a7
+handle: isFeatured
+instructions: ''
+name: Featured
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

@@ -1,0 +1,16 @@
+{% set project = currentProject.getNext(craft.entries.section('arena')) %}
+
+{% if project %}
+  {% set title = project.artistName %}
+  {# {% set title =  project.projectTitle ? "#{project.artistName} «#{project.projectTitle}»" : project.artistName %} #}
+  {# {% set title = project.title %} #}
+
+  <div class="header-grid side-left full" data-playing-dim>
+    <div class="header-element -no-top">
+      <div class="next-project-container">
+        <span>Next in Digital Arena</span>
+        <a class="content-link" href="{{ project.url }}">{{ title }}</a>
+      </div>
+    </div>
+  </div>
+{% endif %}

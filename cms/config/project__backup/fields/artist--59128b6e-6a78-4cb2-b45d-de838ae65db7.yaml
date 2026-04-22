@@ -1,0 +1,21 @@
+contentColumnType: string
+fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8
+handle: artist
+instructions: ''
+name: Artist
+searchable: true
+settings:
+  allowSelfRelations: false
+  limit: '1'
+  localizeRelations: false
+  selectionLabel: 'Select performing artist'
+  showSiteMenu: true
+  source: null
+  sources:
+    - 'section:55ac0cf8-926f-4ebf-beda-5e9defe5c90b'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: null
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\Entries
