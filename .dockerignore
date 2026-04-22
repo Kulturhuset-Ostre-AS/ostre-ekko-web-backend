@@ -1,0 +1,11 @@
+.git
+.github
+terraform
+**/.DS_Store
+**/node_modules
+cms/storage/logs/*
+cms/storage/runtime/*
+cms/vendor
+public_html/uploads/*
+public_html/imager
+public_html/cpresources

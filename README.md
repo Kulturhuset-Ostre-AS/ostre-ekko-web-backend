@@ -78,6 +78,8 @@ Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation star
 5. Import a database dump and sync **`public_html/uploads/`** if you need assets locally (see `docs/database-export.md`).
 6. Open the control panel (this project uses trigger **`admin`**, not `/cp` — see `cms/config/general.php`).
 
+**Docker on a VM:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 7.4 FPM; optional MariaDB profile for local DB).
+
 For day-to-day work, use Craft’s documented workflows for migrations, Project Config, and backups rather than editing production data directly.
 
 ## Environment
