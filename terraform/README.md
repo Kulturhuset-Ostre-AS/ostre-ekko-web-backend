@@ -6,7 +6,7 @@ Creates in an **existing** customer project:
 - **VPC peering** reserved range + **private IP** Cloud SQL for **MySQL**
 - Optional **public IP** on Cloud SQL with **authorized networks** (off by default)
 - Application **database** + **user** (random password)
-- **GCS** buckets: long-lived **assets** + short-lived **migration** (SQL dump upload / `gcloud sql import`)
+- **GCS** buckets: long-lived **assets** + **migration** (SQL dump upload / `gcloud sql import`), with **Cloud SQL instance → migration bucket** `objectViewer` IAM for imports
 - **Service account** for the future app VM / runtime with **Cloud SQL Client** + **object admin on assets bucket** only
 - **Secret Manager** secret holding the DB password (app SA can read it)
 
@@ -88,12 +88,29 @@ You do **not** need Terraform to import SQL or sync files — only `gcloud` (Clo
 
 ### Upload SQL dump and import into Cloud SQL
 
-Cloud SQL import accepts **`.sql` or `.sql.gz`** depending on version; if import rejects gzip, decompress first.
+Terraform grants the **Cloud SQL instance service account** **`roles/storage.objectViewer`** on the **migration** bucket so `gcloud sql import sql` can read the object. Apply Terraform **before** importing; if the bucket existed without this rule, run **`terraform apply`** once to add IAM.
+
+**Option 1 — helper script** (repo root, Terraform initialized so `terraform output` works):
+
+```bash
+chmod +x scripts/import-db-to-cloud-sql.sh
+./scripts/import-db-to-cloud-sql.sh ~/path/to/ekko-20260422.sql.gz
+```
+
+If the dump targets a different **logical** database name than Terraform’s `db_name` (default `craft`):
+
+```bash
+DATABASE_NAME=ekkonqcr_ekko ./scripts/import-db-to-cloud-sql.sh ~/path/to/dump.sql.gz
+```
+
+**Option 2 — manual `gcloud`**
+
+Cloud SQL for MySQL usually accepts **`.sql` or `.sql.gz`**. If import rejects gzip, decompress and upload a plain `.sql`.
 
 ```bash
 PROJECT_ID=…
-MIGRATION_BUCKET=…   # terraform output migration_bucket
-INSTANCE=…         # terraform output sql_instance_name
+MIGRATION_BUCKET=…   # terraform output -raw migration_bucket
+INSTANCE=…           # terraform output -raw sql_instance_name
 
 gcloud config set project "$PROJECT_ID"
 
@@ -103,7 +120,7 @@ gcloud sql import sql "$INSTANCE" "gs://${MIGRATION_BUCKET}/import/ekko.sql.gz" 
   --database=craft
 ```
 
-Use the **Terraform database name** (`db_name`, default `craft`) in `--database=`. If your dump used another logical database name, align `db_name` in tfvars before apply or adjust `--database=`.
+Imports apply to the **named database** (`--database=`). Use Terraform’s `db_name` unless you intentionally import elsewhere. Prefer an **empty** database for first import.
 
 ### Upload media (`uploads/`) to the assets bucket
 

@@ -52,6 +52,11 @@ output "migration_bucket" {
   value = google_storage_bucket.migration.name
 }
 
+output "sql_instance_service_account" {
+  description = "Cloud SQL instance SA (has objectViewer on migration bucket for imports)."
+  value       = google_sql_database_instance.craft.service_account_email_address
+}
+
 output "app_service_account_email" {
   value = google_service_account.app.email
 }
