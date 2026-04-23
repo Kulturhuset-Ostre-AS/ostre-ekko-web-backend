@@ -98,6 +98,9 @@ The **`mikestecker/craft-videoembedder`** plugin was removed (no Craft 4+ compat
 - **Schema and tokens** control which entry types, fields, and sites appear in the API. If something disappears after a deploy, compare **GraphQL schemas** in the CP with the token’s assigned schema.
 - **Multi-site:** pass the appropriate [site argument](https://craftcms.com/docs/5.x/development/graphql.html#querying-elements) when querying localized content (`site: "nb"`, `site: "en"`, etc.) — handles match Project Config (`nb`, `en`).
 - **Introspection:** after any schema change, confirm queries in **GraphiQL** (admin) or your client’s introspection-driven tooling.
+- **Verbb Navigation:** the **`navigationNodes`** / **`navigationNode`** root fields are only registered if the token’s schema includes **Navigation** permissions (`navigationNavs` in Project Config). Otherwise GraphQL returns `Cannot query field "navigationNodes" on type "Query"` — assign the token to a schema that matches **Ekko site** / **Public Schema** navigation scopes, or queries will have no nav field at all.
+- **Entry type names in GraphQL:** Craft 5 exposes entry types as **`{entryTypeHandle}_Entry`** (e.g. `legal_Entry`, `event_Entry`, `festival_Entry`), not the old `section_section_Entry`-style doubled handles.
+- **Matrix inline fragments:** Matrix fields resolve to nested entries; use **`{fieldHandle}_{entryTypeHandle}_Entry`** (e.g. `sections_entry_Entry`, `complexContent_text_Entry`), not `*_BlockType`.
 
 ---
 
