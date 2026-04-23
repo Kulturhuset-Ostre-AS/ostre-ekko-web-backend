@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1.6
 
-# Craft 3.7 runs on PHP 7.4 (EOL). The official docker.io/library/php 7.4 tags
-# have been partially removed, so we use serversideup's maintained Alpine image.
+# PHP 8.2 for Craft 4 + 5. Craft 4 requires PHP 8.0.2+, Craft 5 requires PHP 8.2+.
+# Staying on serversideup's maintained Alpine image.
 # Docs: https://serversideup.net/open-source/docker-php/
-FROM serversideup/php:7.4-fpm-alpine
+FROM serversideup/php:8.2-fpm-alpine
 
 USER root
 

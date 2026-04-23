@@ -30,14 +30,15 @@
     "optimize-autoloader": true,
     "allow-plugins": {
       "craftcms/plugin-installer": true,
-      "yiisoft/yii2-composer": true
+      "yiisoft/yii2-composer": true,
+      "kylekatarnls/update-helper": true
     },
     "audit": {
       "abandoned": "report",
       "block-insecure": false
     },
     "platform": {
-      "php": "7.4"
+      "php": "8.2"
     }
   },
   "scripts": {
