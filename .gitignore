@@ -4,6 +4,10 @@
 !/cms/.env.example
 /cms/config/license.key
 
+# Local database dumps (e.g. mariadb-dump | gzip)
+/cms/*.sql
+/cms/*.sql.gz
+
 /cms/vendor/
 /node_modules/
 
