@@ -41,10 +41,14 @@ echo
 gcloud config set project "$project_id"
 
 echo "Uploading…"
-gcloud storage cp "$dump_path" "$gs_uri"
+gcloud storage cp --quiet "$dump_path" "$gs_uri"
 
 echo "Starting import (can take several minutes)…"
-gcloud sql import sql "$instance" "$gs_uri" --database="$database_name" --project="$project_id"
+# --quiet skips the interactive confirmation prompt (safe for CI / agents).
+gcloud sql import sql "$instance" "$gs_uri" \
+  --database="$database_name" \
+  --project="$project_id" \
+  --quiet
 
 echo
 echo "Done. You may delete the dump from the bucket when finished:"
