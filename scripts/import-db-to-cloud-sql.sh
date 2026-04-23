@@ -7,6 +7,7 @@
 # Optional env:
 #   DATABASE_NAME   — logical DB name (default: terraform output database_name)
 #   IMPORT_OBJECT   — object name under bucket (default: import/<basename>)
+#   SKIP_IMPORT=1   — only upload to GCS; do not run `gcloud sql import sql`
 set -euo pipefail
 
 dump_path="${1:?Usage: $0 /path/to/dump.sql[.gz]}"
@@ -42,6 +43,13 @@ gcloud config set project "$project_id"
 
 echo "Uploading…"
 gcloud storage cp --quiet "$dump_path" "$gs_uri"
+
+if [[ "${SKIP_IMPORT:-}" == "1" ]]; then
+  echo
+  echo "SKIP_IMPORT=1: upload done; skipping Cloud SQL import."
+  echo "Object: $gs_uri"
+  exit 0
+fi
 
 echo "Starting import (can take several minutes)…"
 # --quiet skips the interactive confirmation prompt (safe for CI / agents).
