@@ -186,18 +186,19 @@ jobs:
           PROJECT: ${{ steps.tf.outputs.project }}
         run: |
           set -euo pipefail
+          STAGE="/tmp/ekko-deploy-${GITHUB_SHA::12}"
           gcloud compute ssh "$VM" --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
-            --command="sudo mkdir -p /srv/ekko && sudo chown \$(id -u):\$(id -g) /srv/ekko"
+            --command="rm -rf $STAGE && mkdir -p $STAGE"
           gcloud compute scp \
             --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
-            docker-compose.yml docker-compose.gcp.yml \
-            "$VM:/srv/ekko/"
-          gcloud compute scp \
-            --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
-            scripts/vm/write-cms-env.sh \
-            "$VM:/tmp/write-cms-env.sh"
+            docker-compose.yml docker-compose.gcp.yml scripts/vm/write-cms-env.sh \
+            "$VM:$STAGE/"
           gcloud compute ssh "$VM" --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
-            --command="sudo chown root:root /srv/ekko/docker-compose.yml /srv/ekko/docker-compose.gcp.yml /tmp/write-cms-env.sh && sudo chmod 644 /srv/ekko/docker-compose.yml /srv/ekko/docker-compose.gcp.yml && sudo chmod 755 /tmp/write-cms-env.sh"
+            --command="sudo mkdir -p /srv/ekko && \
+              sudo install -o root -g root -m 0644 $STAGE/docker-compose.yml      /srv/ekko/docker-compose.yml && \
+              sudo install -o root -g root -m 0644 $STAGE/docker-compose.gcp.yml  /srv/ekko/docker-compose.gcp.yml && \
+              sudo install -o root -g root -m 0755 $STAGE/write-cms-env.sh        /usr/local/sbin/ekko-write-cms-env && \
+              rm -rf $STAGE"
 
       - name: Write cms.env + .env.gcp on VM
         run: |
@@ -206,7 +207,7 @@ jobs:
             --zone="${{ steps.tf.outputs.zone }}" \
             --project="${{ steps.tf.outputs.project }}" \
             --tunnel-through-iap \
-            --command="sudo /tmp/write-cms-env.sh \
+            --command="sudo /usr/local/sbin/ekko-write-cms-env \
               --primary-url $(printf %q '${{ steps.url.outputs.primary_url }}') \
               --php-image    $(printf %q '${{ steps.img.outputs.php_sha }}') \
               --nginx-image  $(printf %q '${{ steps.img.outputs.nginx_sha }}')"
