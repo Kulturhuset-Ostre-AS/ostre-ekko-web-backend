@@ -6,4 +6,5 @@ mode: crop
 name: 'Thumb (large)'
 position: center-center
 quality: 82
+upscale: true
 width: 1000

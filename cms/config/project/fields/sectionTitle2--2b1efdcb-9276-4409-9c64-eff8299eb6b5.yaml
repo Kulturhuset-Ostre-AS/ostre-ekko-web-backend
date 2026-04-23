@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: sectionTitle2
+instructions: null
+name: 'Page Structure - Festival - Festival section title'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  initialRows: 4
+  multiline: false
+  placeholder: Festival
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: site
+type: craft\fields\PlainText

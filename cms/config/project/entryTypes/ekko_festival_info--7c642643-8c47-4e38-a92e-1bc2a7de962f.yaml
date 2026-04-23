@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: f0eabcf0-13ce-42bf-9d08-89573281c885
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 10a8a952-18b6-41ba-a2ce-ca42a6ee4d8a
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 47ca7810-e915-4461-af4b-d62b60442eeb
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 4ec5ee75-da95-40b5-aaae-c7948cbc5a8b
             warning: null
             width: 100
           -
@@ -60,10 +64,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 916a84c8-4b5a-4722-be60-ba8b236b0388
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: e26f276d-f0b9-45b9-8fb5-1e9c19a231fd
       -
         elements:
           -
@@ -73,14 +79,15 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: accdc18f-7acd-4077-9dcf-cc20fc211c8f
             warning: null
             width: 100
         name: Gallery
         sortOrder: 2
+        uid: 5d157e22-cc6e-4ccc-9cb2-9a28acd039d1
 handle: ekko_festival_info
 hasTitleField: false
 name: 'Ekko Festival'
-section: 020f48a4-f969-42b4-b017-ff9c94cac7be # Ekko Festival
 sortOrder: 1
 titleFormat: '{section.name|raw}'
 titleTranslationKeyFormat: null

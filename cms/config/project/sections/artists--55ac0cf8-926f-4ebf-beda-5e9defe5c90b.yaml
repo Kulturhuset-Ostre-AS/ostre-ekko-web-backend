@@ -1,6 +1,12 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 5bb4803b-6adc-4b0c-8ee3-1fe72c59b1d7 # Artist
+  -
+    uid: cd909105-de3f-40cc-bcef-3dcc79779872 # Exhibition
 handle: artists
+maxAuthors: 1
 name: Artists
 previewTargets:
   -

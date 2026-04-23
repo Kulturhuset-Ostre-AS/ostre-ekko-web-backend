@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: false
+entryTypes:
+  -
+    uid: ebe72525-8597-4100-a8ba-480515957823 # Østre
 handle: oestre
+maxAuthors: 1
 name: Østre
 previewTargets:
   -

@@ -1,0 +1,13 @@
+columnSuffix: null
+handle: isFestival
+instructions: null
+name: 'Past events - Event - Is festival'
+searchable: true
+settings:
+  default: true
+  offLabel: null
+  onLabel: null
+  showLabelsInCards: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

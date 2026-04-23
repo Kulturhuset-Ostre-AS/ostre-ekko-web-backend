@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: e674f566-c3ed-48a7-abce-f4d4ca06d3d2 # Video Project
 handle: arena
+maxAuthors: 1
 name: 'Digital Arena'
 previewTargets:
   -

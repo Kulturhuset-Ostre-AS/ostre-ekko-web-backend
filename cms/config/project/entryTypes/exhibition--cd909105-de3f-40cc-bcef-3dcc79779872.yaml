@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 644156ca-225c-4837-8714-778e90116766
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 068eb103-b329-4cc0-91e1-bc1e2417878c
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: ed31b3a5-0fbf-4dc3-9d5e-a13a2095081c
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 68de9c24-e7f7-4d13-b248-b0783776e89b
             warning: null
             width: 100
           -
@@ -60,6 +64,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 12961de3-4062-48a2-a6d2-d91e435ec666
             warning: null
             width: 100
           -
@@ -69,6 +74,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: c8caa9d1-98ab-407a-b63c-63467d34bcf8
             warning: null
             width: 100
           -
@@ -78,6 +84,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 4de55c6e-8f1b-455e-af5e-189f8d7ba8f2
             warning: null
             width: 100
           -
@@ -87,14 +94,15 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: ebf80c59-b074-4457-bb33-fd822d02d4d0
             warning: null
             width: 100
         name: Information
         sortOrder: 1
+        uid: 9cb000a2-ebf0-4aa6-96fe-5b00173688e8
 handle: exhibition
 hasTitleField: true
 name: Exhibition
-section: 55ac0cf8-926f-4ebf-beda-5e9defe5c90b # Artists
 sortOrder: 0
 titleFormat: null
 titleTranslationKeyFormat: null

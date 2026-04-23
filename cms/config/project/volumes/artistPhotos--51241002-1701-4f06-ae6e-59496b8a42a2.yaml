@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\AssetTitleField
+            type: craft\fieldlayoutelements\assets\AssetTitleField
+            uid: d7d0eb21-d78a-41ee-b04f-abf638456ebf
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 647e9094-c217-4efc-b496-37084fd4ff0c
             warning: null
             width: 100
           -
@@ -42,17 +44,17 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: c2026b2e-156c-4a37-8778-cb5e2f84c0b4
             warning: null
             width: 100
         name: Innhold
         sortOrder: 1
+        uid: bf5472c0-06b0-4dcb-8464-33dcaa450608
+fs: artistPhotos
 handle: artistPhotos
 hasUrls: true
 name: 'Artist Photos'
-settings:
-  path: '@assetBasePath/photos/artists'
 sortOrder: 1
 titleTranslationKeyFormat: null
 titleTranslationMethod: site
-type: craft\volumes\Local
 url: '@assetBaseUrl/photos/artists'

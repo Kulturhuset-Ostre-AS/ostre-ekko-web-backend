@@ -1,30 +1,6 @@
 isPublic: false
 name: 'Ekko site'
 scope:
-  - 'sections.71ff9901-9c95-4883-b9f2-27282e6584d5:read' # About
-  - 'entrytypes.d0a658ce-92a8-44f0-a55d-8b2e49b51d7e:read' # About
-  - 'sections.196bdedc-ec5d-4598-9494-bd83c64bec41:read' # Archive
-  - 'entrytypes.6092fc1e-80cc-4982-bbb9-ba9861cdcef3:read' # Archive
-  - 'sections.55ac0cf8-926f-4ebf-beda-5e9defe5c90b:read' # Artists
-  - 'entrytypes.5bb4803b-6adc-4b0c-8ee3-1fe72c59b1d7:read' # Artist
-  - 'entrytypes.cd909105-de3f-40cc-bcef-3dcc79779872:read' # Exhibition
-  - 'sections.5238bc75-3c4c-488c-a7be-973e480d98e0:read' # Digital Arena
-  - 'entrytypes.e674f566-c3ed-48a7-abce-f4d4ca06d3d2:read' # Video Project
-  - 'sections.020f48a4-f969-42b4-b017-ff9c94cac7be:read' # Ekko Festival
-  - 'entrytypes.7c642643-8c47-4e38-a92e-1bc2a7de962f:read' # Ekko Festival
-  - 'sections.301645ea-e60b-4a0b-bb67-58f74bdbca11:read' # Events
-  - 'entrytypes.abe8379b-6ad7-4679-9263-7962043daa0b:read' # Festival
-  - 'entrytypes.755c585f-b811-47dc-b91f-aed945420029:read' # Event
-  - 'sections.77eeaf4a-a76a-4b31-992b-a91edf496610:read' # Homepage
-  - 'entrytypes.6c52e813-75ce-4e21-8627-ca4024b4a3a0:read' # Homepage
-  - 'sections.8c744ecf-5dca-4295-891d-f986a1167efb:read' # Legal
-  - 'entrytypes.5970721f-cec8-40e7-af75-ae37f9d9ee20:read' # Legal
-  - 'sections.0e779b2c-f6e5-4cc0-a81c-53479e1587de:read' # News
-  - 'entrytypes.86d6422d-170f-488a-9545-22f573b34683:read' # News entry
-  - 'sections.43bffe17-465b-4ef5-8557-5a5185b24e12:read' # Østre
-  - 'entrytypes.ebe72525-8597-4100-a8ba-480515957823:read' # Østre
-  - 'sections.8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5:read' # Performance
-  - 'entrytypes.847ba39f-d84e-4d90-8962-dd31e5a0fc85:read' # Performance
   - 'volumes.51241002-1701-4f06-ae6e-59496b8a42a2:read' # Artist Photos
   - 'volumes.9654b4af-cff4-49e6-b9b3-a3071afc2549:read' # Event Photo
   - 'volumes.c8b7ff51-a81c-4b49-a381-8c8021719cc2:read' # User Photos
@@ -36,11 +12,26 @@ scope:
   - 'taggroups.9cfd44dd-f0b0-43c0-a6fc-47a984ca0317:read' # Default
   - 'taggroups.bcef1f94-457a-4ebe-8250-016d2af30d83:read' # Digital Arena Projects
   - 'taggroups.69085be0-360e-4318-a157-d38cf06146c7:read' # Test
-  - 'navigationNavs.all:read'
-  - 'navigationNavs.51563ce2-dabd-46db-a7bf-21dbb70fced0:read' # Main navigation
-  - 'navigationNavs.5aeb8e69-596a-403d-970a-3a5f856e172a:read' # Main Menu
-  - 'navigationNavs.1a637861-ca68-4b37-89b2-4749e2df9e77:read' # New Navigation
-  - 'navigationNavs.2636d2bc-c59f-4520-add8-6b673aeaf88a:read' # Ekko Festival
-  - 'navigationNavs.9bd651ab-6fac-4a9c-bc60-505c61c7d8e0:read' # Østre
-  - 'navigationNavs.989baf15-ee1a-40bd-8587-4ac2033dba46:read' # Foreningen Ekko
-  - 'navigationNavs.162b2b00-4439-4618-8365-b40dab8bcaf8:read' # Toggle
+  - 'navigationnavs.all:read'
+  - 'navigationnavs.51563ce2-dabd-46db-a7bf-21dbb70fced0:read' # Main navigation
+  - 'navigationnavs.5aeb8e69-596a-403d-970a-3a5f856e172a:read' # Main Menu
+  - 'navigationnavs.1a637861-ca68-4b37-89b2-4749e2df9e77:read' # New Navigation
+  - 'navigationnavs.2636d2bc-c59f-4520-add8-6b673aeaf88a:read' # Ekko Festival
+  - 'navigationnavs.9bd651ab-6fac-4a9c-bc60-505c61c7d8e0:read' # Østre
+  - 'navigationnavs.989baf15-ee1a-40bd-8587-4ac2033dba46:read' # Foreningen Ekko
+  - 'navigationnavs.162b2b00-4439-4618-8365-b40dab8bcaf8:read' # Toggle
+  - 'sites.2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af:read' # EKKO (en)
+  - 'sites.cc892d6a-abac-456e-83a9-260fd5616d45:read' # EKKO (nb)
+  - 'directive:parserefs'
+  - 'directive:transform'
+  - 'sections.0e779b2c-f6e5-4cc0-a81c-53479e1587de:read' # News
+  - 'sections.8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5:read' # Performance
+  - 'sections.8c744ecf-5dca-4295-891d-f986a1167efb:read' # Legal
+  - 'sections.020f48a4-f969-42b4-b017-ff9c94cac7be:read' # Ekko Festival
+  - 'sections.43bffe17-465b-4ef5-8557-5a5185b24e12:read' # Østre
+  - 'sections.55ac0cf8-926f-4ebf-beda-5e9defe5c90b:read' # Artists
+  - 'sections.71ff9901-9c95-4883-b9f2-27282e6584d5:read' # About
+  - 'sections.77eeaf4a-a76a-4b31-992b-a91edf496610:read' # Homepage
+  - 'sections.196bdedc-ec5d-4598-9494-bd83c64bec41:read' # Archive
+  - 'sections.5238bc75-3c4c-488c-a7be-973e480d98e0:read' # Digital Arena
+  - 'sections.301645ea-e60b-4a0b-bb67-58f74bdbca11:read' # Events

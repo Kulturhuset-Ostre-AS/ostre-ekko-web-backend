@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 5970721f-cec8-40e7-af75-ae37f9d9ee20 # Legal
 handle: legal
+maxAuthors: 1
 name: Legal
 previewTargets:
   -

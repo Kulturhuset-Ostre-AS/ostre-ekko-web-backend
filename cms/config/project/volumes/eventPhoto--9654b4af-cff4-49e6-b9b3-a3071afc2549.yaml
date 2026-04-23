@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\AssetTitleField
+            type: craft\fieldlayoutelements\assets\AssetTitleField
+            uid: 73a3251b-efc3-4e04-b5ce-b0fb09a1febd
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 11145c7a-a9f6-4116-88ff-0e10d6ebbf95
             warning: null
             width: 100
           -
@@ -42,17 +44,17 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 9bb20821-53b7-4f29-a973-12e1cafa41f5
             warning: null
             width: 100
         name: Innhold
         sortOrder: 1
+        uid: 49660f59-f672-4ff4-8afc-17b7a1ae131f
+fs: eventPhoto
 handle: eventPhoto
 hasUrls: true
 name: 'Event Photo'
-settings:
-  path: '@assetBasePath/photos/events'
 sortOrder: 2
 titleTranslationKeyFormat: null
 titleTranslationMethod: site
-type: craft\volumes\Local
 url: '@assetBaseUrl/photos/events'

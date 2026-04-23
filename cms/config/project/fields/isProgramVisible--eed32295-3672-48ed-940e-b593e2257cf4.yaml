@@ -1,0 +1,13 @@
+columnSuffix: null
+handle: isProgramVisible
+instructions: null
+name: 'Page Structure - Festival - Show festival program'
+searchable: true
+settings:
+  default: false
+  offLabel: null
+  onLabel: null
+  showLabelsInCards: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Lightswitch

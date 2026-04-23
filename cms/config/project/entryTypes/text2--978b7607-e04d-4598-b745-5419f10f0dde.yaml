@@ -1,0 +1,44 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  33048b94-64f3-4a05-98b5-a60f01f2d2cc:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:9ab76762-bfbf-4714-87e3-75813c600c3c'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 52683e7a-7c6a-4386-b481-0dfee40ad8db
+            handle: null
+            instructions: null
+            label: Content
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 9ab76762-bfbf-4714-87e3-75813c600c3c
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: c6d4892c-126d-41a9-8809-0b2811796a91
+        userCondition: null
+    thumbFieldKey: null
+handle: text2
+hasTitleField: false
+icon: null
+name: 'Text block'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

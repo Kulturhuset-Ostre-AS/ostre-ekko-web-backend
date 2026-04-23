@@ -1,16 +1,19 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f # Default
 handle: pastEvents
 instructions: ''
 name: 'Past events'
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_pastevents}}'
-  maxBlocks: null
-  minBlocks: null
+  entryTypes:
+    -
+      handle: event
+      uid: 203b3f7a-11d6-44e4-b95e-db08891146dd
+  maxEntries: null
+  minEntries: null
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

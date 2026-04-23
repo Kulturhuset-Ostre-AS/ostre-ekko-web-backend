@@ -1,0 +1,36 @@
+columnSuffix: null
+handle: image
+instructions: null
+name: 'Page Structure - Image block - Image'
+searchable: true
+settings:
+  allowSelfRelations: false
+  allowSubfolders: false
+  allowUploads: true
+  allowedKinds:
+    - image
+  branchLimit: null
+  defaultPlacement: end
+  defaultUploadLocationSource: 'volume:9654b4af-cff4-49e6-b9b3-a3071afc2549' # Event Photo
+  defaultUploadLocationSubpath: null
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  previewMode: full
+  restrictFiles: true
+  restrictLocation: false
+  restrictedDefaultUploadSubpath: null
+  restrictedLocationSource: 'volume:51241002-1701-4f06-ae6e-59496b8a42a2' # Artist Photos
+  restrictedLocationSubpath: null
+  selectionLabel: 'Add an image'
+  showSearchInput: true
+  showSiteMenu: true
+  showUnpermittedFiles: false
+  showUnpermittedVolumes: true
+  sources: '*'
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: thumbs
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Assets

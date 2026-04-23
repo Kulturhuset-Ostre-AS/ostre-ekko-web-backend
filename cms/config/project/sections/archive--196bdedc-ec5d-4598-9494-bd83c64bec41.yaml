@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 6092fc1e-80cc-4982-bbb9-ba9861cdcef3 # Archive
 handle: archive
+maxAuthors: 1
 name: Archive
 previewTargets:
   -

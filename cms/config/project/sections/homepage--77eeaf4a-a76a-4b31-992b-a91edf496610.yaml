@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 6c52e813-75ce-4e21-8627-ca4024b4a3a0 # Homepage
 handle: homepage
+maxAuthors: 1
 name: Homepage
 previewTargets:
   -

@@ -6,4 +6,5 @@ mode: fit
 name: Optimised
 position: center-center
 quality: 60
+upscale: true
 width: 1920

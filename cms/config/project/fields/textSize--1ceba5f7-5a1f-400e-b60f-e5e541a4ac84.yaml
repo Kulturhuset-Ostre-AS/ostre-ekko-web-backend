@@ -1,0 +1,33 @@
+columnSuffix: null
+handle: textSize
+instructions: null
+name: 'Lineup - Lineup entry - Text size'
+searchable: true
+settings:
+  customOptions: false
+  options:
+    -
+      __assoc__:
+        -
+          - label
+          - Normal
+        -
+          - value
+          - normal
+        -
+          - default
+          - '1'
+    -
+      __assoc__:
+        -
+          - label
+          - Small
+        -
+          - value
+          - small
+        -
+          - default
+          - ''
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Dropdown

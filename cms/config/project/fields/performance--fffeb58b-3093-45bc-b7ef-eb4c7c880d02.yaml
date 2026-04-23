@@ -1,0 +1,25 @@
+columnSuffix: null
+handle: performance
+instructions: null
+name: 'Lineup - Lineup entry - Artist / Performance'
+searchable: true
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  selectionLabel: 'Choose performance'
+  showSearchInput: true
+  showSiteMenu: true
+  showUnpermittedEntries: true
+  showUnpermittedSections: true
+  sources:
+    - 'section:8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5' # Performance
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Entries

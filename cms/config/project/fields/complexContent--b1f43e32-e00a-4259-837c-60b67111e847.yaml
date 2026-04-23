@@ -1,16 +1,25 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 1a9347e1-e75c-4664-982f-4cf62da8d14f # Default
 handle: complexContent
 instructions: 'Complex structure allowing to build body with the possibility to mix text with youtube/vimeo videos and custom embeds.'
 name: Content
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_complexcontent}}'
-  maxBlocks: ''
-  minBlocks: ''
+  entryTypes:
+    -
+      handle: text
+      uid: 978b7607-e04d-4598-b745-5419f10f0dde
+    -
+      uid: 61d026cd-2f64-4354-a758-3010ddfb6128
+    -
+      uid: b6e0ebfc-4fd0-4365-84c5-0967bf20104a
+    -
+      uid: 1d177f14-7af9-433e-b253-ac7d84fe6a73
+  maxEntries: ''
+  minEntries: ''
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

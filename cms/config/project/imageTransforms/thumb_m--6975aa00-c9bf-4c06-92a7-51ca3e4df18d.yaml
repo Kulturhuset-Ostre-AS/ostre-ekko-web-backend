@@ -6,4 +6,5 @@ mode: crop
 name: 'Thumb (medium)'
 position: center-center
 quality: 82
+upscale: true
 width: 500

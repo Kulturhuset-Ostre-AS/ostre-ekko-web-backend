@@ -1,0 +1,77 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  1794a43a-c44a-4377-8ac6-abada88396c0:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:a3c97a86-5633-4d97-94f4-cac20ff23054'
+      - 'layoutElement:5afa95d6-5cbe-4be2-b6ad-cf05b1c4cc55'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 7c91a948-4afd-4cfd-9278-1f1851d6fb1b
+            handle: null
+            instructions: null
+            label: 'Event section title'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: a3c97a86-5633-4d97-94f4-cac20ff23054
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 901575ef-4d5f-429c-911b-817847ffb9bf
+            handle: null
+            instructions: null
+            label: 'Event entries'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: acd1b1a1-a7ce-4aad-95ee-6530c7c68bf8
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: dbbc363e-8e44-41d8-b264-8a4d0c9af24e
+            handle: null
+            instructions: null
+            label: 'Section description'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 5afa95d6-5cbe-4be2-b6ad-cf05b1c4cc55
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 423ce969-67ac-4c0c-a4ee-fa8c76df42f8
+        userCondition: null
+    thumbFieldKey: 'layoutElement:acd1b1a1-a7ce-4aad-95ee-6530c7c68bf8'
+handle: events
+hasTitleField: false
+icon: null
+name: Events
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

@@ -15,13 +15,13 @@ permissions:
   craft\elements\Tag:
     enabled: ''
     permissions: '*'
-  custom:
+  verbb\navigation\nodetypes\CustomType:
     enabled: '1'
   verbb\navigation\nodetypes\PassiveType:
     enabled: '1'
   verbb\navigation\nodetypes\SiteType:
     enabled: '1'
-propagateNodes: false
+propagationMethod: none
 siteSettings:
   2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: # EKKO (en)
     enabled: '1'

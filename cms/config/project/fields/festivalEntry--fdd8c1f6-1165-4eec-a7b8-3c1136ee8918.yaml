@@ -1,0 +1,25 @@
+columnSuffix: null
+handle: festivalEntry
+instructions: null
+name: 'Page Structure - Festival - Festival entry'
+searchable: true
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: 1
+  minRelations: null
+  selectionLabel: 'Select festival entry'
+  showSearchInput: true
+  showSiteMenu: true
+  showUnpermittedEntries: true
+  showUnpermittedSections: true
+  sources:
+    - 'section:301645ea-e60b-4a0b-bb67-58f74bdbca11' # Events
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Entries

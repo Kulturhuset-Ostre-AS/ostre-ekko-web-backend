@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: bed0691c-64c7-4361-b551-c686de536614
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 8968ea50-00e2-48ef-be1b-bf5de8e9859c
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 9d3787b8-052b-4890-9011-a0bb662c4c8d
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: ea3da5c4-2222-4bfe-97f4-89162f6b79d7
             warning: null
             width: 100
           -
@@ -60,10 +64,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 73a963f7-b0d9-409b-aedf-2854dc02e324
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: 440f56d5-a3bf-40f4-905a-cae001b61a98
       -
         elements:
           -
@@ -73,10 +79,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 34624c83-c44b-427c-9bc2-57090d967350
             warning: null
             width: 100
         name: Archive
         sortOrder: 2
+        uid: 8fd21d52-c72f-472b-b3cb-8c6718b25de7
       -
         elements:
           -
@@ -86,14 +94,15 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d3aa1ccf-ac9a-40c5-b347-e0125499a17f
             warning: null
             width: 100
         name: 'Additional Information'
         sortOrder: 3
+        uid: f387a842-8fd5-4b53-92b5-d1db4d06d68b
 handle: oestre
 hasTitleField: false
 name: Østre
-section: 43bffe17-465b-4ef5-8557-5a5185b24e12 # Østre
 sortOrder: 1
 titleFormat: '{section.name|raw}'
 titleTranslationKeyFormat: null

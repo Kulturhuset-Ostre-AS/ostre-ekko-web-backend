@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 751eabed-1d00-4858-bda9-c363f90e55ca
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d9f3fac5-34e7-4d8a-bf80-43194e64c149
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: f918bf10-e789-4492-a5c4-a0b9a919d850
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: ''
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 8f255b01-11db-46bd-b5e0-f7266c8ae275
             warning: null
             width: 100
           -
@@ -60,10 +64,12 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: b5623187-f3cb-48ad-98e5-b46f537dcea1
             warning: null
             width: 100
         name: Information
         sortOrder: 1
+        uid: d8abad45-5615-42d8-b2b4-65a2fa4db5b0
       -
         elements:
           -
@@ -73,6 +79,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 5654eac8-1d69-4d60-abaa-8fab35547927
             warning: null
             width: 100
           -
@@ -82,6 +89,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 805ee0ab-15ca-48f6-aedf-73929737faf2
             warning: null
             width: 100
           -
@@ -91,6 +99,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 02ddaac5-e075-41f1-9d04-dde9e1501cab
             warning: null
             width: 100
           -
@@ -100,14 +109,15 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: a54740ca-c6bf-4beb-9253-fa79dbfd969e
             warning: null
             width: 100
         name: 'Old Fields'
         sortOrder: 2
+        uid: 0f5f7c6c-c460-42ae-b995-c90c0e26f7d8
 handle: artist
 hasTitleField: true
 name: Artist
-section: 55ac0cf8-926f-4ebf-beda-5e9defe5c90b # Artists
 sortOrder: 0
 titleFormat: null
 titleTranslationKeyFormat: null

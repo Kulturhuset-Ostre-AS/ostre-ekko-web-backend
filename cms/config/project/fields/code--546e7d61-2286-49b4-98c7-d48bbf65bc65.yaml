@@ -1,0 +1,16 @@
+columnSuffix: null
+handle: code
+instructions: 'Place iframe code for other embeds than Youtube and Vimeo (for example Soundcloud)'
+name: 'Content - Embed block - Code'
+searchable: true
+settings:
+  byteLimit: null
+  charLimit: null
+  code: false
+  initialRows: 4
+  multiline: true
+  placeholder: null
+  uiMode: normal
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\PlainText

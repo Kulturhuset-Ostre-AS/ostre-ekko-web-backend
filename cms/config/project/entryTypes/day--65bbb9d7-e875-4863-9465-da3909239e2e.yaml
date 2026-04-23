@@ -1,0 +1,95 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  8638ebcb-c4af-4baa-b072-fe1c6ee09cd7:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:3fbf2199-d228-4223-998f-9df35f60b9ee'
+      - 'layoutElement:4da255ad-ff0a-48bb-bba8-55c7a3de8e03'
+      - 'layoutElement:ca2ad9db-a1e4-4a30-968a-881f4c146585'
+      - 'layoutElement:be94df51-98bb-41ea-a674-a5b0af8666cb'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3184fc24-35eb-4b0f-b6e1-a3d83399e1ac
+            handle: date
+            instructions: null
+            label: Date
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 3fbf2199-d228-4223-998f-9df35f60b9ee
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 06177583-2913-430d-b1c6-29172e43a635
+            handle: null
+            instructions: null
+            label: 'Start Time'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 4da255ad-ff0a-48bb-bba8-55c7a3de8e03
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: b15b6daa-1c06-42ce-868e-9077af068a7a
+            handle: null
+            instructions: null
+            label: 'End Time'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ca2ad9db-a1e4-4a30-968a-881f4c146585
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: faa04196-2eb1-4133-9eb1-c0ef74f73686
+            handle: null
+            instructions: null
+            label: 'Ticket Information'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: be94df51-98bb-41ea-a674-a5b0af8666cb
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 749a92cf-b116-473d-81a7-7c1992dd2555
+        userCondition: null
+    thumbFieldKey: null
+handle: day
+hasTitleField: false
+icon: null
+name: Day
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

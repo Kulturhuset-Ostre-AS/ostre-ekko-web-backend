@@ -1,0 +1,44 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  5426fe68-a271-4209-a4dd-2fe23616e591:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:6139bc97-8593-4a1e-b6cc-ed88bfc1ba29'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: aee37ec1-5cb8-4d36-9dad-804e174570b4
+            handle: null
+            instructions: null
+            label: Content
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 6139bc97-8593-4a1e-b6cc-ed88bfc1ba29
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: fe5cc426-1832-4cf2-9dbe-d89fd7c7dc94
+        userCondition: null
+    thumbFieldKey: null
+handle: text
+hasTitleField: false
+icon: null
+name: Text
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

@@ -23,18 +23,18 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\AssetTitleField
+            type: craft\fieldlayoutelements\assets\AssetTitleField
+            uid: ee57549b-dcb5-43b7-bbae-af723dc092c1
             warning: null
             width: 100
         name: Innhold
         sortOrder: 1
+        uid: fd495fe3-3681-40c2-a7c7-8f5e28cd5e73
+fs: mixtapes
 handle: mixtapes
 hasUrls: true
 name: Mixtapes
-settings:
-  path: '@assetBasePath/mixtapes'
 sortOrder: 4
 titleTranslationKeyFormat: null
 titleTranslationMethod: none
-type: craft\volumes\Local
 url: '@assetBaseUrl/mixtapes'

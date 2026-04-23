@@ -1,0 +1,112 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  77c534d4-4463-48f1-812c-bf89758303fd:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:f83e81ba-c744-4d68-b1cd-07a3feaec26a'
+      - 'layoutElement:91c010fb-762a-41dc-af8a-d2187b94b65b'
+      - 'layoutElement:ac1e5ae3-fb80-45d8-8adf-9f3c2212cf00'
+      - 'layoutElement:18365312-da0a-43cc-96ec-591e034cd4c8'
+      - 'layoutElement:51bb3e84-7362-49ea-9a05-45ec9bb403cd'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 735e30e0-3a6a-43dd-b34f-281cd6d87761
+            handle: null
+            instructions: null
+            label: Title
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: f83e81ba-c744-4d68-b1cd-07a3feaec26a
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: eba0ecfa-bdbc-40c1-a6c7-0c553f1f2cfb
+            handle: null
+            instructions: null
+            label: 'Is festival'
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 91c010fb-762a-41dc-af8a-d2187b94b65b
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 6db46c9d-527e-48d0-957a-3d79690d4d79
+            handle: date
+            instructions: null
+            label: 'Start date'
+            required: true
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ac1e5ae3-fb80-45d8-8adf-9f3c2212cf00
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 748a4e8a-77d5-4e80-aabd-bf595e378994
+            handle: dateEnd
+            instructions: null
+            label: 'End date'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 18365312-da0a-43cc-96ec-591e034cd4c8
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 457d2dfa-5bc9-453a-87c3-b20147d4ea1b
+            handle: null
+            instructions: null
+            label: Artists
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 51bb3e84-7362-49ea-9a05-45ec9bb403cd
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 170d46bb-7408-4689-adcf-db4f770ff421
+        userCondition: null
+    thumbFieldKey: null
+handle: event2
+hasTitleField: false
+icon: null
+name: Event
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

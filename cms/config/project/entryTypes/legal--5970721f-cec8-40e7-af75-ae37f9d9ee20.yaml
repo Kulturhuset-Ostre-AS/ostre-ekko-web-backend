@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 0d0ab3e0-1a5d-4a9e-aaed-ecdc3dad7a29
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: a57c7126-b6ae-479e-af0e-2afa15a20a51
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 73979daf-449f-4219-b182-9d671dd4e045
             warning: null
             width: 100
           -
@@ -51,14 +54,15 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: a93c856c-8076-481c-a2d6-9909b2504630
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: 5be81409-6b9b-411b-bc37-73cfaa5cc25f
 handle: legal
 hasTitleField: false
 name: Legal
-section: 8c744ecf-5dca-4295-891d-f986a1167efb # Legal
 sortOrder: 1
 titleFormat: '{section.name|raw}'
 titleTranslationKeyFormat: null

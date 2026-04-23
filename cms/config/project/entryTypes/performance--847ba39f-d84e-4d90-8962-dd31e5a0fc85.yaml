@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 0963ecdc-d2dc-4931-a352-84acae6573e6
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: ''
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 97665b52-e869-402e-af79-d9ad295576cf
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: '1'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 6d2b87f4-1efd-4f1d-9e35-c87e507d7027
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d6f0a755-c666-4d7b-bb15-e0b4075b8d24
             warning: null
             width: 100
           -
@@ -60,6 +64,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 8084085d-8030-45a7-8ddf-b9c658282d74
             warning: null
             width: 100
           -
@@ -69,6 +74,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 1609e132-9eef-494f-8ce4-852fdd7ecf29
             warning: null
             width: 100
           -
@@ -78,6 +84,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: ef7da8e0-65fc-4870-97b1-93b746e47b95
             warning: null
             width: 100
           -
@@ -87,6 +94,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 4a8ed49c-7dd2-4bf6-b335-10cf9fa357c8
             warning: null
             width: 100
           -
@@ -96,6 +104,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 687ef1e6-c5a9-4203-9ddc-ae772a4e369a
             warning: null
             width: 100
           -
@@ -105,6 +114,7 @@ fieldLayouts:
             required: ''
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 3bb36c3a-db72-4333-9f73-dcdd06e2c3bc
             warning: null
             width: 100
           -
@@ -114,10 +124,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: a4e9b9ad-c780-4ea2-9252-96a9f3a4fd05
             warning: null
             width: 100
         name: Schedule
         sortOrder: 1
+        uid: bd8d6012-273e-4363-9b5b-fdaee9eb8078
       -
         elements:
           -
@@ -127,6 +139,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 7c97182f-9697-42e5-a4a8-a0a69d00dcb6
             warning: null
             width: 100
           -
@@ -136,14 +149,15 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 3532799d-6ce0-4ee9-a0dc-a6b175ed8600
             warning: null
             width: 100
         name: Content
         sortOrder: 2
+        uid: 6c6c31c5-9015-45a7-804a-5f8483218de5
 handle: performance
 hasTitleField: false
 name: Performance
-section: 8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5 # Performance
 sortOrder: 0
 titleFormat: '{date|date("Y-m-d")} - {artist.one().title|default("")|wordLimit(10)}'
 titleTranslationKeyFormat: null

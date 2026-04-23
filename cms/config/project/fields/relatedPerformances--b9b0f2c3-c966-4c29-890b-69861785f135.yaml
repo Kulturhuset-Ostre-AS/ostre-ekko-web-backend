@@ -1,0 +1,25 @@
+columnSuffix: null
+handle: relatedPerformances
+instructions: "Selected performances will link to this ticket url instead of general event ticket link in the single artist/performance page.\r\nCurrently one ticket per performance."
+name: 'Tickets - Ticket - Related performances'
+searchable: false
+settings:
+  allowSelfRelations: false
+  branchLimit: null
+  defaultPlacement: end
+  maintainHierarchy: false
+  maxRelations: null
+  minRelations: null
+  selectionLabel: 'Select performances'
+  showSearchInput: true
+  showSiteMenu: false
+  showUnpermittedEntries: true
+  showUnpermittedSections: true
+  sources:
+    - 'section:8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5' # Performance
+  targetSiteId: null
+  validateRelatedElements: false
+  viewMode: list
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Entries

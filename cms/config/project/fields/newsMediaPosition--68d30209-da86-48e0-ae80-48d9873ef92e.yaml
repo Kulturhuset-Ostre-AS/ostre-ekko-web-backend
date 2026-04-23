@@ -1,6 +1,5 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 9e233a7f-8f79-4de8-9450-ffd21b8baeb6 # News
 handle: newsMediaPosition
 instructions: 'Select the media (image / video) position for the first news item: over the news or flowed to the left.'
 name: 'Media position'

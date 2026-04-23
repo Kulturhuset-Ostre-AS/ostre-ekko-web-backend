@@ -24,6 +24,7 @@ fieldLayouts:
             tip: null
             title: null
             type: craft\fieldlayoutelements\TitleField
+            uid: 550f81ad-6473-4ab8-8e28-06f9e1966aa2
             warning: null
             width: 100
           -
@@ -33,9 +34,11 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 0a6ee1b3-a714-4ec3-8007-47ce09f0e1e0
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: b2a6dfe9-d9f4-41cc-9452-45333f8e838d
 handle: testtags
 name: Test

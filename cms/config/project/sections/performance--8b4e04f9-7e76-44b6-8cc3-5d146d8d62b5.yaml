@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: false
+entryTypes:
+  -
+    uid: 847ba39f-d84e-4d90-8962-dd31e5a0fc85 # Performance
 handle: performance
+maxAuthors: 1
 name: Performance
 propagationMethod: all
 siteSettings:

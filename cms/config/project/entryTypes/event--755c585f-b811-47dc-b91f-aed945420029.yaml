@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 1732bc72-b49b-4039-bd89-5e3ef6e1c78f
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 95d7f14e-aaf3-44a8-b0e4-c7462e7ce722
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 6936e558-725c-4a86-90a4-94c567ed9a99
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: bf5ca243-5f94-4171-a333-1e8f6f029db0
             warning: null
             width: 100
           -
@@ -60,6 +64,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 45c890d3-0443-4f72-b136-4b3485f257cc
             warning: null
             width: 100
           -
@@ -69,6 +74,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 5bf548c4-1e1c-44d5-b2a7-6e64688535a5
             warning: null
             width: 100
           -
@@ -78,6 +84,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 05ce77d1-ecc5-4479-8770-2fcf57006199
             warning: null
             width: 100
           -
@@ -87,6 +94,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 9330ade9-a885-4617-819a-aeaa88463d5f
             warning: null
             width: 100
           -
@@ -96,6 +104,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: c0b0ee69-facb-4036-98ae-9c76ddaa05d7
             warning: null
             width: 100
           -
@@ -105,6 +114,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 0cc551a4-5fdb-4f26-ad3c-39fc213132e2
             warning: null
             width: 100
           -
@@ -114,6 +124,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 4d47e28e-3ed2-4b7e-a05f-9a370c8c09f8
             warning: null
             width: 100
           -
@@ -123,6 +134,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 2b13e849-cbbe-4eff-9b66-762a59242696
             warning: null
             width: 100
           -
@@ -132,10 +144,12 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 2ffaab51-b4c0-48c5-9105-a007e102f771
             warning: null
             width: 100
         name: 'Information (Program)'
         sortOrder: 1
+        uid: 1c49c288-0961-4b10-90ff-bf01cf0f7f63
       -
         elements:
           -
@@ -145,10 +159,12 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: ec852347-3640-481b-90b6-21de4dd7db83
             warning: null
             width: 100
         name: Performances
         sortOrder: 2
+        uid: 8c5bd233-7c8f-495e-a4de-c3ebdb18fcd2
       -
         elements:
           -
@@ -158,6 +174,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 7c0de9c9-7549-41ec-8cb6-82ed498002bb
             warning: null
             width: 100
           -
@@ -167,6 +184,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 41a3fff0-133b-4a4e-8974-c1e8ceef7c71
             warning: null
             width: 100
           -
@@ -176,6 +194,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 87e552ba-cb5c-433a-bb5d-16458bef0df3
             warning: null
             width: 100
           -
@@ -185,10 +204,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: fe428937-d5f1-46ae-9e1a-0eb259c33496
             warning: null
             width: 100
         name: Description
         sortOrder: 3
+        uid: 726e6c4e-1953-4e63-a3e5-949db094d4dd
       -
         elements:
           -
@@ -198,6 +219,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: fbfd46e8-f9f7-475c-bf8e-d00ff2188ec6
             warning: null
             width: 100
           -
@@ -207,10 +229,12 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 5d6565a5-0e2b-4f57-a7ce-b7b92a23ad8f
             warning: null
             width: 100
         name: Tickets
         sortOrder: 4
+        uid: b11b5a2a-7477-48cd-866f-56fd79b6afc6
       -
         elements:
           -
@@ -220,14 +244,15 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 999740f3-57bb-41cc-81e2-7953cc270d96
             warning: null
             width: 100
         name: Gallery
         sortOrder: 5
+        uid: ca47459e-8f68-4f4e-a9cd-ff8c3a345418
 handle: event
 hasTitleField: true
 name: Event
-section: 301645ea-e60b-4a0b-bb67-58f74bdbca11 # Events
 sortOrder: 0
 titleFormat: null
 titleTranslationKeyFormat: null

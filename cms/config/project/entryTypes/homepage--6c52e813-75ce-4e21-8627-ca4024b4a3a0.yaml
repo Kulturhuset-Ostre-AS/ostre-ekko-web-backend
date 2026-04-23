@@ -10,10 +10,12 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 6a6cd82e-b581-48d7-a5f0-91a834470c94
             warning: null
             width: 100
         name: Home
         sortOrder: 1
+        uid: 73fa861c-29ff-4eae-ace9-97fe4d58a13c
       -
         elements:
           -
@@ -36,7 +38,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 0978ca8f-4681-4464-8114-fdf655c0a86e
             warning: null
             width: 100
           -
@@ -46,6 +49,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: b694e32e-3f55-4c41-9849-13df34cf632b
             warning: null
             width: 100
           -
@@ -55,6 +59,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 883c4c21-5c0e-47a7-986d-5e499d8c28fd
             warning: null
             width: 100
           -
@@ -64,6 +69,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 784d6cfe-c4de-4334-8187-d784cd026f6a
             warning: null
             width: 100
           -
@@ -73,6 +79,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 8a093661-5127-4554-a905-4d5f56f70414
             warning: null
             width: 100
           -
@@ -82,6 +89,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 9bafef11-e95a-4505-8ce5-81aecb89be71
             warning: null
             width: 100
           -
@@ -91,6 +99,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 133e3644-8d00-45df-82b0-00c5f1adacff
             warning: null
             width: 100
           -
@@ -100,6 +109,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 73e90bf1-eb28-47b2-a6eb-9ee8236b35d2
             warning: null
             width: 100
           -
@@ -109,10 +119,12 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 1f8de076-d996-4b24-a882-eaedbd203341
             warning: null
             width: 100
         name: Festival
         sortOrder: 2
+        uid: f8f4e103-878b-48ef-a8bb-ab50882275f4
       -
         elements:
           -
@@ -122,6 +134,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 7ad61f2f-9fec-4ab6-be5f-82678d4349ff
             warning: null
             width: 100
           -
@@ -131,6 +144,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: c583da17-b5a8-4671-872b-e36534444bb0
             warning: null
             width: 100
           -
@@ -140,14 +154,15 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: f7994621-be9d-48d9-9e4d-075e2dd06221
             warning: null
             width: 100
         name: Konserter
         sortOrder: 3
+        uid: d40a716f-5891-401b-bd74-c4fc3a9dfce5
 handle: homepage
 hasTitleField: false
 name: Homepage
-section: 77eeaf4a-a76a-4b31-992b-a91edf496610 # Homepage
 sortOrder: 0
 titleFormat: Homepage
 titleTranslationKeyFormat: null

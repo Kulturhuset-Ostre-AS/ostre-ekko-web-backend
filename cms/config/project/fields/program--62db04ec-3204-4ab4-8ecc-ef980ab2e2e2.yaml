@@ -1,16 +1,18 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
 handle: program
 instructions: ''
 name: Program
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_program}}'
-  maxBlocks: null
-  minBlocks: null
+  entryTypes:
+    -
+      uid: 65bbb9d7-e875-4863-9465-da3909239e2e
+  maxEntries: null
+  minEntries: null
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

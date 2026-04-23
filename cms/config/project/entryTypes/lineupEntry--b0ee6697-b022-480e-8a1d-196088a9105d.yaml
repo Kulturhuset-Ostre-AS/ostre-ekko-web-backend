@@ -1,0 +1,77 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  15266725-6e25-474a-a66b-95ec18244874:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:0e8d2548-26ad-46bc-a21a-c2120e083838'
+      - 'layoutElement:e4ecfcee-5e13-435a-a911-574d51060d79'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: fffeb58b-3093-45bc-b7ef-eb4c7c880d02
+            handle: null
+            instructions: null
+            label: 'Artist / Performance'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 48d79191-d869-44f6-b8a1-43042e854a24
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 3516ab22-88df-4b6b-bf3d-adcb02010f1a
+            handle: null
+            instructions: null
+            label: 'Custom title'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 0e8d2548-26ad-46bc-a21a-c2120e083838
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 1ceba5f7-5a1f-400e-b60f-e5e541a4ac84
+            handle: null
+            instructions: null
+            label: 'Text size'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: e4ecfcee-5e13-435a-a911-574d51060d79
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: fdfba536-5bb7-408d-9a26-aae8ea66ef79
+        userCondition: null
+    thumbFieldKey: 'layoutElement:48d79191-d869-44f6-b8a1-43042e854a24'
+handle: lineupEntry
+hasTitleField: false
+icon: null
+name: 'Lineup entry'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

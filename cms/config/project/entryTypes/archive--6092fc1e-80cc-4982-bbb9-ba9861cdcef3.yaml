@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: d1a8cbe6-6b59-4dac-9984-8147889fb3b1
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 08303a69-0bc4-4b00-978f-0eaa1e0f4c1c
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 5517d502-b043-4c07-8422-9b521c31e87d
             warning: null
             width: 100
           -
@@ -51,14 +54,15 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 0db5ed09-3a99-42e9-8211-db950e74ccf8
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: b9422179-2573-4a74-b20e-952ec074814f
 handle: archive
 hasTitleField: false
 name: Archive
-section: 196bdedc-ec5d-4598-9494-bd83c64bec41 # Archive
 sortOrder: 0
 titleFormat: '{section.name|raw}'
 titleTranslationKeyFormat: null

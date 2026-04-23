@@ -1,9 +1,38 @@
-dateModified: 1776935954
+dateModified: 1776937359
 email:
   fromEmail: pasidejau@gmail.com
   fromName: EKKO
   template: null
   transportType: craft\mail\transportadapters\Sendmail
+fs:
+  artistPhotos:
+    hasUrls: true
+    name: 'Artist Photos'
+    settings:
+      path: '@assetBasePath/photos/artists'
+    type: craft\fs\Local
+    url: '@assetBaseUrl/photos/artists'
+  eventPhoto:
+    hasUrls: true
+    name: 'Event Photo'
+    settings:
+      path: '@assetBasePath/photos/events'
+    type: craft\fs\Local
+    url: '@assetBaseUrl/photos/events'
+  mixtapes:
+    hasUrls: true
+    name: Mixtapes
+    settings:
+      path: '@assetBasePath/mixtapes'
+    type: craft\fs\Local
+    url: '@assetBaseUrl/mixtapes'
+  userPhotos:
+    hasUrls: false
+    name: 'User Photos'
+    settings:
+      path: '@storage/userphotos'
+    type: craft\fs\Local
+    url: null
 meta:
   __names__:
     000db67a-24a2-4bcf-9791-76def17c6393: 'Page Structure' # Page Structure
@@ -11,21 +40,11 @@ meta:
     0e779b2c-f6e5-4cc0-a81c-53479e1587de: News # News
     0ed83704-dc8c-4a51-8ef6-4d9805b65f55: 'Single Page' # Single Page
     0f8e83d0-47dc-4eeb-89ba-c2ec7db13cc1: Gallery # Gallery
-    1a9347e1-e75c-4664-982f-4cf62da8d14f: Default # Default
     1a637861-ca68-4b37-89b2-4749e2df9e77: 'New Navigation' # New Navigation
-    1b4e79e4-6d22-41eb-985f-5c60736c00f5: Assets # Assets
-    1ceba5f7-5a1f-400e-b60f-e5e541a4ac84: 'Text size' # Text size
-    1d177f14-7af9-433e-b253-ac7d84fe6a73: 'Image Block' # Image Block
-    1ece1b63-6a8c-4ff9-8508-9d49f2215a06: 'Link title' # Link title
-    2a64c7df-fa74-4b9e-aa76-94dceee51474: Arena # Arena
     2abbde3f-ca06-4440-8377-78cca305429c: 'Background color' # Background color
-    2b1efdcb-9276-4409-9c64-eff8299eb6b5: 'Festival section title' # Festival section title
-    2b5f0159-6c20-4857-9ad4-bd686b1e3ce8: Event # Event
     2ca3c368-1b4f-48ad-b4a2-1aa79f9ce6af: 'EKKO (en)' # EKKO (en)
     2ca9087d-6867-4b6b-9f29-096d9d6c0206: Location # Location
     2fa144e3-9d6c-4375-aac7-25bff4a94612: 'Ticket Description' # Ticket Description
-    3a538f39-9d08-43bc-b64f-ca7ddbd1552b: Index # Index
-    3ebe7107-0c27-4ed8-8e32-8382940ef5ca: Sub-description # Sub-description
     3ed993e6-828f-4ad3-9a3a-8b89d019607d: Østre # Østre
     04ad8bc5-41ba-46fc-83ee-9e939a4af8d4: 'Menu item entry' # Menu item entry
     4eb54b91-847f-49d3-85af-6fd97c2661b0: 'Festival Section content' # Festival Section content
@@ -36,13 +55,9 @@ meta:
     6b9c6d34-b4f1-4d0b-8d3f-f93f629303a5: 'Parsed date & time' # Parsed date & time
     06b58602-3190-496b-95cc-833c4c279b62: 'Linked festival' # Linked festival
     6c52e813-75ce-4e21-8627-ca4024b4a3a0: Homepage # Homepage
-    06c49665-084c-41df-9b0a-7d5cad1989e3: 'Video URL' # Video URL
-    6db46c9d-527e-48d0-957a-3d79690d4d79: 'Start date' # Start date
     7aadc7b7-db7e-456a-8789-8acb1a6cb1cc: 'Thumb (large)' # Thumb (large)
-    7c91a948-4afd-4cfd-9278-1f1851d6fb1b: 'Event section title' # Event section title
     7c642643-8c47-4e38-a92e-1bc2a7de962f: 'Ekko Festival' # Ekko Festival
     7e6f5fa9-c7c3-4df8-b0f8-c98ee2362329: 'Past events' # Past events
-    7f4be85f-cd38-42ea-afed-25ab3fd2648e: Globals # Globals
     7fc19e46-47b3-4539-803a-471f5f202b63: Intro # Intro
     8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5: Performance # Performance
     8c744ecf-5dca-4295-891d-f986a1167efb: Legal # Legal
@@ -50,12 +65,9 @@ meta:
     9bd651ab-6fac-4a9c-bc60-505c61c7d8e0: Østre # Østre
     9cfd44dd-f0b0-43c0-a6fc-47a984ca0317: Default # Default
     9dd4983f-8b2b-45f7-937d-33fe34967949: 'Festival background color' # Festival background color
-    9e233a7f-8f79-4de8-9450-ffd21b8baeb6: News # News
-    9fb128a7-501d-4957-a791-b5d87348c98b: Image # Image
     20aece2a-ee02-4c26-b0ad-5006ad525667: Instagram # Instagram
     020f48a4-f969-42b4-b017-ff9c94cac7be: 'Ekko Festival' # Ekko Festival
     23e69913-2e5b-412f-a67f-946af1b360e8: Content # Content
-    24c74084-8180-4d13-b980-8a560a2c493c: 'Image block' # Image block
     35a14bab-1bcf-4bd9-aacb-386c79147a44: 'Festival link text' # Festival link text
     35b5fed5-df63-47d2-b504-053234e39c77: Featured # Featured
     38e3689e-6c07-47c2-af7f-406ac6e25708: 'Graphic element' # Graphic element
@@ -65,97 +77,66 @@ meta:
     54f6a4ae-b35f-48e8-8bed-2be391f3e8d9: 'Festival stamp - mobile' # Festival stamp - mobile
     55ac0cf8-926f-4ebf-beda-5e9defe5c90b: Artists # Artists
     55e2f47a-a791-4b6a-8cc3-d918e1342073: 'Global Information' # Global Information
-    61d026cd-2f64-4354-a758-3010ddfb6128: 'Video block' # Video block
     62db04ec-3204-4ab4-8ecc-ef980ab2e2e2: Program # Program
     62f3b664-9574-457c-a7fd-83e88255a397: Stamp # Stamp
-    65bbb9d7-e875-4863-9465-da3909239e2e: Day # Day
-    67a2228e-299c-4e79-96d0-658e05381eb5: Image # Image
-    68bce172-64cb-4fb5-bef6-070a480059f4: Label # Label
     68d30209-da86-48e0-ae80-48d9873ef92e: 'Media position' # Media position
     71ff9901-9c95-4883-b9f2-27282e6584d5: About # About
     77eeaf4a-a76a-4b31-992b-a91edf496610: Homepage # Homepage
     77fadfa1-64d4-4d65-9f1b-d96ecdfdf404: 'Text color' # Text color
     83dec1cb-a705-4029-9aaf-3ec28ce4a629: Organizers # Organizers
     86d6422d-170f-488a-9545-22f573b34683: 'News entry' # News entry
-    89a9a51c-1962-45a8-ba0b-bc67a8384dc5: 'Text overlay' # Text overlay
     92d9f6e4-d8a9-4c6f-90b2-d79ee4de3fc8: Lineup # Lineup
     162b2b00-4439-4618-8365-b40dab8bcaf8: Toggle # Toggle
     196bdedc-ec5d-4598-9494-bd83c64bec41: Archive # Archive
-    203b3f7a-11d6-44e4-b95e-db08891146dd: Event # Event
     248a979b-096c-45c3-a339-2a663262c6da: Title # Title
     356f072d-7d91-4223-80eb-d842012888a3: Intro # Intro
-    457d2dfa-5bc9-453a-87c3-b20147d4ea1b: Artists # Artists
     496d2b10-36b1-43fb-b114-c61c558b9c57: 'Full Title' # Full Title
     501c383f-cb02-4039-973f-c098638b4b84: 'Ticket Link' # Ticket Link
-    546e7d61-2286-49b4-98c7-d48bbf65bc65: Code # Code
     569cc5f7-c3c6-4624-9070-cd060ecff171: 'Newsletter disclaimer' # Newsletter disclaimer
     606fc8b3-0d9d-4d91-b67a-de0a63d95f28: 'Ticket Frame Code' # Ticket Frame Code
     618b9f1d-5720-4c34-a4b0-b5e0caedf06a: Tickets # Tickets
-    645faae0-b1e8-4ac9-b604-b802d4ca8b4c: Exhibition # Exhibition
-    735e30e0-3a6a-43dd-b34f-281cd6d87761: Title # Title
     744a5e0e-c714-4887-88b3-31071a9077da: 'End Time' # End Time
-    748a4e8a-77d5-4e80-aabd-bf595e378994: 'End date' # End date
     755c585f-b811-47dc-b91f-aed945420029: Event # Event
     847ba39f-d84e-4d90-8962-dd31e5a0fc85: Performance # Performance
     897a6dab-8ede-4c25-8a93-b0e5f5d6abf6: 'Section description (events)' # Section description (events)
     925eb546-1db1-441b-9eda-02e8a14087d8: 'Project Title' # Project Title
     932d182b-57a0-4ee3-9d96-a6693aa55436: Optimised # Optimised
     945a4d5e-8361-4e0b-8255-aecb12ef406c: Photo # Photo
-    978b7607-e04d-4598-b745-5419f10f0dde: 'Text block' # Text block
     989baf15-ee1a-40bd-8587-4ac2033dba46: 'Foreningen Ekko' # Foreningen Ekko
     2636d2bc-c59f-4520-add8-6b673aeaf88a: 'Ekko Festival' # Ekko Festival
-    3184fc24-35eb-4b0f-b6e1-a3d83399e1ac: Date # Date
-    3516ab22-88df-4b6b-bf3d-adcb02010f1a: 'Custom title' # Custom title
-    3626e6f0-4597-4098-b20a-fb662ff583a7: Artist # Artist
     4359dca9-1b0a-4ea5-8fd1-3aaa64ce2756: 'Festival section title' # Festival section title
     5238bc75-3c4c-488c-a7be-973e480d98e0: 'Digital Arena' # Digital Arena
     5350a5b0-cd1c-4419-b50a-4cd42eb769a7: Mixtapes # Mixtapes
     6092fc1e-80cc-4982-bbb9-ba9861cdcef3: Archive # Archive
-    06711e51-4828-4ad1-b80f-e862b14627fc: Events # Events
     6975aa00-c9bf-4c06-92a7-51ca3e4df18d: 'Thumb (medium)' # Thumb (medium)
     7558bbac-b043-4d73-a6ae-be776de1486f: 'Festival section subtitle' # Festival section subtitle
     8140a09c-ef4e-4a14-8baa-91c6a5717ade: 'Hide "read more"' # Hide "read more"
-    9008c6c1-990b-4d64-aaa1-1341f6a16040: 'Ticket link' # Ticket link
     9654b4af-cff4-49e6-b9b3-a3071afc2549: 'Event Photo' # Event Photo
     15991c6c-d005-4d63-9da7-e6cb34ba408d: Contact # Contact
     39520ae1-2ccd-47c3-af18-ef1fd52c7098: 'Show Artist Info' # Show Artist Info
     51563ce2-dabd-46db-a7bf-21dbb70fced0: 'Main navigation' # Main navigation
-    52683e7a-7c6a-4386-b481-0dfee40ad8db: Content # Content
     55541fc5-e1a7-4cd6-abe4-3399885a9895: 'Artist Name' # Artist Name
     56271c8c-5fe9-413c-bcb0-4c1e876ffe55: Time # Time
     59128b6e-6a78-4cb2-b45d-de838ae65db7: Artist # Artist
     69085be0-360e-4318-a157-d38cf06146c7: Test # Test
     187397bc-8c24-4472-80eb-d89d2511e444: 'Cover photo' # Cover photo
-    196718d0-fc92-43e0-a523-8b970b98601d: Link # Link
     301645ea-e60b-4a0b-bb67-58f74bdbca11: Events # Events
     634406b0-0ba6-49ff-81ec-9267f0151462: 'Content type' # Content type
     822157ba-1ba2-424b-974b-5407629ba433: Lineup # Lineup
-    901575ef-4d5f-429c-911b-817847ffb9bf: 'Event entries' # Event entries
     5970721f-cec8-40e7-af75-ae37f9d9ee20: Legal # Legal
-    06177583-2913-430d-b1c6-29172e43a635: 'Start Time' # Start Time
-    40714173-3c5a-4d56-a17e-c59b1359685b: Description # Description
     51241002-1701-4f06-ae6e-59496b8a42a2: 'Artist Photos' # Artist Photos
     64644874-c3eb-45b1-bef6-5d51b056c516: Facebook # Facebook
     94498677-f4d1-4cc5-8215-47f4374daa28: 'Public Schema' # Public Schema
-    a06043b6-79e4-4e36-83d2-e9b720993bc9: Festival # Festival
     a2b3d641-b542-4391-a1f7-26d081db16c6: Twitter # Twitter
     a24b012b-7bc1-487e-9244-96fcc5574445: 'Ticket modal content' # Ticket modal content
     a83084f4-78bc-49ff-b261-5a07cc42602f: 'Closing Time' # Closing Time
-    a97380be-7a26-4a65-8982-3cd84ee765fa: Ticket # Ticket
     aac99d83-a88a-4a4b-b3fd-6c95266a5b49: Date # Date
     ab8d9801-10ec-48fd-82bc-044e20cc18c4: linkedNews # linkedNews
     ab43f8e1-da4b-41d0-8169-b3282ace6aac: Room # Room
-    ab73fa6d-b26c-4e2f-9acc-911b59e0ff98: 'Column separator' # Column separator
     abe8379b-6ad7-4679-9263-7962043daa0b: Festival # Festival
     ae576b05-f687-4113-b558-1c2565b364c3: 'Multiple Day Event' # Multiple Day Event
-    aee37ec1-5cb8-4d36-9dad-804e174570b4: Content # Content
     af0f5492-b25f-45be-93c3-5925cce7ebcf: 'Section title (events)' # Section title (events)
-    b0ee6697-b022-480e-8a1d-196088a9105d: 'Lineup entry' # Lineup entry
-    b07c3a7d-5479-4e63-9ab9-3dc62c9e5391: Text # Text
     b1f43e32-e00a-4259-837c-60b67111e847: Content # Content
-    b6e0ebfc-4fd0-4365-84c5-0967bf20104a: 'Embed block' # Embed block
-    b9b0f2c3-c966-4c29-890b-69861785f135: 'Related performances' # Related performances
-    b15b6daa-1c06-42ce-868e-9077af068a7a: 'End Time' # End Time
     b85882d9-26fb-4d9a-bd5d-6dce69ed358e: Locations # Locations
     b8829325-5023-46d1-b8a7-03d6dc33525b: Description # Description
     ba09eebe-08ba-452b-8ac2-62c7819a9d1c: 'Short Title' # Short Title
@@ -167,22 +148,15 @@ meta:
     c160fb14-bd1a-4690-9b04-2932d04eaca0: Sections # Sections
     c497f883-d2d9-46aa-9d6d-50f91ed90ba3: 'Menu item url' # Menu item url
     c869bdc9-08cf-4e74-bcc8-ad30e1d3fe41: Content # Content
-    c1095f5c-a9ea-4d2e-a9df-89ba5530d3d7: 'Link url' # Link url
     c395390c-ba83-4123-9a98-b48fd5ce35a1: 'Dark mode' # Dark mode
     cc892d6a-abac-456e-83a9-260fd5616d45: 'EKKO (nb)' # EKKO (nb)
     cd909105-de3f-40cc-bcef-3dcc79779872: Exhibition # Exhibition
     cea9678d-c4e5-419e-a431-1a0732fa9128: Venue # Venue
     d0a658ce-92a8-44f0-a55d-8b2e49b51d7e: About # About
     d81dc4d7-3875-487c-b4dd-a5a86aeef6c3: 'Newsletter modal content' # Newsletter modal content
-    d404b7fc-c59d-4cf6-97f8-2648cd4fd07c: Images # Images
     d7896b02-ef89-4b2d-bed9-2a1687ddaaa7: 'Enable link to festival entry' # Enable link to festival entry
-    da23ad02-2442-4045-aab6-73b590eb5bbf: Entry # Entry
-    dbbc363e-8e44-41d8-b264-8a4d0c9af24e: 'Section description' # Section description
     dc8b8360-0719-4c2c-a380-700ba0fb559c: 'Opening Time' # Opening Time
-    de6e0a8b-97c4-4c54-9986-e149ea157219: Heading # Heading
     df7b834e-e4f7-4ceb-ae3a-07aa0cd8ca9a: 'Featured Photo' # Featured Photo
-    e1c561c4-1d4c-4087-8ea9-ef82839fa7bd: Tickets # Tickets
-    e2bb1603-0d05-4682-9124-496596dec40e: 'Section ID' # Section ID
     e80f79d5-8bfd-403b-8703-cd18785dc47c: 'Related links' # Related links
     e571f378-cb91-4304-a1b3-cb86027dec63: 'Link color' # Link color
     e615d2b1-f4e4-4e6b-895c-957eff051ea2: Performances # Performances
@@ -190,22 +164,13 @@ meta:
     e870c8fc-0214-40e0-8ad6-7d0629c6a6dc: 'End Date' # End Date
     e9334691-89a8-4b92-b749-c1828f91bcdc: 'Project Tag' # Project Tag
     ea002f54-0097-486c-92bd-64c3b9e6a624: 'Featured Photo' # Featured Photo
-    eb72fbeb-5872-457a-8426-93a276f7e0c0: Price # Price
-    eb356161-6f1c-45f0-a453-18af378140dd: Page # Page
-    eba0ecfa-bdbc-40c1-a6c7-0c553f1f2cfb: 'Is festival' # Is festival
     ebe72525-8597-4100-a8ba-480515957823: Østre # Østre
     ee855f1b-d9fe-4b11-a96b-0016a8583550: Video # Video
-    eed32295-3672-48ed-940e-b593e2257cf4: 'Show festival program' # Show festival program
-    f63b15ea-6503-4137-9f87-96cc3152d0fd: 'Section Body' # Section Body
     f84c68dd-7976-4d13-9e29-b5f0a95b7320: EKKO # EKKO
     f789998e-fb56-4d6e-b00b-f3bdb902595a: 'Global Content' # Global Content
     fa00f016-59a7-4fd1-92ee-f346c3ab6d63: 'Opening Times' # Opening Times
     fa5a5a49-846d-41cc-901c-df6a21381707: 'Label / Land' # Label / Land
-    faa04196-2eb1-4133-9eb1-c0ef74f73686: 'Ticket Information' # Ticket Information
-    fdd8c1f6-1165-4eec-a7b8-3c1136ee8918: 'Festival entry' # Festival entry
-    fe7864fc-1423-4b7f-b731-3d69261b7765: 'Section Title' # Section Title
     ffb359c7-60c8-490b-8731-0943d3dc9130: 'Ekstra info' # Ekstra info
-    fffeb58b-3093-45bc-b7ef-eb4c7c880d02: 'Artist / Performance' # Artist / Performance
 plugins:
   am-nav:
     enabled: '1'
@@ -266,7 +231,7 @@ plugins:
     edition: lite
     enabled: true
     licenseKey: OPG3EEV4QPEEEQRNJKP9IQQE
-    schemaVersion: 3.0.0
+    schemaVersion: 4.0.0
   kint:
     enabled: '0'
     licenseKey: null
@@ -290,16 +255,11 @@ plugins:
     edition: standard
     enabled: true
     licenseKey: IQYN2X1GDL0K976TE35AFR82
-    schemaVersion: 1.0.21
+    schemaVersion: 2.1.2
   preparse-field:
     enabled: '1'
     licenseKey: null
-    schemaVersion: 1.0.5
-    settings: null
-  reasons:
-    enabled: '1'
-    licenseKey: null
-    schemaVersion: 2.1.1
+    schemaVersion: 1.1.0
     settings: null
   redactor:
     edition: standard
@@ -327,19 +287,16 @@ plugins:
     edition: standard
     enabled: true
     schemaVersion: 1.0.0
-  video-embedder:
-    edition: standard
-    enabled: true
-    schemaVersion: 1.0.0
 system:
   edition: pro
   live: true
   name: EKKO
   retryDuration: null
-  schemaVersion: 3.8.0.1
+  schemaVersion: 5.9.0.8
   timeZone: Europe/Oslo
 users:
   allowPublicRegistration: false
+  deactivateByDefault: false
   defaultGroup: null
   photoSubpath: null
   photoVolumeUid: null

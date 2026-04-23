@@ -1,6 +1,10 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 7c642643-8c47-4e38-a92e-1bc2a7de962f # Ekko Festival
 handle: ekko_festival_info
+maxAuthors: 1
 name: 'Ekko Festival'
 previewTargets:
   -

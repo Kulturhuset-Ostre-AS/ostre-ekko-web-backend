@@ -1,16 +1,23 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 3a538f39-9d08-43bc-b64f-ca7ddbd1552b # Index
 handle: pageStructure
 instructions: ''
 name: 'Page Structure'
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_pagestructure}}'
-  maxBlocks: null
-  minBlocks: null
+  entryTypes:
+    -
+      uid: 06711e51-4828-4ad1-b80f-e862b14627fc
+    -
+      handle: festival
+      uid: a06043b6-79e4-4e36-83d2-e9b720993bc9
+    -
+      uid: 24c74084-8180-4d13-b980-8a560a2c493c
+  maxEntries: null
+  minEntries: null
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

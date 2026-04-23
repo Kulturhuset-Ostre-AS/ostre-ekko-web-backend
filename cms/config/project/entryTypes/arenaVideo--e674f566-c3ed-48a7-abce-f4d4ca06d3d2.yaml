@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: b3b8f4ce-7793-43eb-a404-cef90b808504
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 1df94c10-0a8e-4728-b1b2-315f5bf9d2ea
             warning: null
             width: 100
           -
@@ -42,6 +44,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: e0f7412d-7f4b-4bbf-abc7-4dd80d74c69c
             warning: null
             width: 100
           -
@@ -51,6 +54,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: db2455ff-cd59-403e-a80e-f18094953d4b
             warning: null
             width: 100
           -
@@ -60,6 +64,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 4edf68c1-1112-442d-8156-4e84fe119e83
             warning: null
             width: 100
           -
@@ -69,6 +74,7 @@ fieldLayouts:
             required: '1'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: c83c7e1e-4fbd-41c4-8718-1b98167ea46d
             warning: null
             width: 100
           -
@@ -78,6 +84,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 8d1281f2-4333-4b27-9f19-8094b1b7858f
             warning: null
             width: 100
           -
@@ -87,14 +94,15 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: a3f0a5ff-6831-4e7b-854e-152c7d48366e
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: ca199276-3850-4414-9f05-761852e5264f
 handle: arenaVideo
 hasTitleField: true
 name: 'Video Project'
-section: 5238bc75-3c4c-488c-a7be-973e480d98e0 # Digital Arena
 sortOrder: 1
 titleFormat: null
 titleTranslationKeyFormat: null

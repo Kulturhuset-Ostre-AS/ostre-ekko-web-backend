@@ -24,6 +24,7 @@ fieldLayouts:
             tip: null
             title: null
             type: craft\fieldlayoutelements\TitleField
+            uid: 14e892fc-970f-4051-b794-3b0034ce3582
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 5ab9acf9-348a-4014-9bf9-f47f641db264
             warning: null
             width: 100
           -
@@ -42,9 +44,11 @@ fieldLayouts:
             required: false
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: cc026a2b-0a68-4458-911a-4921c684cfe5
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: bbea7bea-1e05-415a-a114-7d101e583b65
 handle: digitalArenaProjects
 name: 'Digital Arena Projects'

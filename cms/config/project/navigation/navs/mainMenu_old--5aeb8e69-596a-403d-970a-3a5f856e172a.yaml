@@ -2,7 +2,7 @@ handle: mainMenu_old
 instructions: ''
 maxNodes: ''
 name: 'Main Menu'
-propagateNodes: true
+propagationMethod: all
 sortOrder: 1
 structure:
   maxLevels: '2'

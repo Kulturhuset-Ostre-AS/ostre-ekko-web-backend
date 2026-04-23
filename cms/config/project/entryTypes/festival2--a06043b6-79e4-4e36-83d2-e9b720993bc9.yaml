@@ -1,0 +1,77 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+fieldLayouts:
+  b0b6f953-e90f-4426-873b-45387e1fbed2:
+    cardThumbAlignment: end
+    cardView:
+      - 'layoutElement:ba879d24-7d31-4ab5-9335-7b51310ff8e4'
+      - 'layoutElement:7599702e-1aa5-4449-990e-3ef2707aac53'
+    tabs:
+      -
+        elementCondition: null
+        elements:
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: 2b1efdcb-9276-4409-9c64-eff8299eb6b5
+            handle: sectionTitle
+            instructions: null
+            label: 'Festival section title'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: ba879d24-7d31-4ab5-9335-7b51310ff8e4
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: fdd8c1f6-1165-4eec-a7b8-3c1136ee8918
+            handle: null
+            instructions: null
+            label: 'Festival entry'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 160c4f90-cb37-4325-ae0e-9452e202b137
+            userCondition: null
+            warning: null
+            width: 100
+          -
+            dateAdded: null
+            editCondition: null
+            elementCondition: null
+            elementEditCondition: null
+            fieldUid: eed32295-3672-48ed-940e-b593e2257cf4
+            handle: null
+            instructions: null
+            label: 'Show festival program'
+            required: false
+            tip: null
+            type: craft\fieldlayoutelements\CustomField
+            uid: 7599702e-1aa5-4449-990e-3ef2707aac53
+            userCondition: null
+            warning: null
+            width: 100
+        name: Content
+        uid: 3b9e3f7c-05b1-49b4-824a-0cad0a9879d8
+        userCondition: null
+    thumbFieldKey: 'layoutElement:160c4f90-cb37-4325-ae0e-9452e202b137'
+handle: festival2
+hasTitleField: false
+icon: null
+name: Festival
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

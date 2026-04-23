@@ -2,7 +2,7 @@ handle: mainMenu
 instructions: ''
 maxNodes: ''
 name: 'Main navigation'
-propagateNodes: false
+propagationMethod: none
 sortOrder: 1
 structure:
   maxLevels: '2'

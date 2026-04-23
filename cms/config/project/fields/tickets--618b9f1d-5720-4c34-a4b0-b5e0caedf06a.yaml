@@ -1,16 +1,20 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: e1c561c4-1d4c-4087-8ea9-ef82839fa7bd # Tickets
 handle: tickets
 instructions: ''
 name: Tickets
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_tickets}}'
-  maxBlocks: ''
-  minBlocks: ''
+  entryTypes:
+    -
+      uid: a97380be-7a26-4a65-8982-3cd84ee765fa
+    -
+      uid: b07c3a7d-5479-4e63-9ab9-3dc62c9e5391
+  maxEntries: ''
+  minEntries: ''
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

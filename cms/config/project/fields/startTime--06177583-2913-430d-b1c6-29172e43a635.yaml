@@ -1,0 +1,15 @@
+columnSuffix: null
+handle: startTime
+instructions: null
+name: 'Program - Day - Start Time'
+searchable: true
+settings:
+  max: null
+  min: null
+  minuteIncrement: 30
+  showDate: false
+  showTime: true
+  showTimeZone: false
+translationKeyFormat: null
+translationMethod: none
+type: craft\fields\Date

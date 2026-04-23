@@ -1,0 +1,15 @@
+allowLineBreaksInTitles: false
+color: null
+description: null
+handle: columnSeparator
+hasTitleField: false
+icon: null
+name: 'Column separator'
+showSlugField: false
+showStatusField: true
+slugTranslationKeyFormat: null
+slugTranslationMethod: site
+titleFormat: null
+titleTranslationKeyFormat: null
+titleTranslationMethod: site
+uiLabelFormat: '{title}'

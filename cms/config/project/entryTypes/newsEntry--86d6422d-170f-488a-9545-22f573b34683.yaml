@@ -23,7 +23,8 @@ fieldLayouts:
             step: null
             tip: null
             title: null
-            type: craft\fieldlayoutelements\EntryTitleField
+            type: craft\fieldlayoutelements\entries\EntryTitleField
+            uid: 946f85eb-b6f3-42dc-a644-b76aa0a502af
             warning: null
             width: 100
           -
@@ -33,6 +34,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: d33cf61c-1640-452d-be12-945038a0f3f5
             warning: null
             width: 100
           -
@@ -42,10 +44,12 @@ fieldLayouts:
             required: ''
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 36b12239-df39-476e-988a-1afd5a2f353b
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: ace46e27-5b7b-4751-87ed-7ce997a15aeb
       -
         elements:
           -
@@ -55,11 +59,13 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 615efde6-1282-415f-9f4f-65ef8e571917
             warning: null
             width: 100
           -
             heading: 'Frontpage media'
             type: craft\fieldlayoutelements\Heading
+            uid: 939d3df4-efca-4f20-b393-32ec4b2e8f1d
           -
             fieldUid: 945a4d5e-8361-4e0b-8255-aecb12ef406c # Photo
             instructions: null
@@ -67,6 +73,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: e192d578-62e4-4eb2-81a7-6a6d0f0d721e
             warning: null
             width: 100
           -
@@ -76,6 +83,7 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 60ac3825-85cf-4934-a718-ad9c9bcfaa2d
             warning: null
             width: 100
           -
@@ -85,16 +93,19 @@ fieldLayouts:
             required: '0'
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 1a458b11-a280-4bf0-b8a8-b35ec13349e0
             warning: null
             width: 100
         name: Media
         sortOrder: 2
+        uid: 93403f93-5955-45cc-8e5c-2ed4028f6213
       -
         elements:
           -
             style: warning
             tip: 'Following fields are not used anymore in the webpage. Fields are left available if editors would still need to use the content  in new fields when migrating old entries.'
             type: craft\fieldlayoutelements\Tip
+            uid: 9805f887-e6b0-429a-87c0-31b31398667f
           -
             fieldUid: 23e69913-2e5b-412f-a67f-946af1b360e8 # Content
             instructions: ''
@@ -102,14 +113,15 @@ fieldLayouts:
             required: ''
             tip: null
             type: craft\fieldlayoutelements\CustomField
+            uid: 852dff84-c874-42b1-bcc6-bf93ca2efafe
             warning: null
             width: 100
         name: 'Deprecated Fields'
         sortOrder: 3
+        uid: bd90b0bd-0f71-4178-b91b-498ed193412f
 handle: newsEntry
 hasTitleField: true
 name: 'News entry'
-section: 0e779b2c-f6e5-4cc0-a81c-53479e1587de # News
 sortOrder: 0
 titleFormat: null
 titleTranslationKeyFormat: null

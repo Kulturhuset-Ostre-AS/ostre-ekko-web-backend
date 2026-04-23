@@ -1,16 +1,18 @@
 columnSuffix: null
 contentColumnType: string
-fieldGroup: 2b5f0159-6c20-4857-9ad4-bd686b1e3ce8 # Event
 handle: sections
 instructions: ''
 name: Sections
 searchable: true
 settings:
-  contentTable: '{{%matrixcontent_sections}}'
-  maxBlocks: ''
-  minBlocks: ''
+  entryTypes:
+    -
+      uid: da23ad02-2442-4045-aab6-73b590eb5bbf
+  maxEntries: ''
+  minEntries: ''
   propagationKeyFormat: null
   propagationMethod: all
+  viewMode: blocks
 translationKeyFormat: null
 translationMethod: site
 type: craft\fields\Matrix

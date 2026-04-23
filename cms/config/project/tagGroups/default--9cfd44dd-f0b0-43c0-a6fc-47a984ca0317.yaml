@@ -24,9 +24,11 @@ fieldLayouts:
             tip: null
             title: null
             type: craft\fieldlayoutelements\TitleField
+            uid: 15a3b044-3201-461b-a6c8-83f3096500e7
             warning: null
             width: 100
         name: Content
         sortOrder: 1
+        uid: 81f0b5de-7856-43f6-bde7-814552024f63
 handle: default
 name: Default

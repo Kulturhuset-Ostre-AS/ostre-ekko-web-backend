@@ -1,6 +1,12 @@
 defaultPlacement: end
 enableVersioning: true
+entryTypes:
+  -
+    uid: 755c585f-b811-47dc-b91f-aed945420029 # Event
+  -
+    uid: abe8379b-6ad7-4679-9263-7962043daa0b # Festival
 handle: events
+maxAuthors: 1
 name: Events
 previewTargets:
   -
