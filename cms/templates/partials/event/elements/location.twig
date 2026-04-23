@@ -1,5 +1,0 @@
-{% set location = craft.ekko.prepLocation(event.location) %}
-
-{% if location is defined and location %}
-	{{ location.fullTitle|replace({', ':'<span class="location-separator"></span><br>'})|raw }}
-{% endif %}

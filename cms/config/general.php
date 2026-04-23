@@ -13,6 +13,13 @@ use craft\helpers\App;
 return [
     // Global settings
     '*' => [
+        // Headless mode: site is served to a separate frontend via GraphQL.
+        // Disables Twig template routing, forces JSON responses from
+        // controller endpoints, and keeps element URLs as absolute base URLs
+        // rather than rendered template paths. See
+        // https://craftcms.com/docs/4.x/config/general.html#headlessmode.
+        'headlessMode' => true,
+
         // Default Week Start Day (0 = Sunday, 1 = Monday...)
         'defaultWeekStartDay' => 1,
 

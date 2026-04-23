@@ -1,7 +1,0 @@
-{% if event.isMultiDay %}
-	{{ event.date|date('D d.F')|replace('. ', ' ') }}<br>
-	&ensp;{{ event.dateEnd|date('D d.F')|replace('. ', ' ') }}
-{% else %}
-	{{ event.date|date('D d.F')|replace('. ', ' ') }}<br>
-	&ensp;{{ event.openingTime|date("H:i") }}
-{% endif %}
