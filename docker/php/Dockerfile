@@ -1,4 +1,5 @@
-FROM php:7.4-fpm-bookworm
+# bookworm tag was removed upstream; bullseye is the last Debian line still published for PHP 7.4.
+FROM php:7.4-fpm-bullseye
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \

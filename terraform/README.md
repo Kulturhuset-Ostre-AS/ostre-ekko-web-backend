@@ -1,5 +1,7 @@
 # GCP baseline (Terraform) — Ekko / Craft
 
+**Goal:** run **Craft CMS** on **GCP** — **Cloud SQL** for MySQL, **GCS** for assets (and migration uploads), **Compute** (optional VM) for Docker/nginx/PHP. The CMS executes on the VM, not in object storage.
+
 Creates in an **existing** customer project:
 
 - Enabled service APIs
@@ -10,7 +12,7 @@ Creates in an **existing** customer project:
 - **Service account** for the future app VM / runtime with **Cloud SQL Client** + **object admin on assets bucket** only
 - **Secret Manager** secret holding the DB password (app SA can read it)
 
-This does **not** create VMs, load balancers, or Craft itself — only the data plane you will point Craft at.
+It also optionally creates a **small Debian VM** (`vm_enabled`, default true) with Docker + Compose, **Cloud SQL Auth Proxy** on `127.0.0.1:3306`, and firewall rules for **IAP SSH** and **HTTP** (compose default port **8080**). It does **not** create load balancers, managed TLS, or run `composer install` / Craft setup for you.
 
 ---
 
@@ -58,6 +60,8 @@ Cloud Shell already includes Terraform and `gcloud`, authenticated as **you** in
    ```
 
 First apply often takes **15–25 minutes** (Cloud SQL + service networking).
+
+After apply, use **`terraform output`** for `craft_vm_external_ip`, `craft_vm_ssh_iap_command`, and `craft_vm_url_hint`. SSH over IAP requires your user (or group) to have **`roles/iap.tunnelResourceAccessor`** on the project (or finer-grained IAP bindings). Tighten **`vm_http_source_ranges`** in `terraform.tfvars` before production.
 
 ### Option B — **GitHub Actions** (no Terraform anywhere on your machine)
 

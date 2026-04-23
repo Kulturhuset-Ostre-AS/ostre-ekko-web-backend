@@ -1,0 +1,73 @@
+# Copy a SQL dump from GCS into the Terraform migration bucket and import into Cloud SQL.
+# Uses the same WIF + state bucket as terraform-gcp.yml.
+#
+# Prerequisites: same secrets/vars as terraform-gcp (GCP_PROJECT_ID, GCP_WIF_*, TF_STATE_BUCKET).
+# The WIF service account must be able to read sql_dump_uri, write the migration bucket, and
+# run Cloud SQL import (typically Editor or roles/cloudsql.admin + storage on those buckets).
+#
+# Typical first run: enable "Run Terraform apply first" so Cloud SQL exists, then import.
+
+name: cloud-sql-import
+
+on:
+  workflow_dispatch:
+    inputs:
+      terraform_apply_first:
+        description: "Run terraform apply before import (when Cloud SQL is not created yet)"
+        type: choice
+        default: "no"
+        options:
+          - "no"
+          - "yes"
+      sql_dump_uri:
+        description: "gs://bucket/path/to/dump.sql.gz (readable by the WIF service account)"
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TF_IN_AUTOMATION: true
+  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+  SOURCE_GS_URI: ${{ github.event.inputs.sql_dump_uri }}
+  WAIT_FOR_SQL_INSTANCE: 1
+  SQL_INSTANCE_WAIT_TIMEOUT_SEC: 7200
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.0"
+
+      - name: Terraform init
+        working-directory: terraform
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="prefix=terraform/ekko"
+
+      - name: Terraform apply (optional)
+        if: github.event.inputs.terraform_apply_first == 'yes'
+        working-directory: terraform
+        run: terraform apply -input=false -no-color -auto-approve
+
+      - name: Import SQL into Cloud SQL
+        run: ./scripts/import-db-to-cloud-sql.sh

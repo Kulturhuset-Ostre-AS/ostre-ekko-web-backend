@@ -18,3 +18,11 @@ name_prefix = "ekko"
 # sql_authorized_cidrs = {
 #   home = "203.0.113.10/32"
 # }
+
+# --- Craft VM (optional) ---
+# vm_enabled = false
+# vm_machine_type = "e2-small"
+# vm_zone = "europe-north1-a"
+# vm_subnetwork_name = "default"
+# vm_http_source_ranges = ["203.0.113.10/32"]
+# craft_git_repo_url = "https://github.com/org/ostre-ekko-web-backend.git"

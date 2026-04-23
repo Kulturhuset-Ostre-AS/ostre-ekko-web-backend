@@ -98,3 +98,87 @@ variable "migration_bucket_force_destroy" {
   type        = bool
   default     = true
 }
+
+# --- Craft application VM (Compute Engine + Docker / Compose on host) ---
+
+variable "vm_enabled" {
+  description = "If false, no GCE instance or VM firewall rules are managed."
+  type        = bool
+  default     = true
+}
+
+variable "vm_zone" {
+  description = "GCE zone (e.g. europe-north1-a). Null = {region}-a."
+  type        = string
+  default     = null
+  nullable    = true
+}
+
+variable "vm_subnetwork_name" {
+  description = "Subnet for the VM. Default VPC (auto mode): use \"default\" in each region."
+  type        = string
+  default     = "default"
+}
+
+variable "vm_machine_type" {
+  description = "GCE machine type. e2-small is a reasonable minimum for Docker; e2-micro is tighter on RAM."
+  type        = string
+  default     = "e2-small"
+}
+
+variable "vm_boot_disk_gb" {
+  type    = number
+  default = 30
+}
+
+variable "vm_boot_disk_type" {
+  type    = string
+  default = "pd-balanced"
+}
+
+variable "vm_boot_disk_image" {
+  type    = string
+  default = "debian-cloud/debian-12"
+}
+
+variable "vm_preemptible" {
+  description = "If true, use Spot pricing (can be reclaimed; not for production)."
+  type        = bool
+  default     = false
+}
+
+variable "vm_http_port" {
+  description = "Host TCP port published by docker-compose nginx (must match HTTP_PORT / compose)."
+  type        = number
+  default     = 8080
+}
+
+variable "vm_enable_http_firewall" {
+  description = "Ingress from vm_http_source_ranges to vm_http_port on instances tagged for Craft."
+  type        = bool
+  default     = true
+}
+
+variable "vm_enable_iap_ssh_firewall" {
+  description = "Allow SSH (tcp/22) from the IAP TCP forwarding range to instances tagged for IAP."
+  type        = bool
+  default     = true
+}
+
+variable "vm_http_source_ranges" {
+  description = "CIDRs allowed to reach vm_http_port. Narrow in production (e.g. office / Cloudflare only)."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "vm_cloud_sql_proxy_version" {
+  description = "Cloud SQL Auth Proxy v2 release tag (see connector releases on GitHub / GCS)."
+  type        = string
+  default     = "v2.14.2"
+}
+
+variable "craft_git_repo_url" {
+  description = "Optional public git clone URL; if set, startup clones into /srv/ekko/app. Leave empty for manual deploy."
+  type        = string
+  default     = ""
+}

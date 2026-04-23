@@ -1,0 +1,19 @@
+# GCP / production VM overlay — use with:
+#   docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --build
+# `.env.gcp` is written by scripts/vm/write-cms-env.sh (EKKO_CLOUDSQL_CONNECTION=project:region:instance).
+
+services:
+  cloudsql:
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.2
+    restart: unless-stopped
+    networks: [app]
+    command:
+      - "--structured-logs"
+      - "--address=0.0.0.0"
+      - "--port=3306"
+      - "${EKKO_CLOUDSQL_CONNECTION}"
+
+  php:
+    depends_on:
+      cloudsql:
+        condition: service_started
