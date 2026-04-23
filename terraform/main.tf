@@ -8,7 +8,6 @@ locals {
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "iap.googleapis.com",
-    "artifactregistry.googleapis.com",
   ])
 }
 
@@ -128,19 +127,6 @@ resource "google_storage_bucket" "migration" {
   force_destroy               = var.migration_bucket_force_destroy
 
   depends_on = [google_project_service.apis]
-}
-
-# Required for `gcloud sql import sql` — the instance service account reads the dump from GCS.
-# https://cloud.google.com/sql/docs/mysql/import-export/import-export-sql
-resource "google_storage_bucket_iam_member" "migration_cloudsql_import" {
-  bucket = google_storage_bucket.migration.name
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${google_sql_database_instance.craft.service_account_email_address}"
-
-  depends_on = [
-    google_sql_database_instance.craft,
-    google_storage_bucket.migration,
-  ]
 }
 
 resource "google_service_account" "app" {

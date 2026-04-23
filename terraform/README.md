@@ -1,18 +1,16 @@
 # GCP baseline (Terraform) — Ekko / Craft
 
-**Goal:** run **Craft CMS** on **GCP** — **Cloud SQL** for MySQL, **GCS** for assets (and migration uploads), **Compute** (optional VM) for Docker/nginx/PHP. The CMS executes on the VM, not in object storage.
-
 Creates in an **existing** customer project:
 
 - Enabled service APIs
 - **VPC peering** reserved range + **private IP** Cloud SQL for **MySQL**
 - Optional **public IP** on Cloud SQL with **authorized networks** (off by default)
 - Application **database** + **user** (random password)
-- **GCS** buckets: long-lived **assets** + **migration** (SQL dump upload / `gcloud sql import`), with **Cloud SQL instance → migration bucket** `objectViewer` IAM for imports
+- **GCS** buckets: long-lived **assets** + short-lived **migration** (SQL dump upload / `gcloud sql import`)
 - **Service account** for the future app VM / runtime with **Cloud SQL Client** + **object admin on assets bucket** only
 - **Secret Manager** secret holding the DB password (app SA can read it)
 
-It also optionally creates a **small Debian VM** (`vm_enabled`, default true) with Docker + Compose, **Cloud SQL Auth Proxy** on `127.0.0.1:3306`, and firewall rules for **IAP SSH** and **HTTP** (compose default port **8080**). It does **not** create load balancers, managed TLS, or run `composer install` / Craft setup for you.
+This does **not** create VMs, load balancers, or Craft itself — only the data plane you will point Craft at.
 
 ---
 
@@ -61,8 +59,6 @@ Cloud Shell already includes Terraform and `gcloud`, authenticated as **you** in
 
 First apply often takes **15–25 minutes** (Cloud SQL + service networking).
 
-After apply, use **`terraform output`** for `craft_vm_external_ip`, `craft_vm_ssh_iap_command`, and `craft_vm_url_hint`. SSH over IAP requires your user (or group) to have **`roles/iap.tunnelResourceAccessor`** on the project (or finer-grained IAP bindings). Tighten **`vm_http_source_ranges`** in `terraform.tfvars` before production.
-
 ### Option B — **GitHub Actions** (no Terraform anywhere on your machine)
 
 Use the workflow **`.github/workflows/terraform-gcp.yml`**, which runs `terraform plan` / `apply` on GitHub runners.
@@ -92,29 +88,12 @@ You do **not** need Terraform to import SQL or sync files — only `gcloud` (Clo
 
 ### Upload SQL dump and import into Cloud SQL
 
-Terraform grants the **Cloud SQL instance service account** **`roles/storage.objectViewer`** on the **migration** bucket so `gcloud sql import sql` can read the object. Apply Terraform **before** importing; if the bucket existed without this rule, run **`terraform apply`** once to add IAM.
-
-**Option 1 — helper script** (repo root, Terraform initialized so `terraform output` works):
-
-```bash
-chmod +x scripts/import-db-to-cloud-sql.sh
-./scripts/import-db-to-cloud-sql.sh ~/path/to/ekko-20260422.sql.gz
-```
-
-If the dump targets a different **logical** database name than Terraform’s `db_name` (default `craft`):
-
-```bash
-DATABASE_NAME=ekkonqcr_ekko ./scripts/import-db-to-cloud-sql.sh ~/path/to/dump.sql.gz
-```
-
-**Option 2 — manual `gcloud`**
-
-Cloud SQL for MySQL usually accepts **`.sql` or `.sql.gz`**. If import rejects gzip, decompress and upload a plain `.sql`.
+Cloud SQL import accepts **`.sql` or `.sql.gz`** depending on version; if import rejects gzip, decompress first.
 
 ```bash
 PROJECT_ID=…
-MIGRATION_BUCKET=…   # terraform output -raw migration_bucket
-INSTANCE=…           # terraform output -raw sql_instance_name
+MIGRATION_BUCKET=…   # terraform output migration_bucket
+INSTANCE=…         # terraform output sql_instance_name
 
 gcloud config set project "$PROJECT_ID"
 
@@ -124,7 +103,7 @@ gcloud sql import sql "$INSTANCE" "gs://${MIGRATION_BUCKET}/import/ekko.sql.gz" 
   --database=craft
 ```
 
-Imports apply to the **named database** (`--database=`). Use Terraform’s `db_name` unless you intentionally import elsewhere. Prefer an **empty** database for first import.
+Use the **Terraform database name** (`db_name`, default `craft`) in `--database=`. If your dump used another logical database name, align `db_name` in tfvars before apply or adjust `--database=`.
 
 ### Upload media (`uploads/`) to the assets bucket
 

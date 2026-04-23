@@ -52,51 +52,6 @@ output "migration_bucket" {
   value = google_storage_bucket.migration.name
 }
 
-output "sql_instance_service_account" {
-  description = "Cloud SQL instance SA (has objectViewer on migration bucket for imports)."
-  value       = google_sql_database_instance.craft.service_account_email_address
-}
-
 output "app_service_account_email" {
   value = google_service_account.app.email
-}
-
-output "craft_vm_name" {
-  description = "GCE instance name when vm_enabled is true."
-  value       = var.vm_enabled ? google_compute_instance.craft[0].name : null
-}
-
-output "craft_vm_zone" {
-  description = "GCE zone short name (e.g. europe-north1-a)."
-  value       = var.vm_enabled ? element(reverse(split("/", google_compute_instance.craft[0].zone)), 0) : null
-}
-
-output "craft_vm_external_ip" {
-  description = "Ephemeral public IPv4 for HTTP until you add a load balancer / static IP."
-  value       = var.vm_enabled ? google_compute_instance.craft[0].network_interface[0].access_config[0].nat_ip : null
-}
-
-output "craft_vm_ssh_iap_command" {
-  description = "SSH via Identity-Aware Proxy (requires IAP permission + gcloud)."
-  value = var.vm_enabled ? format(
-    "gcloud compute ssh %s --zone=%s --tunnel-through-iap --project=%s",
-    google_compute_instance.craft[0].name,
-    element(reverse(split("/", google_compute_instance.craft[0].zone)), 0),
-    var.project_id,
-  ) : null
-}
-
-output "artifact_registry_host" {
-  description = "Docker registry host for the Craft images (use with `gcloud auth configure-docker`)."
-  value       = "${var.region}-docker.pkg.dev"
-}
-
-output "artifact_registry_repo" {
-  description = "Fully qualified AR repo path (prefix for image tags: <repo>/<name>:<tag>)."
-  value       = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.craft.repository_id}"
-}
-
-output "craft_vm_url_hint" {
-  description = "Suggested browser URL when vm_enable_http_firewall allows your client."
-  value       = var.vm_enabled && var.vm_enable_http_firewall ? "http://${google_compute_instance.craft[0].network_interface[0].access_config[0].nat_ip}:${var.vm_http_port}/" : null
 }

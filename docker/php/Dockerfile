@@ -1,46 +1,25 @@
-# syntax=docker/dockerfile:1.6
+FROM php:7.4-fpm-bookworm
 
-# Stage 1 — Composer dependencies. Network + PHP work, no C compilation.
-FROM composer:2 AS vendor
-WORKDIR /app
-COPY cms/composer.json cms/composer.lock* ./
-RUN --mount=type=cache,target=/tmp/composer \
-    COMPOSER_CACHE_DIR=/tmp/composer \
-    composer install \
-        --no-dev \
-        --no-scripts \
-        --no-autoloader \
-        --no-interaction \
-        --prefer-dist
-COPY cms/ ./
-RUN --mount=type=cache,target=/tmp/composer \
-    COMPOSER_CACHE_DIR=/tmp/composer \
-    composer dump-autoload --optimize --classmap-authoritative
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    git \
+    unzip \
+    libicu-dev \
+    libzip-dev \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libcurl4-openssl-dev \
+    pkg-config \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" intl pdo_mysql zip opcache gd curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Stage 2 — ServerSideUp PHP base image.
-#   https://serversideup.net/open-source/docker-php/
-#   https://craftcms.com/knowledge-base/docker-in-production
-# intl, gd, pdo_mysql, zip, opcache, curl, imagick, bcmath, redis, etc. are
-# all already present: zero ext compilation on our side.
-FROM serversideup/php:7.4-fpm-alpine AS runtime
+RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/zz-memory.ini \
+    && echo "upload_max_filesize=256M" >> /usr/local/etc/php/conf.d/zz-memory.ini \
+    && echo "post_max_size=256M" >> /usr/local/etc/php/conf.d/zz-memory.ini
 
-USER root
-
-ENV PHP_OPCACHE_ENABLE=true \
-    PHP_MEMORY_LIMIT=512M \
-    PHP_UPLOAD_MAX_FILESIZE=256M \
-    PHP_POST_MAX_SIZE=256M \
-    CRAFT_STREAM_LOG=true
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/cms
-
-COPY --chown=www-data:www-data cms/          /var/www/cms/
-COPY --chown=www-data:www-data --from=vendor /app/vendor /var/www/cms/vendor
-COPY --chown=www-data:www-data public_html/  /var/www/public_html/
-
-RUN mkdir -p /var/www/cms/storage/logs \
-             /var/www/cms/storage/runtime \
-             /var/www/public_html/cpresources \
-    && chown -R www-data:www-data /var/www/cms/storage /var/www/public_html/cpresources
-
-USER www-data

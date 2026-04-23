@@ -11,28 +11,14 @@ Compose runs **nginx + PHP 7.4 FPM** with the repo mounted at **`/var/www`** so 
    ```bash
    docker compose run --rm php composer install --no-interaction
    ```
-   On a **GCP VM** with Cloud SQL, use the same **`-f …gcp.yml` + `--env-file .env.gcp`** as in the Cloud SQL block below for `composer` and `up`.
 
 4. **`cms/.env`**: copy from `cms/.env.example` and set `DB_*`, `SITE_URL`, `SECURITY_KEY`.  
    - With **local MariaDB** profile: `DB_SERVER=db`, `DB_USER=craft`, `DB_PASSWORD=craft`, `DB_DATABASE=craft`.  
-   - With **Cloud SQL on the GCP VM**: use the **Compose overlay** so the Auth Proxy runs **in Docker** next to PHP (recommended — avoids `host.docker.internal` issues):
-
-     ```bash
-     sudo bash scripts/vm/write-cms-env.sh --primary-url 'http://YOUR_IP:8080/'
-     docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --build
-     ```
-
-     `write-cms-env.sh` creates **`.env.gcp`** (`EKKO_CLOUDSQL_CONNECTION=…`) and **`cms/.env`** with **`DB_SERVER=cloudsql`**.
+   - With **Cloud SQL**: run the [Auth Proxy](https://cloud.google.com/sql/docs/mysql/connect-auth-proxy) on the VM (host or sidecar) and point `DB_SERVER` at the proxy listen address (often `127.0.0.1`).
 
 ## Start
 
-**Against Cloud SQL on GCP** (proxy + PHP in Compose):
-
-```bash
-docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --build
-```
-
-**Local / quick** (no GCP overlay — no Cloud SQL proxy in Compose):
+**Against Cloud SQL only** (no `db` container):
 
 ```bash
 docker compose up -d --build
