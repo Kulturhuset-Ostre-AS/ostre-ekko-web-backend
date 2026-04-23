@@ -1,4 +1,4 @@
-dateModified: 1776937359
+dateModified: 1776940200
 email:
   fromEmail: pasidejau@gmail.com
   fromName: EKKO
@@ -157,6 +157,7 @@ meta:
     d7896b02-ef89-4b2d-bed9-2a1687ddaaa7: 'Enable link to festival entry' # Enable link to festival entry
     dc8b8360-0719-4c2c-a380-700ba0fb559c: 'Opening Time' # Opening Time
     df7b834e-e4f7-4ceb-ae3a-07aa0cd8ca9a: 'Featured Photo' # Featured Photo
+    e2bb1603-0d05-4682-9124-496596dec40e: 'Sections - Entry - Anchor ID' # Sections - Entry - Anchor ID
     e80f79d5-8bfd-403b-8703-cd18785dc47c: 'Related links' # Related links
     e571f378-cb91-4304-a1b3-cb86027dec63: 'Link color' # Link color
     e615d2b1-f4e4-4e6b-895c-957eff051ea2: Performances # Performances

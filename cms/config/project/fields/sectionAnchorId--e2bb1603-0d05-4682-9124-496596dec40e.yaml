@@ -1,7 +1,7 @@
 columnSuffix: null
-handle: sectionId
+handle: sectionAnchorId
 instructions: "ID, that can be used to create the link in festival sub-navigation. To link to this section, use '#....' format.\r\nBy default, the value from Section Title is used."
-name: 'Sections - Entry - Section ID'
+name: 'Sections - Entry - Anchor ID'
 searchable: true
 settings:
   byteLimit: null
