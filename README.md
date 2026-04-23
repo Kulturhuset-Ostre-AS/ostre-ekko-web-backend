@@ -21,6 +21,8 @@ For local work, cloning both repos into the same parent folder is convenient (fo
 - [Environment](#environment)
 - [Security and secrets](#security-and-secrets)
 - [Editorial and API usage](#editorial-and-api-usage)
+- [GraphQL frontend migration](docs/graphql-frontend-migration.md)
+- [Craft post-upgrade audit](docs/craft-post-upgrade-audit.md)
 
 ## GitHub
 
@@ -105,5 +107,7 @@ Regenerate or rotate secrets when credentials leak; coordinate with whoever oper
 
 - **Control panel**: content editors manage entries, assets, navigation, and globals according to your field layouts and sections.
 - **GraphQL**: the frontend repo documents how it queries Craft (`GRAPHQL_API_URL`, `GRAPHQL_TOKEN`). Any schema or token changes on this side should be reflected in frontend configuration and CI secrets.
+- **Frontend migration (Craft 5 / headless):** see [docs/graphql-frontend-migration.md](docs/graphql-frontend-migration.md) for endpoint, auth, **`sectionId` → `sectionAnchorId`**, and video URL field changes.
+- **Backend audit trail:** see [docs/craft-post-upgrade-audit.md](docs/craft-post-upgrade-audit.md) for routes, Composer advisories, and leftover folders.
 
 For Craft-specific behavior, field design, and GraphQL schema design, refer to the [Craft CMS documentation](https://craftcms.com/docs/) for your installed major version.
