@@ -86,6 +86,16 @@ output "craft_vm_ssh_iap_command" {
   ) : null
 }
 
+output "artifact_registry_host" {
+  description = "Docker registry host for the Craft images (use with `gcloud auth configure-docker`)."
+  value       = "${var.region}-docker.pkg.dev"
+}
+
+output "artifact_registry_repo" {
+  description = "Fully qualified AR repo path (prefix for image tags: <repo>/<name>:<tag>)."
+  value       = "${var.region}-docker.pkg.dev/${var.project_id}/${google_artifact_registry_repository.craft.repository_id}"
+}
+
 output "craft_vm_url_hint" {
   description = "Suggested browser URL when vm_enable_http_firewall allows your client."
   value       = var.vm_enabled && var.vm_enable_http_firewall ? "http://${google_compute_instance.craft[0].network_interface[0].access_config[0].nat_ip}:${var.vm_http_port}/" : null

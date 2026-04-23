@@ -1,21 +1,15 @@
-# Automated deploy of Craft to the GCP VM, end-to-end.
+# Automated Craft-on-GCP deploy. Build two immutable images in CI, push to
+# Artifact Registry, then tell the VM to `docker compose pull && up -d`.
 #
-# What it does:
-#   1. WIF auth as the deploy service account
-#   2. terraform apply (optional — infra + VM startup metadata refresh)
-#   3. Package repo, stream it to the VM via IAP SSH
-#   4. Run scripts/vm/write-cms-env.sh on the VM (pulls DB password from Secret Manager)
-#   5. Bring Compose up with docker-compose.gcp.yml (Cloud SQL Auth Proxy sidecar)
+# No compilation, no composer install, no source sync happens on the VM.
 #
-# Required GitHub settings (same as terraform-gcp.yml):
+# Required GitHub settings (bootstrapped by scripts/bootstrap-github-deploy.sh):
 #   Variables: GCP_PROJECT_ID
 #   Secrets:   GCP_WIF_PROVIDER, GCP_WIF_SERVICE_ACCOUNT, TF_STATE_BUCKET
 #
-# The WIF service account also needs, at minimum:
-#   - roles/compute.osLogin  (or compute.instanceAdmin.v1 for ad-hoc SSH)
-#   - roles/iap.tunnelResourceAccessor
-#   - roles/iam.serviceAccountUser on the VM service account (ekko-app@…)
-#   plus whatever Terraform / Cloud SQL Admin / Storage roles it already has for apply.
+# The bootstrapped service account has roles/owner on the project, so it can
+# push to Artifact Registry. The VM service account (ekko-app@…) has
+# roles/artifactregistry.reader so it can pull.
 
 name: deploy-craft
 
@@ -23,24 +17,20 @@ on:
   workflow_dispatch:
     inputs:
       terraform_apply_first:
-        description: "Run terraform apply before deploying (when infra or VM metadata changed)"
+        description: "Run terraform apply before deploying (first run / infra changes)"
         type: choice
         default: "no"
-        options:
-          - "no"
-          - "yes"
+        options: ["no", "yes"]
       primary_url:
-        description: "Public Craft URL (trailing slash). Leave blank to derive from terraform output craft_vm_url_hint."
+        description: "Public Craft URL (trailing slash). Leave blank to use craft_vm_url_hint."
         required: false
         type: string
         default: ""
       restart_vm_before_deploy:
-        description: "Stop/start the VM first (runs startup script again, picks up new /etc/ekko-craft.env)"
+        description: "Stop/start the VM first (picks up new /etc/ekko-craft.env)"
         type: choice
         default: "no"
-        options:
-          - "no"
-          - "yes"
+        options: ["no", "yes"]
 
 permissions:
   id-token: write
@@ -59,11 +49,11 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud (WIF)
-        id: auth
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
           service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+          token_format: access_token
 
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -73,7 +63,7 @@ jobs:
         with:
           terraform_version: "1.9.0"
 
-      - name: Terraform init (GCS backend)
+      - name: Terraform init
         working-directory: terraform
         run: |
           terraform init -input=false \
@@ -94,15 +84,63 @@ jobs:
           VM=$(clean "$(terraform output -raw craft_vm_name 2>/dev/null || true)")
           ZONE=$(clean "$(terraform output -raw craft_vm_zone 2>/dev/null || true)")
           PROJECT=$(clean "$(terraform output -raw project_id 2>/dev/null || true)")
+          REGION=$(clean "$(terraform output -raw region 2>/dev/null || true)")
+          REPO=$(clean "$(terraform output -raw artifact_registry_repo 2>/dev/null || true)")
+          HOST=$(clean "$(terraform output -raw artifact_registry_host 2>/dev/null || true)")
           URL_HINT=$(clean "$(terraform output -raw craft_vm_url_hint 2>/dev/null || true)")
-          if [ -z "$VM" ] || [ -z "$ZONE" ] || [ -z "$PROJECT" ]; then
-            echo "Terraform is missing VM outputs. Enable vm_enabled and run terraform apply first." >&2
+          if [ -z "$VM" ] || [ -z "$ZONE" ] || [ -z "$PROJECT" ] || [ -z "$REPO" ] || [ -z "$HOST" ]; then
+            echo "Missing outputs (VM / Artifact Registry). Run with terraform_apply_first=yes." >&2
             exit 1
           fi
-          echo "vm=$VM"       >>"$GITHUB_OUTPUT"
-          echo "zone=$ZONE"   >>"$GITHUB_OUTPUT"
-          echo "project=$PROJECT" >>"$GITHUB_OUTPUT"
+          echo "vm=$VM"             >>"$GITHUB_OUTPUT"
+          echo "zone=$ZONE"         >>"$GITHUB_OUTPUT"
+          echo "project=$PROJECT"   >>"$GITHUB_OUTPUT"
+          echo "region=$REGION"     >>"$GITHUB_OUTPUT"
+          echo "repo=$REPO"         >>"$GITHUB_OUTPUT"
+          echo "host=$HOST"         >>"$GITHUB_OUTPUT"
           echo "url_hint=$URL_HINT" >>"$GITHUB_OUTPUT"
+
+      - name: Resolve image tags
+        id: img
+        run: |
+          set -euo pipefail
+          SHA_TAG="${GITHUB_SHA::12}"
+          echo "php_sha=${{ steps.tf.outputs.repo }}/php:${SHA_TAG}"     >>"$GITHUB_OUTPUT"
+          echo "php_latest=${{ steps.tf.outputs.repo }}/php:latest"      >>"$GITHUB_OUTPUT"
+          echo "nginx_sha=${{ steps.tf.outputs.repo }}/nginx:${SHA_TAG}" >>"$GITHUB_OUTPUT"
+          echo "nginx_latest=${{ steps.tf.outputs.repo }}/nginx:latest"  >>"$GITHUB_OUTPUT"
+
+      - name: Configure docker for Artifact Registry
+        run: gcloud auth configure-docker "${{ steps.tf.outputs.host }}" --quiet
+
+      - name: Set up Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push PHP image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/php/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.img.outputs.php_sha }}
+            ${{ steps.img.outputs.php_latest }}
+          cache-from: type=registry,ref=${{ steps.img.outputs.php_latest }}
+          cache-to: type=inline
+          provenance: false
+
+      - name: Build and push nginx image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/nginx/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.img.outputs.nginx_sha }}
+            ${{ steps.img.outputs.nginx_latest }}
+          cache-from: type=registry,ref=${{ steps.img.outputs.nginx_latest }}
+          cache-to: type=inline
+          provenance: false
 
       - name: Pick SITE_URL
         id: url
@@ -111,7 +149,7 @@ jobs:
           PICK='${{ github.event.inputs.primary_url }}'
           if [ -z "$PICK" ]; then PICK='${{ steps.tf.outputs.url_hint }}'; fi
           if [ -z "$PICK" ]; then
-            echo "No primary_url provided and craft_vm_url_hint is null (vm_enable_http_firewall=false?); set the primary_url input." >&2
+            echo "No primary_url and craft_vm_url_hint is null." >&2
             exit 1
           fi
           echo "primary_url=$PICK" >>"$GITHUB_OUTPUT"
@@ -135,84 +173,89 @@ jobs:
               echo "VM ready."
               exit 0
             fi
-            echo "Waiting for first-boot script… ($i)"
+            echo "Waiting for first-boot… ($i)"
             sleep 15
           done
           echo "Timed out waiting for /etc/ekko-craft.env" >&2
           exit 1
 
-      - name: Sync repo to /srv/ekko/app
+      - name: Ship compose + env-writer to the VM
+        env:
+          VM:      ${{ steps.tf.outputs.vm }}
+          ZONE:    ${{ steps.tf.outputs.zone }}
+          PROJECT: ${{ steps.tf.outputs.project }}
         run: |
           set -euo pipefail
-          tar \
-            --exclude='./.git' \
-            --exclude='./.terraform' \
-            --exclude='./cms/vendor' \
-            --exclude='./cms/.env' \
-            --exclude='./cms/storage' \
-            --exclude='./node_modules' \
-            --exclude='./.cursor' \
-            -czf - . | \
-          gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
-            --zone="${{ steps.tf.outputs.zone }}" \
-            --project="${{ steps.tf.outputs.project }}" \
-            --tunnel-through-iap \
-            --command="sudo mkdir -p /srv/ekko/app && sudo tar -xzf - -C /srv/ekko/app --strip-components=0 && \
-              sudo chmod -R a+rX /srv/ekko/app/public_html /srv/ekko/app/docker /srv/ekko/app/cms && \
-              if sudo test -f /srv/ekko/app/cms/.env; then \
-                sudo chown root:www-data /srv/ekko/app/cms/.env 2>/dev/null || sudo chown root:33 /srv/ekko/app/cms/.env; \
-                sudo chmod 640 /srv/ekko/app/cms/.env; \
-              fi"
+          gcloud compute ssh "$VM" --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
+            --command="sudo mkdir -p /srv/ekko && sudo chown \$(id -u):\$(id -g) /srv/ekko"
+          gcloud compute scp \
+            --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
+            docker-compose.yml docker-compose.gcp.yml \
+            "$VM:/srv/ekko/"
+          gcloud compute scp \
+            --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
+            scripts/vm/write-cms-env.sh \
+            "$VM:/tmp/write-cms-env.sh"
+          gcloud compute ssh "$VM" --zone="$ZONE" --project="$PROJECT" --tunnel-through-iap \
+            --command="sudo chown root:root /srv/ekko/docker-compose.yml /srv/ekko/docker-compose.gcp.yml /tmp/write-cms-env.sh && sudo chmod 644 /srv/ekko/docker-compose.yml /srv/ekko/docker-compose.gcp.yml && sudo chmod 755 /tmp/write-cms-env.sh"
 
-      - name: Write cms/.env + .env.gcp on VM
+      - name: Write cms.env + .env.gcp on VM
         run: |
           set -euo pipefail
           gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
             --zone="${{ steps.tf.outputs.zone }}" \
             --project="${{ steps.tf.outputs.project }}" \
             --tunnel-through-iap \
-            --command="sudo bash /srv/ekko/app/scripts/vm/write-cms-env.sh --primary-url $(printf '%q' '${{ steps.url.outputs.primary_url }}')"
+            --command="sudo /tmp/write-cms-env.sh \
+              --primary-url $(printf %q '${{ steps.url.outputs.primary_url }}') \
+              --php-image    $(printf %q '${{ steps.img.outputs.php_sha }}') \
+              --nginx-image  $(printf %q '${{ steps.img.outputs.nginx_sha }}')"
 
-      - name: Disable stale host Cloud SQL Auth Proxy (if any)
+      - name: Disable legacy services on VM (older deploys)
         run: |
           gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
             --zone="${{ steps.tf.outputs.zone }}" \
             --project="${{ steps.tf.outputs.project }}" \
             --tunnel-through-iap \
-            --command="if systemctl list-unit-files cloud-sql-proxy.service --no-legend --no-pager | grep -q cloud-sql-proxy; then sudo systemctl disable --now cloud-sql-proxy; fi" || true
+            --command="if systemctl list-unit-files cloud-sql-proxy.service --no-legend --no-pager | grep -q cloud-sql-proxy; then sudo systemctl disable --now cloud-sql-proxy; fi; \
+              if [ -d /srv/ekko/app ]; then sudo docker compose -f /srv/ekko/app/docker-compose.yml -f /srv/ekko/app/docker-compose.gcp.yml --env-file /srv/ekko/app/.env.gcp down --remove-orphans 2>/dev/null || true; fi" || true
 
-      - name: Compose up (Cloud SQL proxy + PHP + nginx)
+      - name: Pull + up (Compose)
+        env:
+          AR_HOST: ${{ steps.tf.outputs.host }}
         run: |
           set -euo pipefail
+          # Docker-login to Artifact Registry using the VM's own SA token from
+          # the metadata server (no gcloud CLI needed on the VM).
+          REMOTE='set -e
+            TOKEN=$(curl -sS -H "Metadata-Flavor: Google" \
+              http://metadata.google.internal/computeMetadata/v1/instance/service-accounts/default/token \
+              | python3 -c "import sys,json; print(json.load(sys.stdin)[\"access_token\"])")
+            printf "%s" "$TOKEN" | sudo docker login -u oauth2accesstoken --password-stdin '"$AR_HOST"'
+            cd /srv/ekko
+            sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp pull
+            sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --remove-orphans'
           gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
             --zone="${{ steps.tf.outputs.zone }}" \
             --project="${{ steps.tf.outputs.project }}" \
             --tunnel-through-iap \
-            --command="cd /srv/ekko/app && sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp run --rm php composer install --no-interaction --no-progress"
-          gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
-            --zone="${{ steps.tf.outputs.zone }}" \
-            --project="${{ steps.tf.outputs.project }}" \
-            --tunnel-through-iap \
-            --command="cd /srv/ekko/app && sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --build"
+            --command="$REMOTE"
 
-      - name: Smoke test (HTTP)
+      - name: Smoke test
         run: |
           set -euo pipefail
           URL='${{ steps.url.outputs.primary_url }}'
           for i in $(seq 1 20); do
             CODE=$(curl -sS -o /tmp/body -w '%{http_code}' --max-time 15 "$URL" || echo 000)
             echo "try $i: HTTP $CODE"
-            if [ "$CODE" = "200" ]; then
-              head -c 500 /tmp/body
-              exit 0
-            fi
+            if [ "$CODE" = "200" ]; then head -c 500 /tmp/body; exit 0; fi
             sleep 5
           done
           echo "---- body ----"; head -c 2000 /tmp/body || true
-          echo "---- cloudsql logs ----"
+          echo "---- container logs ----"
           gcloud compute ssh "${{ steps.tf.outputs.vm }}" \
             --zone="${{ steps.tf.outputs.zone }}" \
             --project="${{ steps.tf.outputs.project }}" \
             --tunnel-through-iap \
-            --command="cd /srv/ekko/app && sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp logs --tail=50 cloudsql php nginx" || true
+            --command="cd /srv/ekko && sudo docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp logs --tail=80 cloudsql php nginx" || true
           exit 1

@@ -1,26 +1,56 @@
-# bookworm tag was removed upstream; bullseye is the last Debian line still published for PHP 7.4.
-FROM php:7.4-fpm-bullseye
+# syntax=docker/dockerfile:1.6
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    unzip \
-    libicu-dev \
-    libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    libonig-dev \
-    libcurl4-openssl-dev \
-    pkg-config \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" intl pdo_mysql zip opcache gd curl \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# Stage 1 — install Composer dependencies once, cached by composer.lock.
+FROM composer:2 AS vendor
 
-RUN echo "memory_limit=512M" > /usr/local/etc/php/conf.d/zz-memory.ini \
-    && echo "upload_max_filesize=256M" >> /usr/local/etc/php/conf.d/zz-memory.ini \
-    && echo "post_max_size=256M" >> /usr/local/etc/php/conf.d/zz-memory.ini
+WORKDIR /app
 
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+COPY cms/composer.json cms/composer.lock* ./
+RUN --mount=type=cache,target=/tmp/composer \
+    COMPOSER_CACHE_DIR=/tmp/composer \
+    composer install \
+        --no-dev \
+        --no-scripts \
+        --no-autoloader \
+        --no-interaction \
+        --prefer-dist
+
+COPY cms/ ./
+RUN --mount=type=cache,target=/tmp/composer \
+    COMPOSER_CACHE_DIR=/tmp/composer \
+    composer dump-autoload \
+        --optimize \
+        --classmap-authoritative
+
+# Stage 2 — php-fpm with prebuilt extensions and the app baked in.
+FROM php:7.4-fpm-bullseye AS runtime
+
+# install-php-extensions is the maintained community tool; it pulls prebuilt
+# binaries where available and handles system deps for us.
+ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN install-php-extensions \
+        intl \
+        pdo_mysql \
+        zip \
+        opcache \
+        gd \
+        curl
+
+RUN printf 'memory_limit=512M\nupload_max_filesize=256M\npost_max_size=256M\nopcache.enable=1\nopcache.jit=off\n' \
+    > /usr/local/etc/php/conf.d/zz-ekko.ini
 
 WORKDIR /var/www/cms
+
+# App code + vendor. Runtime-writable paths are redeclared as VOLUMEs below
+# so Compose can wire them to named volumes / host paths without masking the
+# rest of the image.
+COPY --chown=www-data:www-data cms/ /var/www/cms/
+COPY --chown=www-data:www-data --from=vendor /app/vendor /var/www/cms/vendor
+COPY --chown=www-data:www-data public_html/ /var/www/public_html/
+
+RUN mkdir -p /var/www/cms/storage/logs \
+             /var/www/cms/storage/runtime \
+             /var/www/public_html/cpresources \
+    && chown -R www-data:www-data /var/www/cms/storage /var/www/public_html/cpresources
+
+USER www-data

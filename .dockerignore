@@ -1,11 +1,31 @@
 .git
 .github
-terraform
-**/.DS_Store
-**/node_modules
-cms/storage/logs/*
-cms/storage/runtime/*
+.terraform
+.cursor
+.idea
+.vscode
+.DS_Store
+node_modules
+
+# Local secrets — injected at runtime on the VM.
+cms/.env
+cms/.env.*
+!cms/.env.example
+cms/config/license.key
+
+# Local vendor — built fresh in the image.
 cms/vendor
-public_html/uploads/*
-public_html/imager
+
+# Runtime state — provided via volumes / GCS.
+cms/storage/logs
+cms/storage/runtime
+cms/storage/backups
 public_html/cpresources
+public_html/uploads
+public_html/imager
+
+# DB dumps / large artefacts shouldn't end up in images.
+*.sql
+*.sql.gz
+*.tar.gz
+*.zip

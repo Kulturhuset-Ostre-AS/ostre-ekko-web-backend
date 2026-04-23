@@ -1,32 +1,48 @@
 #!/usr/bin/env bash
-# Run on the GCE Craft VM (sudo). Reads /etc/ekko-craft.env, fetches DB password from Secret Manager, writes cms/.env.
+# Runs on the VM (sudo). Writes:
+#   /srv/ekko/cms.env   — Craft .env (bind-mounted into php container at /var/www/cms/.env)
+#   /srv/ekko/.env.gcp  — Compose env: EKKO_PHP_IMAGE / EKKO_NGINX_IMAGE / EKKO_CLOUDSQL_CONNECTION / HTTP_PORT
+#
+# Pulls DB_PASSWORD from Secret Manager via the VM's own service account.
+# Reads /etc/ekko-craft.env (provisioned by Terraform startup script) for the
+# Cloud SQL connection name, DB user, DB name, and project.
 set -euo pipefail
 
-APP_ROOT="${APP_ROOT:-/srv/ekko/app}"
-PRIMARY_URL="${PRIMARY_SITE_URL:-http://127.0.0.1:8080/}"
+STACK_DIR="${STACK_DIR:-/srv/ekko}"
+PRIMARY_URL="${PRIMARY_SITE_URL:-}"
 ENVIRONMENT="${CRAFT_ENVIRONMENT:-staging}"
 SECURITY_KEY="${CRAFT_SECURITY_KEY:-}"
+PHP_IMAGE="${EKKO_PHP_IMAGE:-}"
+NGINX_IMAGE="${EKKO_NGINX_IMAGE:-}"
+HTTP_PORT="${EKKO_HTTP_PORT:-8080}"
 
 usage() {
-  echo "Usage: sudo $0 [--app-root DIR] [--primary-url URL] [--environment NAME] [--security-key KEY]" >&2
+  cat >&2 <<EOF
+Usage: sudo $0 [--stack-dir DIR] [--primary-url URL] [--environment NAME]
+               [--security-key KEY] [--php-image REF] [--nginx-image REF]
+               [--http-port N]
+EOF
   exit 1
 }
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --app-root) APP_ROOT="$2"; shift 2 ;;
+    --stack-dir) STACK_DIR="$2"; shift 2 ;;
     --primary-url) PRIMARY_URL="$2"; shift 2 ;;
     --environment) ENVIRONMENT="$2"; shift 2 ;;
     --security-key) SECURITY_KEY="$2"; shift 2 ;;
+    --php-image) PHP_IMAGE="$2"; shift 2 ;;
+    --nginx-image) NGINX_IMAGE="$2"; shift 2 ;;
+    --http-port) HTTP_PORT="$2"; shift 2 ;;
     -h | --help) usage ;;
     *) echo "Unknown option: $1" >&2; usage ;;
   esac
 done
 
-if [[ "$(id -u)" -ne 0 ]]; then
-  echo "Run as root (sudo)." >&2
-  exit 1
-fi
+if [[ "$(id -u)" -ne 0 ]]; then echo "Run as root (sudo)." >&2; exit 1; fi
+[[ -z "${PRIMARY_URL}" ]] && { echo "--primary-url is required." >&2; exit 1; }
+[[ -z "${PHP_IMAGE}"   ]] && { echo "--php-image is required."   >&2; exit 1; }
+[[ -z "${NGINX_IMAGE}" ]] && { echo "--nginx-image is required." >&2; exit 1; }
 
 if [[ ! -f /etc/ekko-craft.env ]]; then
   echo "Missing /etc/ekko-craft.env (Terraform VM startup did not run?)." >&2
@@ -34,31 +50,31 @@ if [[ ! -f /etc/ekko-craft.env ]]; then
 fi
 
 # shellcheck disable=SC1091
-set -a
-# shellcheck source=/dev/null
-source /etc/ekko-craft.env
-set +a
+set -a; source /etc/ekko-craft.env; set +a
 
 : "${EKKO_GCP_PROJECT:?}"
 : "${EKKO_DB_SECRET_ID:?}"
 : "${EKKO_DB_USER:?}"
 : "${EKKO_DB_NAME:?}"
-: "${EKKO_CLOUDSQL_CONNECTION:?Missing EKKO_CLOUDSQL_CONNECTION in /etc/ekko-craft.env (re-apply Terraform / refresh VM startup).}"
+: "${EKKO_CLOUDSQL_CONNECTION:?}"
 
-if [[ ! -d "${APP_ROOT}/cms" ]]; then
-  echo "Missing ${APP_ROOT}/cms — deploy the repo to ${APP_ROOT} first." >&2
-  exit 1
+mkdir -p "${STACK_DIR}"
+
+if [[ -z "${SECURITY_KEY}" && -f "${STACK_DIR}/.security-key" ]]; then
+  SECURITY_KEY="$(cat "${STACK_DIR}/.security-key")"
 fi
-
 if [[ -z "${SECURITY_KEY}" ]]; then
   if command -v openssl >/dev/null 2>&1; then
     SECURITY_KEY="$(openssl rand -base64 48 | tr -d '\n')"
   else
     SECURITY_KEY="$(head -c 48 /dev/urandom | base64 | tr -d '\n')"
   fi
+  umask 077
+  printf '%s' "$SECURITY_KEY" >"${STACK_DIR}/.security-key"
+  umask 022
 fi
 
-export WR_APP_ROOT="$APP_ROOT"
+export WR_CMS_ENV_PATH="${STACK_DIR}/cms.env"
 export WR_PRIMARY_URL="$PRIMARY_URL"
 export WR_ENVIRONMENT="$ENVIRONMENT"
 export WR_SECURITY_KEY="$SECURITY_KEY"
@@ -68,22 +84,7 @@ export WR_DB_USER="$EKKO_DB_USER"
 export WR_DB_NAME="$EKKO_DB_NAME"
 
 python3 <<'PY'
-import base64
-import json
-import os
-import pathlib
-import ssl
-import urllib.request
-import uuid
-
-app_root = os.environ["WR_APP_ROOT"]
-primary = os.environ["WR_PRIMARY_URL"]
-environment = os.environ["WR_ENVIRONMENT"]
-security = os.environ["WR_SECURITY_KEY"]
-project = os.environ["WR_PROJECT"]
-secret_id = os.environ["WR_SECRET_ID"]
-db_user = os.environ["WR_DB_USER"]
-db_name = os.environ["WR_DB_NAME"]
+import base64, json, os, pathlib, ssl, urllib.request, uuid
 
 meta = "http://169.254.169.254/computeMetadata/v1/instance/service-accounts/default/token"
 req = urllib.request.Request(meta, headers={"Metadata-Flavor": "Google"})
@@ -92,61 +93,56 @@ with urllib.request.urlopen(req, timeout=30) as r:
 
 url = (
     "https://secretmanager.googleapis.com/v1/projects/"
-    + project
+    + os.environ["WR_PROJECT"]
     + "/secrets/"
-    + secret_id
+    + os.environ["WR_SECRET_ID"]
     + "/versions/latest:access"
 )
 req = urllib.request.Request(url, headers={"Authorization": "Bearer " + tok})
-ctx = ssl.create_default_context()
-with urllib.request.urlopen(req, context=ctx, timeout=60) as r:
+with urllib.request.urlopen(req, context=ssl.create_default_context(), timeout=60) as r:
     body = json.loads(r.read().decode())
 db_password = base64.b64decode(body["payload"]["data"]).decode()
 
-app_id = "CraftCMS--" + str(uuid.uuid4())
-
-def q(s: str) -> str:
-    return json.dumps(s)
+def q(s): return json.dumps(s)
 
 lines = [
-    "# Generated by scripts/vm/write-cms-env.sh — do not commit.",
+    "# Generated by scripts/vm/write-cms-env.sh — do not edit by hand.",
     "",
-    f"ENVIRONMENT={q(environment)}",
-    f"APP_ID={q(app_id)}",
-    f"SECURITY_KEY={q(security)}",
+    f"ENVIRONMENT={q(os.environ['WR_ENVIRONMENT'])}",
+    f"APP_ID={q('CraftCMS--' + str(uuid.uuid4()))}",
+    f"SECURITY_KEY={q(os.environ['WR_SECURITY_KEY'])}",
     "",
     'DB_DRIVER="mysql"',
     'DB_SERVER="cloudsql"',
     'DB_PORT="3306"',
-    f"DB_DATABASE={q(db_name)}",
-    f"DB_USER={q(db_user)}",
+    f"DB_DATABASE={q(os.environ['WR_DB_NAME'])}",
+    f"DB_USER={q(os.environ['WR_DB_USER'])}",
     f"DB_PASSWORD={q(db_password)}",
     'DB_SCHEMA=""',
     'DB_TABLE_PREFIX="craft_"',
     "",
-    f"SITE_URL={q(primary)}",
+    f"SITE_URL={q(os.environ['WR_PRIMARY_URL'])}",
     "",
 ]
 
-path = pathlib.Path(app_root) / "cms" / ".env"
-path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-path.chmod(0o640)
+p = pathlib.Path(os.environ["WR_CMS_ENV_PATH"])
+p.write_text("\n".join(lines) + "\n", encoding="utf-8")
+p.chmod(0o640)
 PY
 
+# The php container runs as www-data (uid 33); let it read the mounted env.
+chown root:33 "${STACK_DIR}/cms.env"
+chmod 640 "${STACK_DIR}/cms.env"
+
 umask 077
-printf 'EKKO_CLOUDSQL_CONNECTION=%s\n' "${EKKO_CLOUDSQL_CONNECTION}" >"${APP_ROOT}/.env.gcp"
-chmod 600 "${APP_ROOT}/.env.gcp"
+cat >"${STACK_DIR}/.env.gcp" <<EOF
+# Generated by scripts/vm/write-cms-env.sh — compose env only, no secrets.
+EKKO_PHP_IMAGE=${PHP_IMAGE}
+EKKO_NGINX_IMAGE=${NGINX_IMAGE}
+EKKO_CLOUDSQL_CONNECTION=${EKKO_CLOUDSQL_CONNECTION}
+HTTP_PORT=${HTTP_PORT}
+EOF
+chmod 640 "${STACK_DIR}/.env.gcp"
 umask 022
 
-# PHP-FPM runs as www-data (uid 33); keep secrets off world-read.
-chown root:www-data "${APP_ROOT}/cms/.env" 2>/dev/null || chown root:33 "${APP_ROOT}/cms/.env"
-chmod 640 "${APP_ROOT}/cms/.env"
-
-mkdir -p "${APP_ROOT}/cms/storage/logs" "${APP_ROOT}/cms/storage/runtime"
-chown -R 33:33 "${APP_ROOT}/cms/storage" || true
-
-mkdir -p "${APP_ROOT}/public_html/cpresources"
-chown -R 33:33 "${APP_ROOT}/public_html/cpresources" || true
-chmod -R u+rwX "${APP_ROOT}/public_html/cpresources" || true
-
-echo "Wrote ${APP_ROOT}/cms/.env and ${APP_ROOT}/.env.gcp (DB via Docker service cloudsql — use docker-compose.gcp.yml)."
+echo "Wrote ${STACK_DIR}/cms.env and ${STACK_DIR}/.env.gcp."
