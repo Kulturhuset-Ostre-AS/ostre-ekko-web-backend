@@ -1,23 +1,18 @@
 {
   "require": {
-    "aelvan/mailchimp-subscribe": "3.0.3",
-    "besteadfast/craft-preparse-field": "1.2.5",
-    "clubstudioltd/craft-asset-rev": "6.0.2",
-    "craftcms/cms": "^3.7.20",
-    "craftcms/redactor": "2.8.8",
-    "doublesecretagency/craft-siteswitcher": "2.2.0",
-    "mikestecker/craft-videoembedder": "1.1.4",
-    "mmikkel/cp-field-inspect": "1.2.5",
-    "mmikkel/reasons": "2.2.5",
-    "nystudio107/craft-typogrify": "1.1.18",
-    "spacecatninja/imager-x": "v3.6.2",
-    "topshelfcraft/supersort": "3.1.0",
-    "verbb/field-manager": "2.2.4",
-    "verbb/navigation": "1.4.21",
-    "vlucas/phpdotenv": "^3.4.0"
-  },
-  "require-dev": {
-    "yiisoft/yii2-shell": "^2.0.3"
+    "aelvan/mailchimp-subscribe": "*",
+    "jalendport/craft-preparse": "^3.0@alpha",
+    "clubstudioltd/craft-asset-rev": "*",
+    "craftcms/cms": "^5.0",
+    "craftcms/redactor": "*",
+    "doublesecretagency/craft-siteswitcher": "*",
+    "mmikkel/cp-field-inspect": "*",
+    "nystudio107/craft-typogrify": "*",
+    "spacecatninja/imager-x": "*",
+    "topshelfcraft/supersort": "*",
+    "verbb/field-manager": "*",
+    "verbb/navigation": "^3.0",
+    "vlucas/phpdotenv": "*"
   },
   "autoload": {
     "psr-4": {
