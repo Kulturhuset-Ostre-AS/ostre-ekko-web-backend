@@ -80,7 +80,7 @@ echo ">> Ensuring OIDC provider '${PROVIDER_ID}' (pinned to ${GH_REPO})"
 PROVIDER_ARGS=(
   --location=global
   --workload-identity-pool="${POOL_ID}"
-  --display-name="github-actions-${GH_REPO##*/}"
+  --display-name="github-oidc"
   --issuer-uri="https://token.actions.githubusercontent.com"
   --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.ref=assertion.ref"
   --attribute-condition="assertion.repository == '${GH_REPO}'"
