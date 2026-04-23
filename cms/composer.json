@@ -3,7 +3,7 @@
     "aelvan/mailchimp-subscribe": "3.0.3",
     "besteadfast/craft-preparse-field": "1.2.5",
     "clubstudioltd/craft-asset-rev": "6.0.2",
-    "craftcms/cms": "3.7.20",
+    "craftcms/cms": "3.7.*",
     "craftcms/redactor": "2.8.8",
     "doublesecretagency/craft-siteswitcher": "2.2.0",
     "mikestecker/craft-videoembedder": "1.1.4",
@@ -31,6 +31,10 @@
     "allow-plugins": {
       "craftcms/plugin-installer": true,
       "yiisoft/yii2-composer": true
+    },
+    "audit": {
+      "abandoned": "report",
+      "block-insecure": false
     },
     "platform": {
       "php": "7.4"

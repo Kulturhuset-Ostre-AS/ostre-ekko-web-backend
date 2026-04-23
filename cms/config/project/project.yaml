@@ -1,4 +1,4 @@
-dateModified: 1716216505
+dateModified: 1776935829
 email:
   fromEmail: pasidejau@gmail.com
   fromName: EKKO
@@ -278,7 +278,6 @@ plugins:
     licenseKey: null
     schemaVersion: 2.0.0
     settings:
-      # Set in Control Panel (Mailchimp Subscribe) or via environment — never commit real keys.
       mcsubApikey: ''
       mcsubDoubleOptIn: '1'
       mcsubListId: 4512f2003b
@@ -337,7 +336,7 @@ system:
   live: true
   name: EKKO
   retryDuration: null
-  schemaVersion: 3.7.8
+  schemaVersion: 3.7.33
   timeZone: Europe/Oslo
 users:
   allowPublicRegistration: false
