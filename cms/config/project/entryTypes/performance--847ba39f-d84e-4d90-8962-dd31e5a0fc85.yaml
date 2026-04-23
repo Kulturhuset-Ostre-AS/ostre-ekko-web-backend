@@ -145,6 +145,6 @@ hasTitleField: false
 name: Performance
 section: 8b4e04f9-7e76-44b6-8cc3-5d146d8d62b5 # Performance
 sortOrder: 0
-titleFormat: '{date|date("Y-m-d")} - {artist.first().title|default("")|wordLimit(10)}'
+titleFormat: '{date|date("Y-m-d")} - {artist.one().title|default("")|wordLimit(10)}'
 titleTranslationKeyFormat: null
 titleTranslationMethod: site

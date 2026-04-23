@@ -43,11 +43,6 @@ return [
         // Dev Mode (see https://craftcms.com/guides/what-dev-mode-does)
         'devMode' => true,
         'enableTemplateCaching' => false,
-
-        'siteUrl' => [
-            'nb' => '@web',
-            'en' => '@web/en/'
-        ],
     ],
 
     // Staging environment settings

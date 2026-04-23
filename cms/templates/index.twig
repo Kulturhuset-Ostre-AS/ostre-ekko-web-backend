@@ -72,7 +72,7 @@
   {# {% elseif events|length %}
             {% set event = events|first %}
             {% set events = events|slice(1) %}
-            {% set performances = event.performances.find({ with: ['artist'] }) %}
+            {% set performances = event.performances.with(['artist']).all() %}
             
             <section id="prosjekter" class="section section-front cf">
                 <div class="section__header"></div>
@@ -121,7 +121,7 @@
           {# {% for event in entry.linkedEvents.with(['location']) %} #}
           {% for event in events %}
 
-            {% set performances = event.performances.find({ with: ['artist'] }) %}
+            {% set performances = event.performances.with(['artist']).all() %}
 
             {% if loop.index == 1 %}
               {% include "partials/event/block/block_image_full" %}

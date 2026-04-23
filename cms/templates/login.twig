@@ -11,13 +11,13 @@
 <div class="container cf ">
   <div style="margin: 0 auto; width: 500px; margin-top: 100px;">
     <form method="post" accept-charset="UTF-8">
-        {{ getCsrfInput() }}
+        {{ csrfInput() }}
         <input type="hidden" name="action" value="users/login">
 
         <div>
           <label><span>Bruker</span>
             <input type="text" name="loginName" autofocus
-                value="{{ craft.session.rememberedUsername }}">
+                value="{{ craft.app.user.rememberedUsername }}">
           </label>
         </div>
 

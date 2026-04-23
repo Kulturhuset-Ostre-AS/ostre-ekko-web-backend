@@ -1,4 +1,4 @@
-baseUrl: 'https://ekko.no'
+baseUrl: '@web'
 enabled: true
 handle: nb
 hasUrls: true
