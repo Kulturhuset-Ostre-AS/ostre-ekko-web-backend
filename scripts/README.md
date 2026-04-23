@@ -23,6 +23,19 @@ Prefer the workflow — no local `gcloud` auth needed, uses Workload Identity Fe
 
 It runs: WIF auth → (optional `terraform apply`) → IAP SSH → sync repo to `/srv/ekko/app` → `scripts/vm/write-cms-env.sh` → `composer install` → `docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d --build` → HTTP smoke test. On failure it dumps `cloudsql`, `php`, `nginx` logs.
 
+### One-time setup — grant GitHub permission to deploy
+
+Before the workflow can run, a project owner (admin@ekko.no) binds GitHub → GCP via Workload Identity Federation and uploads the four repo identifiers. No long-lived keys leave GCP; GitHub exchanges its per-run OIDC token for a short-lived GCP token.
+
+```bash
+gcloud auth login admin@ekko.no
+gh auth login
+TF_STATE_BUCKET=ostre-ekko-web-backend-tfstate \
+  ./scripts/bootstrap-github-deploy.sh
+```
+
+The script is idempotent. It pins WIF to exactly this repo (`assertion.repository == '…'`) and grants `roles/owner` to the deploy SA — effectively, anyone with **Actions: write** on this repo can ship. Tighten that by wrapping the workflow job in a GitHub **Environment** (`environment: production`) with required reviewers.
+
 The local scripts below are the same pipeline, for debugging or one-offs.
 
 ---
