@@ -19,6 +19,8 @@
  */
 
 return [
-  'events/<festivalSlug:{slug}>/<artistSlug:{slug}>' => ['template' => 'artists/_entry_festival'],
+  // Legacy Twig URL removed: `cms/templates/` was dropped for headless. If you
+  // ever need server-rendered festival/artist URLs again, restore templates and
+  // re-add a route here.
   'api' => 'graphql/api',
 ];
