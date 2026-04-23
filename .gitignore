@@ -14,6 +14,7 @@
 !/cms/storage/runtime/.gitignore
 /cms/storage/backups/*
 !/cms/storage/backups/.gitignore
+/cms/storage/config-deltas/
 
 # Web root — generated / large (sync from legacy host or GCS)
 /public_html/cpresources/
