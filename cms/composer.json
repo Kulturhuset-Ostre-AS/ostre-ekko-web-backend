@@ -1,11 +1,12 @@
 {
   "require": {
     "aelvan/mailchimp-subscribe": "*",
-    "jalendport/craft-preparse": "^3.0@alpha",
     "clubstudioltd/craft-asset-rev": "*",
     "craftcms/cms": "^5.0",
+    "craftcms/google-cloud": "^2.2",
     "craftcms/redactor": "*",
     "doublesecretagency/craft-siteswitcher": "*",
+    "jalendport/craft-preparse": "^3.0@alpha",
     "mmikkel/cp-field-inspect": "*",
     "nystudio107/craft-typogrify": "*",
     "spacecatninja/imager-x": "*",

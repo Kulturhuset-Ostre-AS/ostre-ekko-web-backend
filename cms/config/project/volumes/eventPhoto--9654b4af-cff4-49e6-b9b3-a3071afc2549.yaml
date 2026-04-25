@@ -57,4 +57,4 @@ name: 'Event Photo'
 sortOrder: 2
 titleTranslationKeyFormat: null
 titleTranslationMethod: site
-url: '@assetBaseUrl/photos/events'
+url: '@gcsUrlEventPhotos'

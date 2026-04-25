@@ -57,4 +57,4 @@ name: 'Artist Photos'
 sortOrder: 1
 titleTranslationKeyFormat: null
 titleTranslationMethod: site
-url: '@assetBaseUrl/photos/artists'
+url: '@gcsUrlArtistPhotos'

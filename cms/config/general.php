@@ -10,6 +10,8 @@
 
 use craft\helpers\App;
 
+$gcsAssetBaseUrl = rtrim((string) (App::env('GCS_ASSET_BASE_URL') ?: ''), '/');
+
 return [
     // Global settings
     '*' => [
@@ -37,6 +39,14 @@ return [
             '@webroot' => dirname(__DIR__, 2) . '/public_html',
             '@assetBaseUrl' => App::env('SITE_URL').'/uploads',
             '@assetBasePath' => '@webroot/uploads',
+            // craftcms/google-cloud filesystems (see docs/gcs-craft-plugin.md)
+            '@gcsProjectId' => App::env('GCP_PROJECT_ID') ?: '',
+            '@gcsAssetsBucket' => App::env('GCS_ASSETS_BUCKET') ?: '',
+            '@gcsKeyFileJson' => App::env('GCS_KEY_FILE_JSON') ?: '',
+            '@gcsAssetBaseUrl' => $gcsAssetBaseUrl,
+            '@gcsUrlArtistPhotos' => $gcsAssetBaseUrl !== '' ? $gcsAssetBaseUrl . '/uploads/photos/artists' : '',
+            '@gcsUrlEventPhotos' => $gcsAssetBaseUrl !== '' ? $gcsAssetBaseUrl . '/uploads/photos/events' : '',
+            '@gcsUrlMixtapes' => $gcsAssetBaseUrl !== '' ? $gcsAssetBaseUrl . '/uploads/mixtapes' : '',
         ],
 
         'convertFilenamesToAscii' => true,

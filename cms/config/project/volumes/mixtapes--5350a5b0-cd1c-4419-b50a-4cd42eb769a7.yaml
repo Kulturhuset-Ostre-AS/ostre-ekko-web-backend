@@ -37,4 +37,4 @@ name: Mixtapes
 sortOrder: 4
 titleTranslationKeyFormat: null
 titleTranslationMethod: none
-url: '@assetBaseUrl/mixtapes'
+url: '@gcsUrlMixtapes'

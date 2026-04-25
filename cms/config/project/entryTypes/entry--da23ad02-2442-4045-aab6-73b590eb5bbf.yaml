@@ -49,7 +49,7 @@ fieldLayouts:
             editCondition: null
             elementCondition: null
             elementEditCondition: null
-            fieldUid: e2bb1603-0d05-4682-9124-496596dec40e
+            fieldUid: e2bb1603-0d05-4682-9124-496596dec40e # Sections - Entry - Anchor ID
             handle: null
             instructions: null
             label: 'Section ID'

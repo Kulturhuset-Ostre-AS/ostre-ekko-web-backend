@@ -1,4 +1,4 @@
-dateModified: 1776940200
+dateModified: 1778000400
 email:
   fromEmail: pasidejau@gmail.com
   fromName: EKKO
@@ -9,23 +9,41 @@ fs:
     hasUrls: true
     name: 'Artist Photos'
     settings:
-      path: '@assetBasePath/photos/artists'
-    type: craft\fs\Local
-    url: '@assetBaseUrl/photos/artists'
+      bucket: '@gcsAssetsBucket'
+      bucketSelectionMode: manual
+      expires: ''
+      keyFileContents: '@gcsKeyFileJson'
+      projectId: '@gcsProjectId'
+      subfolder: uploads/photos/artists
+      visibility: public
+    type: craft\googlecloud\Fs
+    url: '@gcsAssetBaseUrl'
   eventPhoto:
     hasUrls: true
     name: 'Event Photo'
     settings:
-      path: '@assetBasePath/photos/events'
-    type: craft\fs\Local
-    url: '@assetBaseUrl/photos/events'
+      bucket: '@gcsAssetsBucket'
+      bucketSelectionMode: manual
+      expires: ''
+      keyFileContents: '@gcsKeyFileJson'
+      projectId: '@gcsProjectId'
+      subfolder: uploads/photos/events
+      visibility: public
+    type: craft\googlecloud\Fs
+    url: '@gcsAssetBaseUrl'
   mixtapes:
     hasUrls: true
     name: Mixtapes
     settings:
-      path: '@assetBasePath/mixtapes'
-    type: craft\fs\Local
-    url: '@assetBaseUrl/mixtapes'
+      bucket: '@gcsAssetsBucket'
+      bucketSelectionMode: manual
+      expires: ''
+      keyFileContents: '@gcsKeyFileJson'
+      projectId: '@gcsProjectId'
+      subfolder: uploads/mixtapes
+      visibility: public
+    type: craft\googlecloud\Fs
+    url: '@gcsAssetBaseUrl'
   userPhotos:
     hasUrls: false
     name: 'User Photos'
@@ -218,6 +236,10 @@ plugins:
     licenseKey: null
     schemaVersion: 1.0.0
     settings: null
+  google-cloud:
+    edition: standard
+    enabled: true
+    schemaVersion: '2.0'
   hacksaw:
     enabled: '1'
     licenseKey: null
