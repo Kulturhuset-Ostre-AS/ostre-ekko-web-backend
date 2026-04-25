@@ -1,0 +1,87 @@
+# Pushes the Cloudflare Tunnel token from the GitHub repository secret
+# CLOUDFLARE_TUNNEL_TOKEN onto the VM at /srv/ekko/cloudflared.env and
+# recreates the `cloudflared` container so it picks up the new token.
+#
+# Intentionally manual (workflow_dispatch) — tokens shouldn't roll on every push.
+#
+# Prerequisites (one-time):
+#   1) GitHub repo secrets:
+#        - CLOUDFLARE_TUNNEL_TOKEN  (the tunnel token string)
+#        - GCP_WIF_PROVIDER         (already used by terraform-gcp.yml)
+#        - GCP_WIF_SERVICE_ACCOUNT  (already used by terraform-gcp.yml)
+#   2) GitHub repo variable:
+#        - GCP_PROJECT_ID           (already used by terraform-gcp.yml)
+#   3) The WIF service account needs these project-level IAM roles on the VM:
+#        - roles/iap.tunnelResourceAccessor   (to SSH via IAP)
+#        - roles/compute.osAdminLogin         (to sudo on the VM)
+#        - roles/compute.instanceAdmin.v1     (to describe/list instances)
+#   4) The VM must have OS Login enabled (metadata `enable-oslogin=TRUE`).
+
+name: deploy-cloudflared-token
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  VM_NAME: ekko-craft-vm
+  VM_ZONE: europe-north1-a
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Render token file
+        env:
+          TUNNEL_TOKEN: ${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}
+        run: |
+          if [ -z "${TUNNEL_TOKEN}" ]; then
+            echo "CLOUDFLARE_TUNNEL_TOKEN secret is empty"; exit 1
+          fi
+          umask 077
+          printf 'TUNNEL_TOKEN=%s\n' "${TUNNEL_TOKEN}" > cloudflared.env
+
+      - name: Upload token and recreate cloudflared on VM
+        env:
+          PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+        run: |
+          set -euo pipefail
+
+          gcloud compute scp ./cloudflared.env "${VM_NAME}":/tmp/cloudflared.env \
+            --zone="${VM_ZONE}" \
+            --project="${PROJECT_ID}" \
+            --tunnel-through-iap
+
+          gcloud compute ssh "${VM_NAME}" \
+            --zone="${VM_ZONE}" \
+            --project="${PROJECT_ID}" \
+            --tunnel-through-iap \
+            --command='
+              set -euo pipefail
+              sudo install -o root -g root -m 600 /tmp/cloudflared.env /srv/ekko/cloudflared.env
+              rm -f /tmp/cloudflared.env
+              cd /srv/ekko
+              sudo docker compose \
+                -f docker-compose.yml -f docker-compose.gcp.yml \
+                --env-file .env.gcp \
+                up -d --force-recreate cloudflared
+              sleep 4
+              sudo docker logs --tail 20 ekko-cloudflared-1 2>&1 \
+                | sed -E "s/(token|TOKEN)=[A-Za-z0-9_\.-]+/\1=REDACTED/g"
+            '
+
+      - name: Clean local token file
+        if: always()
+        run: rm -f cloudflared.env
