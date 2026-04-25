@@ -1,0 +1,49 @@
+# Files to exclude from the `gcloud builds submit` upload.
+# Mirrors .dockerignore plus the heavy/local-only paths from .gitignore.
+# See: https://cloud.google.com/sdk/gcloud/reference/topic/gcloudignore
+
+.git
+.github
+.idea
+.cursor
+.vscode
+
+# Heavy / generated / not needed in the image
+**/.DS_Store
+**/._*
+**/node_modules
+cms/vendor
+cms/storage/logs/*
+cms/storage/runtime/*
+cms/storage/backups/*
+cms/storage/config-deltas
+cms/*.sql
+cms/*.sql.gz
+
+# Local secrets — never ship
+cms/.env
+cms/.env.*
+!cms/.env.example
+cms/config/license.key
+.env
+.env.*
+!.env.example
+
+# Web root generated/transient & local media (13G+ when present)
+public_html/cpresources/
+public_html/imager/
+public_html/uploads/*
+!public_html/uploads/.gitignore
+public_html/error_log
+
+# Terraform — not part of the image build
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/*.tfvars
+!terraform/terraform.tfvars.example
+
+# IDE / OS
+*.swp
+*.swo
