@@ -1,0 +1,29 @@
+#cloud-config
+# TEMPLATE — edit before use: repo URL, branch, paths, and remove what you do not need.
+#
+# Use as “Custom metadata” → “Startup script” on GCE, or attach as user-data
+# when creating an instance from gcloud / Terraform.
+#
+# Assumes: Ubuntu, Docker installed via vendor script, repo is public OR deploy key is baked separately.
+
+package_update: true
+packages:
+  - git
+  - ca-certificates
+  - curl
+
+runcmd:
+  - curl -fsSL https://get.docker.com | sh
+  - usermod -aG docker ubuntu
+  - mkdir -p /opt/ostre-ekko-web-backend
+  - chown ubuntu:ubuntu /opt/ostre-ekko-web-backend
+  # Replace with your clone method (SSH URL + deploy key, or rsync from CI bucket):
+  - sudo -u ubuntu git clone --depth 1 --branch main https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-backend.git /opt/ostre-ekko-web-backend
+  - install -m 0644 /opt/ostre-ekko-web-backend/deploy/vm/systemd/ekko-craft.service /etc/systemd/system/ekko-craft.service
+  # Create /opt/ostre-ekko-web-backend/cms/.env and license.key before first start — see docs/gcp-vm-docker-deploy.md
+  - systemctl daemon-reload
+  - systemctl enable ekko-craft.service
+  # Do not auto-start until .env exists; uncomment after secrets are in place:
+  # - systemctl start ekko-craft.service
+
+final_message: "Cloud-init finished — configure cms/.env, run deploy/vm/bootstrap.sh, then systemctl start ekko-craft"

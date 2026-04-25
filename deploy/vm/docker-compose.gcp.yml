@@ -1,0 +1,61 @@
+# GCP / production VM overlay. On the VM (e.g. /srv/ekko):
+#   docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp pull
+#   docker compose -f docker-compose.yml -f docker-compose.gcp.yml --env-file .env.gcp up -d
+#
+# `.env.gcp` defines EKKO_PHP_IMAGE, EKKO_NGINX_IMAGE, EKKO_CLOUDSQL_CONNECTION, HTTP_PORT.
+
+services:
+  cloudsql:
+    image: gcr.io/cloud-sql-connectors/cloud-sql-proxy:2.14.2
+    restart: unless-stopped
+    networks: [app]
+    command:
+      - "--structured-logs"
+      - "--private-ip"
+      - "--address=0.0.0.0"
+      - "--port=3306"
+      - "${EKKO_CLOUDSQL_CONNECTION}"
+
+  php:
+    image: ${EKKO_PHP_IMAGE}
+    build: !reset null
+    restart: unless-stopped
+    depends_on:
+      cloudsql:
+        condition: service_started
+    environment:
+      CRAFT_DOTENV_PATH: /var/www/cms/.env
+    volumes: !override
+      - /srv/ekko/cms.env:/var/www/cms/.env:ro
+      - cpresources:/var/www/public_html/cpresources
+      - craft_storage:/var/www/cms/storage
+
+  nginx:
+    image: ${EKKO_NGINX_IMAGE}
+    restart: unless-stopped
+    volumes: !override
+      - cpresources:/var/www/public_html/cpresources:ro
+
+  # Cloudflare Tunnel — terminates TLS at the Cloudflare edge and forwards
+  # traffic to `nginx:80` over an outbound-only connection. This lets us keep
+  # the VM firewall closed (no inbound 80/443/8080) while still serving
+  # cms.ekko.no publicly. Configure Public Hostnames in the Cloudflare
+  # Zero Trust dashboard (Tunnel "ekko-craft" → cms.ekko.no → http://nginx:80).
+  #
+  # The tunnel token is read from /srv/ekko/cloudflared.env as TUNNEL_TOKEN.
+  # That file is written by the `deploy-cloudflared-token` GitHub Actions
+  # workflow from the CLOUDFLARE_TUNNEL_TOKEN repo secret. cloudflared picks
+  # TUNNEL_TOKEN up automatically when running `tunnel run` without --token.
+  cloudflared:
+    image: cloudflare/cloudflared:2024.12.2
+    restart: unless-stopped
+    networks: [app]
+    depends_on:
+      - nginx
+    env_file:
+      - /srv/ekko/cloudflared.env
+    command: ["tunnel", "--no-autoupdate", "run"]
+
+volumes:
+  cpresources:
+  craft_storage:
