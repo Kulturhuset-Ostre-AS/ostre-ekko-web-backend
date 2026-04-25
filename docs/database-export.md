@@ -103,3 +103,5 @@ gunzip -c ekko-YYYYMMDD.sql.gz | mysql -h HOST -P 3306 -u USER -p DATABASE
 ```
 
 Use Cloud SQL Auth Proxy or VPC rules as required by your target environment.
+
+**Google Cloud SQL:** upload the `.sql.gz` to the Terraform **migration** bucket and run `gcloud sql import sql … --database=… --quiet` — see **[cloud-sql-import.md](cloud-sql-import.md)**.

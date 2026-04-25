@@ -23,6 +23,11 @@ For local work, cloning both repos into the same parent folder is convenient (fo
 - [Editorial and API usage](#editorial-and-api-usage)
 - [GraphQL frontend migration](docs/graphql-frontend-migration.md)
 - [Craft post-upgrade audit](docs/craft-post-upgrade-audit.md)
+- [Local media sync (uploads / Imager)](docs/local-media-sync.md)
+- [GCP VM: Docker same as local](docs/gcp-vm-docker-deploy.md)
+- [Google Cloud Storage + Craft (`google-cloud` plugin)](docs/gcs-craft-plugin.md)
+- [Import local MySQL dump into Cloud SQL](docs/cloud-sql-import.md)
+- [GCP bring-up checklist (Terraform + GCS + SQL + Craft)](docs/gcp-bring-up.md)
 
 ## GitHub
 
@@ -77,7 +82,7 @@ Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation star
 
 3. Copy **`cms/.env.example`** to **`cms/.env`** and set `DB_*`, `SECURITY_KEY`, `SITE_URL`, and any other variables your environment needs.
 4. Point the web server document root at **`public_html/`** (same as legacy production).
-5. Import a database dump and sync **`public_html/uploads/`** if you need assets locally (see `docs/database-export.md`).
+5. Import a database dump and sync **`public_html/uploads/`** (and optionally **`public_html/imager/`**) if you need assets locally — see [`docs/database-export.md`](docs/database-export.md) and [`docs/local-media-sync.md`](docs/local-media-sync.md).
 6. Open the control panel (this project uses trigger **`admin`**, not `/cp` — see `cms/config/general.php`).
 
 **Docker on a VM:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 7.4 FPM; optional MariaDB profile for local DB).
