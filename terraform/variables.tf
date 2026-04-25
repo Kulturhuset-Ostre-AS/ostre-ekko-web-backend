@@ -87,6 +87,12 @@ variable "db_high_availability" {
   default     = false
 }
 
+variable "assets_bucket_uniform_bucket_level_access" {
+  description = "If false, the bucket uses legacy ACLs (fine-grained), required by craftcms/google-cloud. If true (GCP default), that plugin cannot manage object visibility — keep false for Craft-managed media."
+  type        = bool
+  default     = false
+}
+
 variable "assets_bucket_force_destroy" {
   description = "If true, `terraform destroy` can delete non-empty assets bucket. Keep false for prod."
   type        = bool
@@ -97,4 +103,10 @@ variable "migration_bucket_force_destroy" {
   description = "If true, destroy can delete the migration bucket even if objects exist."
   type        = bool
   default     = true
+}
+
+variable "deploy_service_account_email" {
+  description = "Email of the WIF-federated service account used by GitHub Actions (e.g. the `deploy-cloudflared-token` workflow). When non-empty, IAP + OS Login roles are granted so the workflow can SSH into the VM. Leave empty to skip."
+  type        = string
+  default     = ""
 }

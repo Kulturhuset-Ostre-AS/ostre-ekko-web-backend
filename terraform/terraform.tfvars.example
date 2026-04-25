@@ -7,6 +7,10 @@ name_prefix = "ekko"
 # Optional: use a custom VPC if default was removed by org policy.
 # vpc_network_name = "my-vpc"
 
+# Default `false` enables legacy ACLs (fine-grained), required by craftcms/google-cloud.
+# Set `true` only if you use uniform bucket-level IAM and do not use that plugin for this bucket.
+# assets_bucket_uniform_bucket_level_access = true
+
 # Start small; bump for production traffic.
 # db_tier = "db-custom-2-7680"
 
@@ -18,3 +22,8 @@ name_prefix = "ekko"
 # sql_authorized_cidrs = {
 #   home = "203.0.113.10/32"
 # }
+
+# GitHub Actions WIF service account (same email referenced by the
+# GCP_WIF_SERVICE_ACCOUNT repo secret). Required for the
+# `deploy-cloudflared-token` workflow to SSH into the VM via IAP.
+# deploy_service_account_email = "github-deploy@my-customer-project-id.iam.gserviceaccount.com"

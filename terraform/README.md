@@ -6,11 +6,13 @@ Creates in an **existing** customer project:
 - **VPC peering** reserved range + **private IP** Cloud SQL for **MySQL**
 - Optional **public IP** on Cloud SQL with **authorized networks** (off by default)
 - Application **database** + **user** (random password)
-- **GCS** buckets: long-lived **assets** + short-lived **migration** (SQL dump upload / `gcloud sql import`)
+- **GCS** buckets: long-lived **assets** (Craft **media library** / `uploads/`) + short-lived **migration** (SQL dump upload / `gcloud sql import`). The assets bucket defaults to **legacy ACLs** (`uniform_bucket_level_access = false`) so **[craftcms/google-cloud](https://plugins.craftcms.com/google-cloud)** can manage object visibility; override with `assets_bucket_uniform_bucket_level_access` only if you do not use that plugin on this bucket.
 - **Service account** for the future app VM / runtime with **Cloud SQL Client** + **object admin on assets bucket** only
 - **Secret Manager** secret holding the DB password (app SA can read it)
 
 This does **not** create VMs, load balancers, or Craft itself — only the data plane you will point Craft at.
+
+End-to-end checklist (apply → GCS media → SQL import **`--quiet`** → Craft `.env` → VM): **[`docs/gcp-bring-up.md`](../docs/gcp-bring-up.md)**.
 
 ---
 
@@ -53,6 +55,8 @@ Cloud Shell already includes Terraform and `gcloud`, authenticated as **you** in
    ```bash
    terraform output -raw database_password
    terraform output assets_bucket
+   terraform output media_library_bucket
+   terraform output media_library_bucket_uri
    terraform output migration_bucket
    terraform output sql_instance_connection_name
    ```
@@ -88,7 +92,11 @@ You do **not** need Terraform to import SQL or sync files — only `gcloud` (Clo
 
 ### Upload SQL dump and import into Cloud SQL
 
+Terraform grants the **Cloud SQL service agent** **`storage.objectViewer`** on the **migration** bucket so `gcloud sql import sql` can read objects there.
+
 Cloud SQL import accepts **`.sql` or `.sql.gz`** depending on version; if import rejects gzip, decompress first.
+
+Step-by-step (local Craft → dump → bucket → import): **[`docs/cloud-sql-import.md`](../docs/cloud-sql-import.md)**.
 
 ```bash
 PROJECT_ID=…
@@ -100,18 +108,28 @@ gcloud config set project "$PROJECT_ID"
 gcloud storage cp ./path/to/ekko-20260422.sql.gz "gs://${MIGRATION_BUCKET}/import/ekko.sql.gz"
 
 gcloud sql import sql "$INSTANCE" "gs://${MIGRATION_BUCKET}/import/ekko.sql.gz" \
-  --database=craft
+  --database=craft \
+  --quiet
 ```
+
+`--quiet` skips the interactive confirmation prompt (required for scripts and CI).
 
 Use the **Terraform database name** (`db_name`, default `craft`) in `--database=`. If your dump used another logical database name, align `db_name` in tfvars before apply or adjust `--database=`.
 
-### Upload media (`uploads/`) to the assets bucket
+### Media library — upload `uploads/` to GCS
+
+Terraform creates **one** long-lived bucket used for all public Craft volumes (artist/event photos, mixtapes, etc.). In outputs it appears as **`assets_bucket`** and **`media_library_bucket`** (same name).
+
+The app service account has **`roles/storage.objectAdmin`** on this bucket so a VM or job can sync or read objects. The bucket is **not** world-readable by default; the public site still serves files from your web origin (for example `SITE_URL/uploads/…` on the VM) unless you later add a CDN or change Craft to use object URLs.
 
 ```bash
-ASSETS_BUCKET=…   # terraform output assets_bucket
+# Either output works — they resolve to the same bucket.
+MEDIA_BUCKET="$(terraform output -raw media_library_bucket)"
 
-gcloud storage rsync -r ./public_html/uploads/ "gs://${ASSETS_BUCKET}/uploads/"
+gcloud storage rsync -r ./public_html/uploads/ "gs://${MEDIA_BUCKET}/uploads/"
 ```
+
+To copy from an existing object prefix (for example after reorganizing), use `gcloud storage cp` / `rsync` as needed; keep the **`uploads/`** prefix aligned with `@assetBasePath` (`public_html/uploads` → `gs://…/uploads/`) if you mirror files onto disk with the same layout.
 
 ---
 

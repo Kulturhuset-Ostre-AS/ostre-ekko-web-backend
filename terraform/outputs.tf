@@ -45,7 +45,19 @@ output "secret_db_password_id" {
 }
 
 output "assets_bucket" {
-  value = google_storage_bucket.assets.name
+  description = "Private GCS bucket for Craft media (uploads/). Same resource as media_library_bucket."
+  value       = google_storage_bucket.assets.name
+}
+
+# Alias for operators who look for “media library” rather than “assets”.
+output "media_library_bucket" {
+  description = "GCS bucket holding Craft volume files; sync public_html/uploads/ here (see terraform/README.md)."
+  value       = google_storage_bucket.assets.name
+}
+
+output "media_library_bucket_uri" {
+  description = "gs:// URI for scripts (gcloud storage rsync, etc.)."
+  value       = google_storage_bucket.assets.url
 }
 
 output "migration_bucket" {

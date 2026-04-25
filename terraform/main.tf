@@ -19,6 +19,10 @@ resource "google_project_service" "apis" {
   disable_on_destroy = false
 }
 
+data "google_project" "current" {
+  project_id = var.project_id
+}
+
 data "google_compute_network" "main" {
   name    = var.vpc_network_name
   project = var.project_id
@@ -114,7 +118,7 @@ resource "random_id" "bucket_suffix" {
 resource "google_storage_bucket" "assets" {
   name                        = "${var.name_prefix}-assets-${random_id.bucket_suffix.hex}"
   location                    = var.region
-  uniform_bucket_level_access = true
+  uniform_bucket_level_access = var.assets_bucket_uniform_bucket_level_access
   force_destroy               = var.assets_bucket_force_destroy
 
   depends_on = [google_project_service.apis]
@@ -127,6 +131,19 @@ resource "google_storage_bucket" "migration" {
   force_destroy               = var.migration_bucket_force_destroy
 
   depends_on = [google_project_service.apis]
+}
+
+# So `gcloud sql import sql … gs://migration-bucket/…` can read the object.
+# See https://cloud.google.com/sql/docs/mysql/import-export/import-export-sql
+resource "google_storage_bucket_iam_member" "migration_cloudsql_import" {
+  bucket = google_storage_bucket.migration.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-cloud-sql.iam.gserviceaccount.com"
+
+  depends_on = [
+    google_project_service.apis,
+    google_storage_bucket.migration,
+  ]
 }
 
 resource "google_service_account" "app" {
@@ -168,4 +185,24 @@ resource "google_secret_manager_secret_iam_member" "db_password_app_accessor" {
 resource "google_secret_manager_secret_version" "db_password" {
   secret      = google_secret_manager_secret.db_password.id
   secret_data = random_password.db.result
+}
+
+# Roles granted to the GitHub Actions (WIF) service account so the
+# `deploy-cloudflared-token` workflow can SSH into the VM via IAP and
+# update /srv/ekko/cloudflared.env. Gated on deploy_service_account_email;
+# leave that variable empty to skip these bindings entirely.
+locals {
+  deploy_sa_roles = var.deploy_service_account_email == "" ? toset([]) : toset([
+    "roles/iap.tunnelResourceAccessor", # reach instances over IAP
+    "roles/compute.osAdminLogin",       # SSH as a sudoer via OS Login
+    "roles/compute.instanceAdmin.v1",   # describe/list instances (gcloud ssh needs this)
+  ])
+}
+
+resource "google_project_iam_member" "deploy_sa" {
+  for_each = local.deploy_sa_roles
+
+  project = var.project_id
+  role    = each.value
+  member  = "serviceAccount:${var.deploy_service_account_email}"
 }
