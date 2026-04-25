@@ -1,0 +1,8 @@
+# syntax=docker/dockerfile:1.6
+# Production nginx: static web root + config; PHP runs in sibling image.
+FROM nginx:1.25-alpine
+
+COPY docker/nginx/default.conf /etc/nginx/conf.d/default.conf
+COPY public_html /var/www/public_html
+
+RUN mkdir -p /var/www/public_html/cpresources

@@ -1,0 +1,57 @@
+# syntax=docker/dockerfile:1.6
+# Production PHP image for Craft 5.
+#
+# Per https://craftcms.com/knowledge-base/docker-in-production:
+#   serversideup/php:8.2-fpm-alpine already ships intl, gd, imagick, bcmath,
+#   pdo_mysql, zip, opcache, curl, redis, sodium, soap, etc. No
+#   install-php-extensions / compile step needed here.
+
+# Stage 1: composer install (no PHP compilation).
+FROM composer:2 AS vendor
+WORKDIR /app
+COPY cms/composer.json cms/composer.lock ./
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --no-scripts \
+    --no-autoloader \
+    --prefer-dist \
+    --no-progress \
+    --ignore-platform-reqs
+COPY cms/ ./
+RUN composer dump-autoload --optimize --classmap-authoritative
+
+# Stage 2: runtime (pre-baked base + a few Alpine APK extensions).
+FROM serversideup/php:8.2-fpm-alpine AS runtime
+
+ENV PHP_OPCACHE_ENABLE=true \
+    PHP_MEMORY_LIMIT=512M \
+    PHP_UPLOAD_MAX_FILESIZE=256M \
+    PHP_POST_MAX_SIZE=256M \
+    CRAFT_STREAM_LOG=true
+
+USER root
+
+# install-php-extensions pulls prebuilt Alpine APK packages for these — no C
+# compilation step. Per https://craftcms.com/knowledge-base/docker-in-production.
+RUN install-php-extensions bcmath gd imagick intl soap
+
+WORKDIR /var/www
+
+COPY --chown=www-data:www-data public_html/ /var/www/public_html/
+COPY --chown=www-data:www-data --from=vendor /app /var/www/cms
+
+# Defensive: strip macOS AppleDouble metadata files if the build context ever
+# leaks them (.dockerignore should already exclude **/._*). These are binary
+# and crash Symfony's YAML parser when Craft scans config/project/**/*.yaml.
+RUN find /var/www -name '._*' -type f -delete
+
+RUN mkdir -p /var/www/cms/storage/logs \
+             /var/www/cms/storage/runtime \
+             /var/www/cms/storage/config-deltas \
+             /var/www/cms/storage/backups \
+             /var/www/public_html/cpresources \
+    && chown -R www-data:www-data /var/www/cms/storage /var/www/public_html/cpresources
+
+USER www-data
+WORKDIR /var/www/cms

@@ -2,6 +2,10 @@
 .github
 terraform
 **/.DS_Store
+# macOS AppleDouble resource forks ("._foo") — these are binary metadata files
+# created when copying onto non-HFS+ filesystems. Symfony YAML treats them as
+# YAML files and crashes on the binary header. Never ship them.
+**/._*
 **/node_modules
 cms/storage/logs/*
 cms/storage/runtime/*

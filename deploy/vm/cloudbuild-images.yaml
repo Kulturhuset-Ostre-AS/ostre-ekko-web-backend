@@ -1,0 +1,45 @@
+# Build and push Craft PHP + nginx images to Artifact Registry.
+# Usage (from repo root):
+#   TAG=$(git rev-parse --short HEAD)
+#   gcloud builds submit . --config=deploy/vm/cloudbuild-images.yaml --substitutions=_TAG=$TAG --project=YOUR_PROJECT_ID
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - docker/php/Dockerfile.prod
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/php:${_TAG}
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - docker/nginx/Dockerfile.prod
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/nginx:${_TAG}
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/php:${_TAG}
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/nginx:${_TAG}
+
+options:
+  machineType: E2_HIGHCPU_8
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _TAG: latest
+  _REGION: europe-north1
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/php:${_TAG}
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-craft/nginx:${_TAG}
