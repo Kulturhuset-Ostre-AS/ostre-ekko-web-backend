@@ -1,0 +1,417 @@
+ Image postgres:16-alpine Pulling 
+ 5de55e5ef9c0 Pulling fs layer 0B
+ d4d0fadf898a Pulling fs layer 0B
+ bce425ecfaaa Pulling fs layer 0B
+ 6498537e6761 Pulling fs layer 0B
+ 45cc3e839ffd Pulling fs layer 0B
+ 04e3aee4221b Pulling fs layer 0B
+ d052215e28f3 Pulling fs layer 0B
+ ed3865b2f387 Pulling fs layer 0B
+ 5c9e69e30b63 Pulling fs layer 0B
+ 7f56633e156a Pulling fs layer 0B
+ 8ff0b682b155 Pulling fs layer 0B
+ ed3865b2f387 Waiting 0B
+ 5c9e69e30b63 Waiting 0B
+ 45cc3e839ffd Waiting 0B
+ 04e3aee4221b Waiting 0B
+ 8ff0b682b155 Waiting 0B
+ d052215e28f3 Waiting 0B
+ 7f56633e156a Waiting 0B
+ 6498537e6761 Waiting 0B
+ 5de55e5ef9c0 Downloading 48.55kB
+ 5de55e5ef9c0 Downloading 97.7kB
+ d4d0fadf898a Downloading 970B
+ d4d0fadf898a Verifying Checksum 0B
+ d4d0fadf898a Download complete 0B
+ 5de55e5ef9c0 Downloading 196kB
+ bce425ecfaaa Downloading 15.78kB
+ bce425ecfaaa Downloading 64.93kB
+ 5de55e5ef9c0 Downloading 343.5kB
+ 6498537e6761 Downloading 175B
+ 6498537e6761 Download complete 0B
+ bce425ecfaaa Downloading 163.2kB
+ 5de55e5ef9c0 Downloading 490.9kB
+ bce425ecfaaa Downloading 343.5kB
+ 5de55e5ef9c0 Downloading 687.5kB
+ bce425ecfaaa Downloading 409kB
+ 5de55e5ef9c0 Downloading 785.8kB
+ bce425ecfaaa Downloading 671.1kB
+ 5de55e5ef9c0 Downloading 1.032MB
+ 45cc3e839ffd Downloading 116B
+ 45cc3e839ffd Verifying Checksum 0B
+ 45cc3e839ffd Download complete 0B
+ bce425ecfaaa Verifying Checksum 0B
+ bce425ecfaaa Download complete 0B
+ 5de55e5ef9c0 Downloading 1.277MB
+ 5de55e5ef9c0 Downloading 1.523MB
+ 5de55e5ef9c0 Downloading 1.671MB
+ d052215e28f3 Downloading 3.496kB
+ d052215e28f3 Downloading 9.62kB
+ d052215e28f3 Download complete 0B
+ 5de55e5ef9c0 Downloading 1.818MB
+ 5de55e5ef9c0 Downloading 2.015MB
+ 5de55e5ef9c0 Downloading 2.162MB
+ 5de55e5ef9c0 Downloading 2.359MB
+ ed3865b2f387 Download complete 0B
+ 5de55e5ef9c0 Downloading 2.555MB
+ 04e3aee4221b Downloading 535.8kB
+ 5de55e5ef9c0 Downloading 2.703MB
+ 5de55e5ef9c0 Downloading 2.998MB
+ 5c9e69e30b63 Downloading 168B
+ 5c9e69e30b63 Verifying Checksum 0B
+ 5c9e69e30b63 Download complete 0B
+ 5de55e5ef9c0 Downloading 3.194MB
+ 5de55e5ef9c0 Downloading 3.391MB
+ 04e3aee4221b Downloading 1.065MB
+ 5de55e5ef9c0 Downloading 3.637MB
+ 7f56633e156a Downloading 3.496kB
+ 7f56633e156a Downloading 6.098kB
+ 7f56633e156a Verifying Checksum 0B
+ 7f56633e156a Download complete 0B
+ 5de55e5ef9c0 Downloading 3.833MB
+ 04e3aee4221b Downloading 1.606MB
+ 5de55e5ef9c0 Downloading 4.079MB
+ 04e3aee4221b Downloading 2.687MB
+ 8ff0b682b155 Downloading 184B
+ 8ff0b682b155 Verifying Checksum 0B
+ 8ff0b682b155 Download complete 0B
+ 5de55e5ef9c0 Verifying Checksum 0B
+ 5de55e5ef9c0 Download complete 0B
+ 5de55e5ef9c0 Extracting 65.54kB
+ 5de55e5ef9c0 Extracting 4.183MB
+ 5de55e5ef9c0 Extracting 4.183MB
+ 04e3aee4221b Downloading 4.28MB
+ 5de55e5ef9c0 Pull complete 0B
+ d4d0fadf898a Extracting 970B
+ d4d0fadf898a Pull complete 0B
+ bce425ecfaaa Extracting 32.77kB
+ bce425ecfaaa Extracting 852.3kB
+ bce425ecfaaa Pull complete 0B
+ 6498537e6761 Extracting 175B
+ 6498537e6761 Extracting 175B
+ 6498537e6761 Pull complete 0B
+ 45cc3e839ffd Extracting 116B
+ 45cc3e839ffd Extracting 116B
+ 45cc3e839ffd Pull complete 0B
+ 04e3aee4221b Downloading 5.348MB
+ 04e3aee4221b Downloading 6.425MB
+ 04e3aee4221b Downloading 6.959MB
+ 04e3aee4221b Downloading 7.5MB
+ 04e3aee4221b Downloading 8.567MB
+ 04e3aee4221b Downloading 9.636MB
+ 04e3aee4221b Downloading 10.18MB
+ 04e3aee4221b Downloading 11.23MB
+ 04e3aee4221b Downloading 11.76MB
+ 04e3aee4221b Downloading 13.37MB
+ 04e3aee4221b Downloading 14.44MB
+ 04e3aee4221b Downloading 15.5MB
+ 04e3aee4221b Downloading 16.04MB
+ 04e3aee4221b Downloading 18.17MB
+ 04e3aee4221b Downloading 19.25MB
+ 04e3aee4221b Downloading 20.32MB
+ 04e3aee4221b Downloading 21.38MB
+ 04e3aee4221b Downloading 22.46MB
+ 04e3aee4221b Downloading 23.52MB
+ 04e3aee4221b Downloading 24.58MB
+ 04e3aee4221b Downloading 25.63MB
+ 04e3aee4221b Downloading 26.17MB
+ 04e3aee4221b Downloading 27.23MB
+ 04e3aee4221b Downloading 28.29MB
+ 04e3aee4221b Downloading 29.36MB
+ 04e3aee4221b Downloading 29.89MB
+ 04e3aee4221b Downloading 30.95MB
+ 04e3aee4221b Downloading 32.01MB
+ 04e3aee4221b Downloading 33.06MB
+ 04e3aee4221b Downloading 34.12MB
+ 04e3aee4221b Downloading 34.65MB
+ 04e3aee4221b Downloading 35.18MB
+ 04e3aee4221b Downloading 35.71MB
+ 04e3aee4221b Downloading 36.78MB
+ 04e3aee4221b Downloading 37.85MB
+ 04e3aee4221b Downloading 38.39MB
+ 04e3aee4221b Downloading 39.45MB
+ 04e3aee4221b Downloading 40.51MB
+ 04e3aee4221b Downloading 41.05MB
+ 04e3aee4221b Downloading 42.11MB
+ 04e3aee4221b Downloading 43.17MB
+ 04e3aee4221b Downloading 44.23MB
+ 04e3aee4221b Downloading 45.3MB
+ 04e3aee4221b Downloading 45.84MB
+ 04e3aee4221b Downloading 46.9MB
+ 04e3aee4221b Downloading 47.43MB
+ 04e3aee4221b Downloading 48.48MB
+ 04e3aee4221b Downloading 49.54MB
+ 04e3aee4221b Downloading 50.08MB
+ 04e3aee4221b Downloading 51.14MB
+ 04e3aee4221b Downloading 52.21MB
+ 04e3aee4221b Downloading 53.29MB
+ 04e3aee4221b Downloading 53.82MB
+ 04e3aee4221b Downloading 54.9MB
+ 04e3aee4221b Downloading 55.44MB
+ 04e3aee4221b Downloading 56.5MB
+ 04e3aee4221b Downloading 57.57MB
+ 04e3aee4221b Downloading 58.63MB
+ 04e3aee4221b Downloading 59.7MB
+ 04e3aee4221b Downloading 60.76MB
+ 04e3aee4221b Downloading 61.29MB
+ 04e3aee4221b Downloading 62.34MB
+ 04e3aee4221b Downloading 63.42MB
+ 04e3aee4221b Downloading 64.49MB
+ 04e3aee4221b Downloading 65.55MB
+ 04e3aee4221b Downloading 66.6MB
+ 04e3aee4221b Downloading 67.66MB
+ 04e3aee4221b Downloading 68.72MB
+ 04e3aee4221b Downloading 70.32MB
+ 04e3aee4221b Downloading 70.85MB
+ 04e3aee4221b Downloading 72.45MB
+ 04e3aee4221b Downloading 73.52MB
+ 04e3aee4221b Downloading 74.59MB
+ 04e3aee4221b Downloading 75.65MB
+ 04e3aee4221b Downloading 76.72MB
+ 04e3aee4221b Downloading 78.32MB
+ 04e3aee4221b Downloading 79.91MB
+ 04e3aee4221b Downloading 80.97MB
+ 04e3aee4221b Downloading 83.11MB
+ 04e3aee4221b Downloading 84.72MB
+ 04e3aee4221b Downloading 86.31MB
+ 04e3aee4221b Downloading 87.91MB
+ 04e3aee4221b Downloading 88.96MB
+ 04e3aee4221b Downloading 90.56MB
+ 04e3aee4221b Downloading 92.16MB
+ 04e3aee4221b Downloading 93.22MB
+ 04e3aee4221b Downloading 94.82MB
+ 04e3aee4221b Downloading 96.43MB
+ 04e3aee4221b Downloading 97.49MB
+ 04e3aee4221b Downloading 99.1MB
+ 04e3aee4221b Downloading 100.7MB
+ 04e3aee4221b Downloading 101.8MB
+ 04e3aee4221b Downloading 103.4MB
+ 04e3aee4221b Downloading 105MB
+ 04e3aee4221b Downloading 106.5MB
+ 04e3aee4221b Downloading 108.1MB
+ 04e3aee4221b Verifying Checksum 0B
+ 04e3aee4221b Download complete 0B
+ 04e3aee4221b Extracting 557.1kB
+ 04e3aee4221b Extracting 6.128MB
+ 04e3aee4221b Extracting 18.38MB
+ 04e3aee4221b Extracting 30.64MB
+ 04e3aee4221b Extracting 42.34MB
+ 04e3aee4221b Extracting 53.48MB
+ 04e3aee4221b Extracting 58.49MB
+ 04e3aee4221b Extracting 67.4MB
+ 04e3aee4221b Extracting 76.87MB
+ 04e3aee4221b Extracting 79.1MB
+ 04e3aee4221b Extracting 81.33MB
+ 04e3aee4221b Extracting 85.79MB
+ 04e3aee4221b Extracting 91.36MB
+ 04e3aee4221b Extracting 95.26MB
+ 04e3aee4221b Extracting 105.8MB
+ 04e3aee4221b Extracting 108.8MB
+ 04e3aee4221b Pull complete 0B
+ d052215e28f3 Extracting 9.62kB
+ d052215e28f3 Extracting 9.62kB
+ d052215e28f3 Pull complete 0B
+ ed3865b2f387 Extracting 129B
+ ed3865b2f387 Extracting 129B
+ ed3865b2f387 Pull complete 0B
+ 5c9e69e30b63 Extracting 168B
+ 5c9e69e30b63 Extracting 168B
+ 5c9e69e30b63 Pull complete 0B
+ 7f56633e156a Extracting 6.098kB
+ 7f56633e156a Extracting 6.098kB
+ 7f56633e156a Pull complete 0B
+ 8ff0b682b155 Extracting 184B
+ 8ff0b682b155 Extracting 184B
+ 8ff0b682b155 Pull complete 0B
+ Image postgres:16-alpine Pulled 
+ Image ekko-payload-payload Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 616B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 632B done
+#2 DONE 0.0s
+
+#3 [internal] load metadata for docker.io/library/node:22-bookworm-slim
+#3 DONE 1.8s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 2B done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 28.36kB done
+#5 DONE 0.0s
+
+#6 [1/6] FROM docker.io/library/node:22-bookworm-slim@sha256:813a7480f28fdadac1f7f5c824bcdad435b5bc1322a5968bbbdef8d058f9dff4
+#6 resolve docker.io/library/node:22-bookworm-slim@sha256:813a7480f28fdadac1f7f5c824bcdad435b5bc1322a5968bbbdef8d058f9dff4 done
+#6 sha256:44b5401ff81007bebc40bdbc27a8e1c8d8e6060bff10abef92a8df113a26077a 6.84kB / 6.84kB done
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 0B / 28.12MB 0.1s
+#6 sha256:0e832fa8743efe71bf8a2524827700e16ac83b74942073675f4c8f267b866306 0B / 3.31kB 0.1s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 0B / 50.06MB 0.1s
+#6 sha256:813a7480f28fdadac1f7f5c824bcdad435b5bc1322a5968bbbdef8d058f9dff4 6.49kB / 6.49kB done
+#6 sha256:6db9be2ebb4bafb687a078ef5ba1b1dd256e8004d246a31fd210b6b848ab6be2 1.93kB / 1.93kB done
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 3.15MB / 28.12MB 0.7s
+#6 sha256:0e832fa8743efe71bf8a2524827700e16ac83b74942073675f4c8f267b866306 3.31kB / 3.31kB 0.7s done
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 5.24MB / 28.12MB 0.9s
+#6 sha256:4bc834702693a20ef8e6f2b58d80b8e54faf0094e6377ad8464ed4ebb7715ff1 0B / 1.71MB 0.9s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 8.39MB / 28.12MB 1.2s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 10.49MB / 28.12MB 1.4s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 12.58MB / 28.12MB 1.6s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 15.73MB / 28.12MB 1.9s
+#6 sha256:4bc834702693a20ef8e6f2b58d80b8e54faf0094e6377ad8464ed4ebb7715ff1 1.05MB / 1.71MB 2.1s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 18.87MB / 28.12MB 2.3s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 22.02MB / 28.12MB 2.6s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 25.17MB / 28.12MB 2.9s
+#6 sha256:4bc834702693a20ef8e6f2b58d80b8e54faf0094e6377ad8464ed4ebb7715ff1 1.71MB / 1.71MB 2.7s done
+#6 sha256:1bc538ee50930e70026931c3ae28ad62b53277c37a9bc8c13a816f10e155ca04 0B / 447B 2.9s
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 27.26MB / 28.12MB 3.1s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 3.15MB / 50.06MB 3.1s
+#6 sha256:1bc538ee50930e70026931c3ae28ad62b53277c37a9bc8c13a816f10e155ca04 447B / 447B 3.1s done
+#6 sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 28.12MB / 28.12MB 3.2s done
+#6 extracting sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009
+#6 extracting sha256:74f1dcfcc9c80045f6f6394ffcfc261cb19d0c71b97e964aec3d4abf4e0f7009 0.9s done
+#6 extracting sha256:0e832fa8743efe71bf8a2524827700e16ac83b74942073675f4c8f267b866306
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 6.29MB / 50.06MB 4.3s
+#6 extracting sha256:0e832fa8743efe71bf8a2524827700e16ac83b74942073675f4c8f267b866306 done
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 9.44MB / 50.06MB 4.9s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 12.58MB / 50.06MB 5.5s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 15.73MB / 50.06MB 5.9s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 19.92MB / 50.06MB 6.3s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 23.07MB / 50.06MB 6.6s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 27.26MB / 50.06MB 7.0s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 30.41MB / 50.06MB 7.2s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 35.65MB / 50.06MB 7.6s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 38.80MB / 50.06MB 7.9s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 42.99MB / 50.06MB 8.2s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 48.23MB / 50.06MB 8.6s
+#6 sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 50.06MB / 50.06MB 8.8s done
+#6 extracting sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 0.1s
+#6 extracting sha256:bbce3da877fb05b8743f5ab454ae860f44f2de31c26fee07de6573e328084d7c 1.0s done
+#6 extracting sha256:4bc834702693a20ef8e6f2b58d80b8e54faf0094e6377ad8464ed4ebb7715ff1 0.0s done
+#6 extracting sha256:1bc538ee50930e70026931c3ae28ad62b53277c37a9bc8c13a816f10e155ca04 done
+#6 DONE 9.9s
+
+#7 [2/6] WORKDIR /app
+#7 DONE 0.5s
+
+#8 [3/6] RUN apt-get update && apt-get install -y --no-install-recommends     ca-certificates openssl   && rm -rf /var/lib/apt/lists/*
+#8 0.315 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#8 0.701 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#8 0.840 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#8 0.967 Get:4 http://deb.debian.org/debian bookworm/main arm64 Packages [8690 kB]
+#8 2.348 Get:5 http://deb.debian.org/debian bookworm-updates/main arm64 Packages [6936 B]
+#8 2.434 Get:6 http://deb.debian.org/debian-security bookworm-security/main arm64 Packages [310 kB]
+#8 3.041 Fetched 9261 kB in 3s (3169 kB/s)
+#8 3.041 Reading package lists...
+#8 3.410 Reading package lists...
+#8 3.759 Building dependency tree...
+#8 3.831 Reading state information...
+#8 3.933 The following additional packages will be installed:
+#8 3.933   libssl3
+#8 3.949 The following NEW packages will be installed:
+#8 3.949   ca-certificates libssl3 openssl
+#8 4.065 0 upgraded, 3 newly installed, 0 to remove and 0 not upgraded.
+#8 4.065 Need to get 3384 kB of archives.
+#8 4.065 After this operation, 8931 kB of additional disk space will be used.
+#8 4.065 Get:1 http://deb.debian.org/debian-security bookworm-security/main arm64 libssl3 arm64 3.0.20-1~deb12u2 [1824 kB]
+#8 4.576 Get:2 http://deb.debian.org/debian-security bookworm-security/main arm64 openssl arm64 3.0.20-1~deb12u2 [1405 kB]
+#8 4.896 Get:3 http://deb.debian.org/debian bookworm/main arm64 ca-certificates all 20230311+deb12u1 [155 kB]
+#8 5.082 debconf: delaying package configuration, since apt-utils is not installed
+#8 5.096 Fetched 3384 kB in 1s (3253 kB/s)
+#8 5.108 Selecting previously unselected package libssl3:arm64.
+#8 5.108 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 6090 files and directories currently installed.)
+#8 5.111 Preparing to unpack .../libssl3_3.0.20-1~deb12u2_arm64.deb ...
+#8 5.113 Unpacking libssl3:arm64 (3.0.20-1~deb12u2) ...
+#8 5.208 Selecting previously unselected package openssl.
+#8 5.208 Preparing to unpack .../openssl_3.0.20-1~deb12u2_arm64.deb ...
+#8 5.210 Unpacking openssl (3.0.20-1~deb12u2) ...
+#8 5.304 Selecting previously unselected package ca-certificates.
+#8 5.305 Preparing to unpack .../ca-certificates_20230311+deb12u1_all.deb ...
+#8 5.307 Unpacking ca-certificates (20230311+deb12u1) ...
+#8 5.331 Setting up libssl3:arm64 (3.0.20-1~deb12u2) ...
+#8 5.335 Setting up openssl (3.0.20-1~deb12u2) ...
+#8 5.342 Setting up ca-certificates (20230311+deb12u1) ...
+#8 5.381 debconf: unable to initialize frontend: Dialog
+#8 5.381 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#8 5.381 debconf: falling back to frontend: Readline
+#8 5.381 debconf: unable to initialize frontend: Readline
+#8 5.381 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/aarch64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/aarch64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/aarch64-linux-gnu/perl-base /usr/lib/aarch64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+#8 5.381 debconf: falling back to frontend: Teletype
+#8 5.579 Updating certificates in /etc/ssl/certs...
+#8 5.827 142 added, 0 removed; done.
+#8 5.845 Processing triggers for libc-bin (2.36-9+deb12u14) ...
+#8 5.853 Processing triggers for ca-certificates (20230311+deb12u1) ...
+#8 5.857 Updating certificates in /etc/ssl/certs...
+#8 6.048 0 added, 0 removed; done.
+#8 6.048 Running hooks in /etc/ca-certificates/update.d...
+#8 6.049 done.
+#8 DONE 6.1s
+
+#9 [4/6] COPY package.json ./
+#9 DONE 0.0s
+
+#10 [5/6] RUN npm install
+#10 4.697 npm error code ERESOLVE
+#10 4.697 npm error ERESOLVE unable to resolve dependency tree
+#10 4.697 npm error
+#10 4.697 npm error While resolving: ekko-payload@0.1.0
+#10 4.697 npm error Found: next@15.5.19
+#10 4.697 npm error node_modules/next
+#10 4.697 npm error   next@"^15.0.0" from the root project
+#10 4.697 npm error
+#10 4.697 npm error Could not resolve dependency:
+#10 4.697 npm error peer next@">=15.2.9 <15.3.0 || >=15.3.9 <15.4.0 || >=15.4.11 <15.5.0 || >=16.2.6 <17.0.0" from @payloadcms/next@3.85.1
+#10 4.697 npm error node_modules/@payloadcms/next
+#10 4.697 npm error   @payloadcms/next@"^3.0.0" from the root project
+#10 4.697 npm error
+#10 4.697 npm error Fix the upstream dependency conflict, or retry
+#10 4.697 npm error this command with --force or --legacy-peer-deps
+#10 4.697 npm error to accept an incorrect (and potentially broken) dependency resolution.
+#10 4.697 npm error
+#10 4.697 npm error
+#10 4.697 npm error For a full report see:
+#10 4.697 npm error /root/.npm/_logs/2026-06-29T13_27_43_287Z-eresolve-report.txt
+#10 4.698 npm notice
+#10 4.698 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+#10 4.698 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+#10 4.698 npm notice To update run: npm install -g npm@11.17.0
+#10 4.698 npm notice
+#10 4.698 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-29T13_27_43_287Z-debug-0.log
+#10 ERROR: process "/bin/sh -c npm install" did not complete successfully: exit code: 1
+------
+ > [5/6] RUN npm install:
+4.697 npm error
+4.697 npm error
+4.697 npm error For a full report see:
+4.697 npm error /root/.npm/_logs/2026-06-29T13_27_43_287Z-eresolve-report.txt
+4.698 npm notice
+4.698 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+4.698 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+4.698 npm notice To update run: npm install -g npm@11.17.0
+4.698 npm notice
+4.698 npm error A complete log of this run can be found in: /root/.npm/_logs/2026-06-29T13_27_43_287Z-debug-0.log
+------
+Dockerfile:15
+
+--------------------
+
+  13 |     # Install deps first for layer caching. (Lockfile generated on first local install.)
+
+  14 |     COPY package.json ./
+
+  15 | >>> RUN npm install
+
+  16 |     
+
+  17 |     COPY . .
+
+--------------------
+
+failed to solve: process "/bin/sh -c npm install" did not complete successfully: exit code: 1
+
+
+
+View build details: docker-desktop://dashboard/build/default/default/kovsn82xgwedq8q8vlsvwoxl8
+

@@ -84,13 +84,29 @@ Mapping summary:
 | Verbb `navigationNodes(level:1)` | `NavigationNodes` collection (nav/order/parent) |
 | `entries(search:$q)` full-text | `Events(where:{OR:[{title:{contains}},…]})` (approx.) |
 
-## Caveats / things to verify after first boot
+## Verified against a live boot (Payload 3.85.1 / Next 16.2.9)
 
-1. **Generated block/type names.** `app/service/payload.ts` assumes Payload's default
-   GraphQL naming (`Text2Block`, `VideoBlock`, `EmbedBlock`, `ImageBlockBlock`,
-   `Media`, `Category`, `Events`, `News`, …). Open `generated-schema.graphql` (or the
-   Playground) and confirm; adjust the fragment/selection names if Payload pluralises
-   or suffixes differently in your version.
+All 12 frontend queries were run against the running schema and return without
+GraphQL errors; a created Event round-trips through the frontend query. The exact
+naming Payload generated (already applied in `app/service/`):
+
+- **List vs single query:** the *plural* root field returns `{ docs }` lists; the
+  *singular* one fetches by id. Most are `Events`, `Artists`, `Performances`,
+  `Categories`, `Tags`, `Arenas` — but News's list is **`allNews`** and Media's is
+  **`allMedia`** (Payload prefixes `all` when the singular and plural would collide).
+- **Block types** are the PascalCased block slug with **no suffix**: `Text2`, `Video`,
+  `Embed`, `ImageBlock` (not `…Block`).
+- **Polymorphic relationship fragments** (navigation `reference.value`) use the
+  **singular** type names: `... on Event`, `... on Artist`.
+- **Search:** richText fields (`intro`/`description`) take JSON filter operators, so
+  only the plain-text `title` is `contains`-searchable via GraphQL — search is
+  title-only (see search.ts header for the upgrade path).
+
+## Other caveats
+
+1. **Re-verify type names if you change the model.** If you rename collections/blocks,
+   re-check `generated-schema.graphql` (written on boot) — the names above are derived
+   from collection/block slugs.
 2. **Search fidelity.** The Payload search is a `contains` OR over event title/intro/
    description — it does NOT reproduce Craft's relational full-text index (it won't
    find an event by an artist's name). Upgrade to `@payloadcms/plugin-search` or an
