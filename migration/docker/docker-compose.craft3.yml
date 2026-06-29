@@ -1,0 +1,59 @@
+# Throwaway Craft 3.7.20 stack used ONLY to export content over GraphQL.
+# Mounts the original code read-only and restores the DB dump into a scratch DB.
+#
+#   bring up:   ./00-craft3-up.sh
+#   tear down:  ./00-craft3-down.sh   (or: docker compose -f docker-compose.craft3.yml down -v)
+#
+# GraphQL ends up at http://localhost:8390/api
+
+name: craft3-export
+
+services:
+  db:
+    image: mariadb:10.6
+    environment:
+      MARIADB_ROOT_PASSWORD: root
+      MARIADB_DATABASE: ekko
+      MARIADB_USER: ekko
+      MARIADB_PASSWORD: ekko
+    volumes:
+      - craft3_db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+
+  craft:
+    # Official Craft 3 image pinned to the project's version + PHP 7.4.
+    image: craftcms/nginx:7.4
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8390:8080"
+    environment:
+      ENVIRONMENT: dev
+      CRAFT_ENVIRONMENT: dev
+      DB_DRIVER: mysql
+      DB_SERVER: db
+      DB_PORT: "3306"
+      DB_DATABASE: ekko
+      DB_USER: ekko
+      DB_PASSWORD: ekko
+      DB_SCHEMA: ""
+      DB_TABLE_PREFIX: craft_
+      # Reuse the original keys so encrypted/UID-derived values stay valid.
+      # Filled in by 00-craft3-up.sh from the original .env.
+      SECURITY_KEY: "${CRAFT3_SECURITY_KEY:-}"
+      APP_ID: "${CRAFT3_APP_ID:-}"
+      DEFAULT_SITE_URL: "http://localhost:8390"
+    volumes:
+      # Original Craft 3 app, read-only. config + vendor + templates + modules.
+      - "${CRAFT3_SRC:-/Users/sindresorensen/Downloads/api.ekko.no/cms}:/app:ro"
+      # Writable storage so Craft can boot (caches, logs) without touching the source.
+      - craft3_storage:/app/storage
+
+volumes:
+  craft3_db:
+  craft3_storage:

@@ -1,0 +1,10 @@
+node_modules
+.next
+dist
+build
+.env
+media-uploads
+payload-types.ts
+generated-schema.graphql
+*.tsbuildinfo
+next-env.d.ts

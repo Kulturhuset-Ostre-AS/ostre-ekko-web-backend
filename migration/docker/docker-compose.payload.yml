@@ -1,0 +1,55 @@
+# Local Payload test environment: Payload 3 (Next dev server) + Postgres 16.
+#
+#   cd migration/docker
+#   docker compose -f docker-compose.payload.yml up --build
+#
+# Admin:    http://localhost:3000/admin     (create the first user on first load)
+# GraphQL:  http://localhost:3000/api/graphql
+# Playground: http://localhost:3000/api/graphql-playground
+
+name: ekko-payload
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: payload
+      POSTGRES_PASSWORD: payload
+      POSTGRES_DB: payload
+    ports:
+      - "5433:5432"        # host 5433 to avoid clashing with a local postgres
+    volumes:
+      - payload_pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U payload"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  payload:
+    build:
+      context: ../payload-app
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URI: postgres://payload:payload@postgres:5432/payload
+      PAYLOAD_SECRET: dev-secret-change-me
+      PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
+      PAYLOAD_CORS: http://localhost:5173,http://localhost:8788,http://localhost:3001
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    volumes:
+      # Bind-mount source for hot reload; keep container's node_modules + .next.
+      - ../payload-app:/app
+      - payload_node_modules:/app/node_modules
+      - payload_next:/app/.next
+      - payload_uploads:/app/media-uploads
+
+volumes:
+  payload_pg:
+  payload_node_modules:
+  payload_next:
+  payload_uploads:
