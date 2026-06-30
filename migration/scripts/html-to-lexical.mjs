@@ -26,6 +26,11 @@ const decode = (s) =>
     .replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'")
     .replace(/&aelig;/gi, 'æ').replace(/&oslash;/gi, 'ø').replace(/&aring;/gi, 'å')
 
+// The SQL/JSON export escaped CR/LF/TAB as the literal characters \r \n \t. Turn
+// those back into real whitespace so they don't render as visible "\r\n" text.
+const unescapeWs = (s) =>
+  (s || '').replace(/\\r\\n|\\n|\\r/g, '\n').replace(/\\t/g, ' ')
+
 // Collect inline children (text + format + links + linebreaks) from an element's nodes.
 function inlineChildren(node, format = 0) {
   const out = []
@@ -131,7 +136,7 @@ function blockNodes(root) {
 /** Convert an HTML string to a Payload lexical document, or undefined if empty. */
 export function htmlToLexical(html) {
   if (!html || typeof html !== 'string') return undefined
-  const root = parse(html, { lowerCaseTagName: true, comment: false })
+  const root = parse(unescapeWs(html), { lowerCaseTagName: true, comment: false })
   let children = blockNodes(root)
   // Drop empty trailing/leading paragraphs that carry no text.
   children = children.filter((n) =>
@@ -143,7 +148,7 @@ export function htmlToLexical(html) {
 /** Plain-text flatten (for textarea fields like ticketDescription). */
 export function htmlToPlain(html) {
   if (!html || typeof html !== 'string') return undefined
-  const s = decode(html.replace(/<\s*br\s*\/?>/gi, '\n').replace(/<\/(p|div|li|h[1-6])>/gi, '\n').replace(/<[^>]+>/g, ''))
+  const s = decode(unescapeWs(html).replace(/<\s*br\s*\/?>/gi, '\n').replace(/<\/(p|div|li|h[1-6])>/gi, '\n').replace(/<[^>]+>/g, ''))
     .replace(/\n{3,}/g, '\n\n').replace(/[ \t]+/g, ' ').trim()
   return s || undefined
 }

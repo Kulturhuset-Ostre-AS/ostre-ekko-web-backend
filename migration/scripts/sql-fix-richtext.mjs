@@ -19,7 +19,7 @@ const idMap = read('id-map.json')
 
 // collection -> [ [payloadField, craftColumn], ... ] richText fields
 const RICH = {
-  events: [['intro', 'intro'], ['description', 'description']],
+  events: [['intro', 'intro'], ['description', 'description'], ['ticketDescription', 'ticketDescription']],
   news: [['intro', 'newsIntro']],
   artists: [['bio', 'description']],
 }

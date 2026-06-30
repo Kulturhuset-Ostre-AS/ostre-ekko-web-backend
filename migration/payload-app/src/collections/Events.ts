@@ -48,7 +48,8 @@ export const Events: CollectionConfig = {
     { name: 'intro', type: 'richText', editor: lexicalEditor() },
     { name: 'description', type: 'richText', editor: lexicalEditor() },
     { name: 'ticketLink', type: 'text' },
-    { name: 'ticketDescription', type: 'textarea' },
+    // richText so multi-line ticket tiers (Craft <br>-separated HTML) keep their breaks.
+    { name: 'ticketDescription', type: 'richText', editor: lexicalEditor() },
     { name: 'performances', type: 'relationship', relationTo: 'performance', hasMany: true },
     // festival-type cross links
     { name: 'linkedEvents', type: 'relationship', relationTo: 'events', hasMany: true },
