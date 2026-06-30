@@ -11,6 +11,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { htmlToLexical, htmlToPlain } from './html-to-lexical.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -25,37 +26,11 @@ const exists = (f) => fs.existsSync(path.join(SQL, f))
 
 // ---- Craft HTML rich text -> minimal lexical (Craft 3 Redactor stores HTML) -------
 // Craft 3 rich text is an HTML string, not lexical. Wrap it as a lexical doc with a
-// single html-ish paragraph so Payload stores it; full HTML->lexical node conversion
-// is a known follow-up (see PLAN.md). For now we keep the text content (tags stripped
-// to plain paragraphs split on block tags) so pages render readable copy.
-function htmlToLexical(html) {
-  if (!html || typeof html !== 'string') return undefined
-  const blocks = html
-    .replace(/<\s*br\s*\/?>/gi, '\n')
-    .split(/<\/(?:p|div|h[1-6]|li)>/i)
-    .map((s) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').trim())
-    .filter(Boolean)
-  if (!blocks.length) return undefined
-  return {
-    root: {
-      type: 'root', format: '', indent: 0, version: 1, direction: 'ltr',
-      children: blocks.map((text) => ({
-        type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr',
-        children: [{ type: 'text', text, format: 0, version: 1, mode: 'normal', style: '', detail: 0 }],
-      })),
-    },
-  }
-}
-
+// Rich text uses the faithful shared converter (html-to-lexical.mjs): preserves
+// bold/italic/links/headings/lists/linebreaks/embeds, unescapes literal \r\n.
 const bool = (v) => v === '1' || v === 1 || v === true
 const num = (v) => (v == null || v === '' ? undefined : Number(v))
-// Plain-text from HTML for non-richText fields (textarea): <br> -> newline, drop tags.
-const plain = (html) => {
-  if (!html || typeof html !== 'string') return undefined
-  const s = html.replace(/<\s*br\s*\/?>/gi, '\n').replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\n{3,}/g, '\n\n').trim()
-  return s || undefined
-}
+const plain = htmlToPlain
 
 // ---- API helpers -----------------------------------------------------------------
 let TOKEN = ''
@@ -99,7 +74,7 @@ function scalarData(collection, row) {
         isMultiDay: bool(row.isMultiDay), singlePage: bool(row.singlePage), showArtistInfo: bool(row.showArtistInfo),
         openingTime: row.openingTime || undefined, closingTime: row.closingTime || undefined,
         intro: rt(row.intro), description: rt(row.description),
-        ticketLink: row.ticketLink || undefined, ticketDescription: plain(row.ticketDescription),
+        ticketLink: row.ticketLink || undefined, ticketDescription: htmlToLexical(row.ticketDescription),
         lineup: row.lineup || undefined,
       })
       break

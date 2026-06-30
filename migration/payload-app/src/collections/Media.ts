@@ -8,7 +8,9 @@ export const Media: CollectionConfig = {
   slug: 'media',
   access: { read: () => true },
   upload: {
-    staticDir: '../media-uploads',
+    // Must match the persistent volume mount (payload_uploads -> /app/media-uploads).
+    // A leading '../' wrote to /media-uploads (ephemeral) — lost on container recreate.
+    staticDir: 'media-uploads',
     // Broad: every Craft asset type. Explicit tiff/wav variants so detected MIMEs
     // (image/tiff, audio/x-wav, audio/wave) pass even if a wildcard misses them.
     mimeTypes: [

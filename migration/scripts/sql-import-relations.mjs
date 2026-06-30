@@ -6,6 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { htmlToLexical, htmlToPlain } from './html-to-lexical.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SQL = path.resolve(__dirname, '..', 'data', 'sql')
@@ -65,15 +66,33 @@ const SINGLE = new Set(['eventFeaturedPhoto', 'artistFeaturedPhoto', 'newsPhoto'
 // Fields that point to media (assets) rather than entries.
 const ASSET_FIELDS = new Set(['eventFeaturedPhoto', 'artistFeaturedPhoto', 'newsPhoto', 'pagePhoto', 'gallery', 'images', 'festivalSectionGraphicElements'])
 
-// ---- lexical conversion (same as pass 1) ----
-function htmlToLexical(html) {
-  if (!html || typeof html !== 'string') return undefined
-  const blocks = html.replace(/<\s*br\s*\/?>/gi, '\n').split(/<\/(?:p|div|h[1-6]|li)>/i)
-    .map((s) => s.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').trim()).filter(Boolean)
-  if (!blocks.length) return undefined
-  return { root: { type: 'root', format: '', indent: 0, version: 1, direction: 'ltr',
-    children: blocks.map((text) => ({ type: 'paragraph', format: '', indent: 0, version: 1, direction: 'ltr',
-      children: [{ type: 'text', text, format: 0, version: 1, mode: 'normal', style: '', detail: 0 }] })) } }
+// ---- festival matrix array fields (program / tickets / sections) ----
+const dt = (v) => (v ? v.replace(' ', 'T') + '.000Z' : undefined)
+const hhmm = (v) => (v && v.includes(' ') ? v.split(' ')[1].slice(0, 5) : v || undefined)
+
+function buildProgram(craftId, siteId) {
+  return (matrix.program?.[craftId]?.[siteId] || []).map((b) => ({
+    date: dt(b.day_date), startTime: hhmm(b.day_startTime), endTime: hhmm(b.day_endTime),
+    ticketInformation: htmlToPlain(b.day_ticketInformation),
+  }))
+}
+function buildTickets(craftId, siteId) {
+  return (matrix.tickets?.[craftId]?.[siteId] || []).map((b) => ({
+    description: b.ticket_description || undefined, subdescription: b.ticket_subdescription || undefined,
+    price: b.ticket_price || undefined, ticketLink: b.ticket_ticketLink || undefined,
+    textContent: htmlToPlain(b.text_textContent),
+  })).filter((t) => t.description || t.price || t.ticketLink || t.textContent)
+}
+function buildSections(craftId, siteId) {
+  return (matrix.sections?.[craftId]?.[siteId] || []).map((b) => {
+    // section images are a relation on the block element
+    const imgs = (relations[b.id]?.images || relations[b.id]?.image || []).map(mediaId).filter(Boolean)
+    return {
+      sectionTitle: b.entry_sectionTitle || undefined,
+      sectionBody: htmlToLexical(b.entry_sectionBody),
+      ...(imgs.length ? { images: imgs } : {}),
+    }
+  }).filter((s) => s.sectionTitle || s.sectionBody || s.images)
 }
 
 // Build Payload complexContent blocks from Craft matrix blocks for one owner+site.
@@ -142,6 +161,15 @@ async function main() {
       if (['events', 'news', 'artists', 'arena'].includes(col)) {
         const cc = buildComplexContent(craftId, 1) // nb site blocks
         if (cc.length) data.complexContent = cc
+      }
+      // festival matrix array fields (program / tickets / sections) — events only
+      if (col === 'events') {
+        const program = buildProgram(craftId, 1)
+        const tickets = buildTickets(craftId, 1)
+        const sections = buildSections(craftId, 1)
+        if (program.length) data.program = program
+        if (tickets.length) data.tickets = tickets
+        if (sections.length) data.sections = sections
       }
       // Only patch if there's real relation/matrix data (title/slug alone = skip).
       const hasPayload = Object.keys(data).some((k) => k !== 'title' && k !== 'slug')
