@@ -1,0 +1,9 @@
+{
+  "name": "ekko-migration-scripts",
+  "private": true,
+  "type": "module",
+  "description": "Craft 3 -> Payload migration scripts (SQL export/import).",
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  }
+}

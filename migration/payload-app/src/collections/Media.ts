@@ -9,7 +9,12 @@ export const Media: CollectionConfig = {
   access: { read: () => true },
   upload: {
     staticDir: '../media-uploads',
-    mimeTypes: ['image/*', 'video/*', 'audio/*', 'application/pdf'],
+    // Broad: every Craft asset type. Explicit tiff/wav variants so detected MIMEs
+    // (image/tiff, audio/x-wav, audio/wave) pass even if a wildcard misses them.
+    mimeTypes: [
+      'image/*', 'video/*', 'audio/*', 'application/pdf',
+      'image/tiff', 'image/x-tiff', 'audio/x-wav', 'audio/wave', 'audio/wav',
+    ],
     imageSizes: [
       { name: 'optimised', width: 1600, height: undefined, position: 'centre' },
       { name: 'thumbnail', width: 400, height: undefined, position: 'centre' },

@@ -38,7 +38,14 @@ async function login() {
 
 const mimeOf = (f) => {
   const e = f.toLowerCase().split('.').pop()
-  return { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml', mp3: 'audio/mpeg', pdf: 'application/pdf' }[e] || 'application/octet-stream'
+  return {
+    jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', gif: 'image/gif',
+    webp: 'image/webp', svg: 'image/svg+xml', tif: 'image/tiff', tiff: 'image/tiff',
+    bmp: 'image/bmp', heic: 'image/heic',
+    mp3: 'audio/mpeg', wav: 'audio/x-wav', m4a: 'audio/mp4', aiff: 'audio/aiff', flac: 'audio/flac',
+    mp4: 'video/mp4', mov: 'video/quicktime', webm: 'video/webm',
+    pdf: 'application/pdf',
+  }[e] || 'application/octet-stream'
 }
 
 function assetUrl(a) {
