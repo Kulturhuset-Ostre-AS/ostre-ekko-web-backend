@@ -49,10 +49,15 @@ services:
       APP_ID: "${CRAFT3_APP_ID:-}"
       DEFAULT_SITE_URL: "http://localhost:8390"
     volumes:
-      # Original Craft 3 app, read-only. config + vendor + templates + modules.
-      - "${CRAFT3_SRC:-/Users/sindresorensen/Downloads/api.ekko.no/cms}:/app:ro"
+      # This project keeps the web root (public_html, where index.php lives) as a
+      # SIBLING of the Craft app dir (cms). index.php does
+      # CRAFT_BASE_PATH = dirname(__DIR__).'/cms', so we mount:
+      #   public_html -> /app/web  (nginx document root for craftcms/nginx image)
+      #   cms         -> /app/cms  (Craft base; index.php resolves dirname(web)/cms)
+      - "${CRAFT3_WEB:-/Users/sindresorensen/Downloads/api.ekko.no/public_html}:/app/web:ro"
+      - "${CRAFT3_SRC:-/Users/sindresorensen/Downloads/api.ekko.no/cms}:/app/cms:ro"
       # Writable storage so Craft can boot (caches, logs) without touching the source.
-      - craft3_storage:/app/storage
+      - craft3_storage:/app/cms/storage
 
 volumes:
   craft3_db:
