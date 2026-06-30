@@ -49,8 +49,9 @@ async function login() {
 
 async function uploadImage(token, file, alt) {
   const bytes = fs.readFileSync(path.join(IMG_DIR, file))
+  const type = file.toLowerCase().endsWith('.png') ? 'image/png' : 'image/jpeg'
   const fd = new FormData()
-  fd.append('file', new Blob([bytes], { type: 'image/jpeg' }), file)
+  fd.append('file', new Blob([bytes], { type }), file)
   fd.append('_payload', JSON.stringify({ alt, source: 'eventPhoto', artistName: alt }))
   const res = await fetch(`${BASE}/media`, { method: 'POST', headers: { Authorization: `JWT ${token}` }, body: fd })
   const json = await res.json()
@@ -82,15 +83,18 @@ async function main() {
   console.log('✓ wiped previous demo content')
 
   // Real production images (downloaded from api.ekko.no into migration/scratch-img).
-  const [imgEvent1, imgEvent2, imgArtist, imgNews, imgGal1, imgGal2] = await Promise.all([
+  const [imgEvent1, imgEvent2, imgArtist, imgNews, imgGal1, imgGal2, imgFestivalLogo] = await Promise.all([
     uploadImage(token, 'real1.jpg', 'Opening night'),
     uploadImage(token, 'real2.jpg', 'Closing night'),
     uploadImage(token, 'real3.jpg', 'Demo Artist'),
     uploadImage(token, 'real4.jpg', 'Programme'),
     uploadImage(token, 'real5.jpg', 'Gallery 1'),
     uploadImage(token, 'extra-20221106-004513-78.jpg', 'Gallery 2'),
+    // Real EKKO festival web banner — this is the year LOGO/graphic the festival
+    // hero expects in festivalSectionGraphicElements (not a concert photo).
+    uploadImage(token, 'festival-banner.png', 'EKKO logo'),
   ])
-  console.log('✓ uploaded 6 real production images')
+  console.log('✓ uploaded 7 real production images')
 
   const loc = await api('/categories', { method: 'POST', body: JSON.stringify({ title: 'Røkeriet', slug: 'rokeriet', group: 'locations', fullTitle: 'USF Røkeriet', venue: 'USF Verftet', room: 'Røkeriet' }) }, token)
   const loc2 = await api('/categories', { method: 'POST', body: JSON.stringify({ title: 'Studio', slug: 'studio-usf', group: 'locations', fullTitle: 'USF Studio', venue: 'USF Verftet', room: 'Studio' }) }, token)
@@ -147,7 +151,8 @@ async function main() {
     date: '2026-09-01T12:00:00.000Z', dateEnd: '2026-09-05T23:00:00.000Z',
     eventFeaturedPhoto: imgEvent2, location: [loc.doc.id], intro: lexical('Five days of sound art.', 'Bergen.'),
     lineup: 'Demo Artist · Second Act · Third Sound', performances: perfs, gallery: [imgGal1, imgGal2],
-    festivalSectionGraphicElements: [imgEvent1],
+    // Festival year logo/banner (real EKKO web banner), NOT a concert photo.
+    festivalSectionGraphicElements: [imgFestivalLogo],
     program: [{ date: '2026-09-01T00:00:00.000Z', startTime: '18:00', endTime: '23:59', ticketInformation: 'Day pass NOK 350' }],
     tickets: [{ description: 'Festival pass', price: 'NOK 1200', ticketLink: 'https://example.com/pass', textContent: 'Best value' }],
     sections: [{ sectionTitle: 'About the festival', sectionBody: lexical('An annual celebration of electronic art.', 'Since 2003.'), images: [imgGal1] }],
