@@ -24,10 +24,10 @@ export default buildConfig({
   admin: { user: Users.slug },
   editor: lexicalEditor(),
 
-  // Mirror Craft's two sites (en, nb). en is default.
+  // Mirror Craft's two sites (en, nb). nb (Norwegian Bokmål) is the default.
   localization: {
     locales: ['en', 'nb'],
-    defaultLocale: 'en',
+    defaultLocale: 'nb',
     fallback: true,
   },
 
