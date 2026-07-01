@@ -20,27 +20,33 @@ import { globals } from './globals'
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
 // In the cloud (Cloud Run) the container filesystem is ephemeral, so media must
-// live in GCS. Locally (docker/dev) GCS_BUCKET is unset and Payload keeps using
-// the on-disk staticDir, so nothing about the test env changes.
-//   GCS_BUCKET               - target bucket (enables the plugin when set)
+// live in GCS. Locally (docker/dev) GCS_BUCKET is unset, the plugin is DISABLED
+// (`enabled: false`) and Payload keeps using the on-disk staticDir — so nothing
+// about the test env changes.
+//
+// The plugin is ALWAYS present in the config (never conditionally omitted) so the
+// admin importMap is identical whether or not GCS_BUCKET is set. Omitting it when
+// the bucket is unset used to drop the GcsClientUploadHandler client component from
+// the generated importMap, which made the Cloud Run admin render blank (the build
+// ran without GCS_BUCKET). `enabled` toggles behaviour without changing the map.
+//   GCS_BUCKET               - target bucket (enables uploads to GCS when set)
 //   GCS_PROJECT_ID           - GCP project (optional; inferred on GCP)
 //   GOOGLE_APPLICATION_CREDENTIALS - key file path (optional; ADC on Cloud Run)
-const gcsPlugins = process.env.GCS_BUCKET
-  ? [
-      gcsStorage({
-        collections: { media: true },
-        bucket: process.env.GCS_BUCKET,
-        options: {
-          projectId: process.env.GCS_PROJECT_ID,
-          // On Cloud Run, Application Default Credentials are used automatically.
-          // Locally you can point GOOGLE_APPLICATION_CREDENTIALS at a key file.
-          ...(process.env.GOOGLE_APPLICATION_CREDENTIALS
-            ? { keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS }
-            : {}),
-        },
-      }),
-    ]
-  : []
+const gcsPlugins = [
+  gcsStorage({
+    enabled: Boolean(process.env.GCS_BUCKET),
+    collections: { media: true },
+    bucket: process.env.GCS_BUCKET || 'unused-local-dev',
+    options: {
+      projectId: process.env.GCS_PROJECT_ID,
+      // On Cloud Run, Application Default Credentials are used automatically.
+      // Locally you can point GOOGLE_APPLICATION_CREDENTIALS at a key file.
+      ...(process.env.GOOGLE_APPLICATION_CREDENTIALS
+        ? { keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS }
+        : {}),
+    },
+  }),
+]
 
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
