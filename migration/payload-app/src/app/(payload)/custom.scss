@@ -1,5 +1,4 @@
-/* Payload admin base styles — REQUIRED. Without this import the admin panel renders
-   completely unstyled (raw HTML). Add custom overrides below the import. */
-@import '~@payloadcms/ui/scss/app.scss';
-
-/* Custom admin panel overrides go here. */
+/* Custom admin panel style overrides only.
+   The Payload UI base styles are imported as precompiled CSS in layout.tsx
+   (@payloadcms/ui/dist/styles.css) — the SCSS entrypoint path does not exist in the
+   published package, and Turbopack (Next 16 dev) does not resolve the `~` SCSS import. */

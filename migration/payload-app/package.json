@@ -5,8 +5,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
-    "devsafe": "rm -rf .next && next dev",
+    "dev": "next dev --webpack",
+    "devsafe": "rm -rf .next && next dev --webpack",
     "build": "next build",
     "start": "next start",
     "payload": "payload",
