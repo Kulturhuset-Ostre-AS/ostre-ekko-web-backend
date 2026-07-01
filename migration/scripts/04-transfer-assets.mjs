@@ -1,3 +1,7 @@
+// ⚠️ DEPRECATED — GraphQL export path (abandoned: Craft 3 GraphQL would not register
+// entry types on the restored DB). Use the SQL path instead: see migration/MIGRATION.md
+// (sql-export.mjs, sql-transfer-assets.mjs, sql-import*.mjs, sql-verify.mjs).
+
 // Phase 0 of import (run before 05): copy asset binaries into Payload's media
 // collection and record a craftId -> payload media id map for relation resolution.
 //

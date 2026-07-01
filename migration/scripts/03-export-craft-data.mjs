@@ -1,3 +1,7 @@
+// ⚠️ DEPRECATED — GraphQL export path (abandoned: Craft 3 GraphQL would not register
+// entry types on the restored DB). Use the SQL path instead: see migration/MIGRATION.md
+// (sql-export.mjs, sql-transfer-assets.mjs, sql-import*.mjs, sql-verify.mjs).
+
 // Phase 3: export all Craft 3 content over GraphQL, per locale, to data/*.json.
 //
 // Strategy: for each section we run a generic query that pulls the interface-level

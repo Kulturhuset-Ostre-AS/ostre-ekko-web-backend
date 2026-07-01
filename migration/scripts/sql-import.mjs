@@ -57,11 +57,9 @@ async function login() {
 }
 
 // ---- field mapping: Craft content row -> Payload data (scalars only, pass 1) -------
-// UID-suffixed handles in this install:
-const F = {
-  venue: 'venue_elprwjet', room: 'room_ynqltqgf', ekstraInfo: 'ekstraInfo_jmpksqsj',
-  contact: 'contact_xneweoyp',
-}
+// Field handles arrive already de-UID'd from the export (sql-export cleanFieldName),
+// so scalarData reads clean handles like `venue`/`room`/`contact` regardless of the
+// install's field-layout UID suffixes.
 
 function scalarData(collection, row) {
   const d = { craftId: Number(row.id), title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}` }

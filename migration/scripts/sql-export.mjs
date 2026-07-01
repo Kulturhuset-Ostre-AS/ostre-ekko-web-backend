@@ -53,6 +53,15 @@ function contentColumns(table) {
   )
 }
 
+// Craft appends a `_<8-char-uid>` suffix to field columns when a field is reused
+// inside a field layout (e.g. field_venue_elprwjet). Those UIDs are install-specific,
+// so we strip both `field_` and the trailing uid suffix to get a stable handle
+// (venue). Verified: no legitimate field handle ends in `_[a-z0-9]{8}` in this schema,
+// so there are no false positives. Import code keys off the clean names.
+function cleanFieldName(col) {
+  return col.replace(/^field_/, '').replace(/_[a-z0-9]{8}$/, '')
+}
+
 // Relation fields: which field handles are relations (entries/assets/categories).
 function relationFieldHandles() {
   return sql(
@@ -77,7 +86,7 @@ function entriesQuery(sectionHandle, siteId, fieldCols) {
           AND a.lft < st.lft AND a.rgt > st.rgt AND a.level = st.level - 1
         ORDER BY a.lft DESC LIMIT 1)`,
   ]
-  const fieldPairs = fieldCols.map((col) => `'${col.replace(/^field_/, '')}', c.${col}`)
+  const fieldPairs = fieldCols.map((col) => `'${cleanFieldName(col)}', c.${col}`)
   const jsonObj = `JSON_OBJECT(${[...base, ...fieldPairs].join(', ')})`
   return `
     SELECT ${jsonObj}
@@ -165,10 +174,11 @@ function main() {
     }
   }
 
-  // Categories. venue/room carry UID suffixes in this install; resolve dynamically.
+  // Categories. venue/room may carry install-specific UID suffixes; resolve by handle.
   const allCols = contentColumns('craft_content')
-  const venueCol = allCols.find((c) => /^field_venue(_|$)/.test(c)) || 'field_venue_elprwjet'
-  const roomCol = allCols.find((c) => /^field_room(_|$)/.test(c)) || 'field_room_ynqltqgf'
+  const findCol = (h) => allCols.find((c) => c === `field_${h}` || new RegExp(`^field_${h}_[a-z0-9]{8}$`).test(c)) || `field_${h}`
+  const venueCol = findCol('venue')
+  const roomCol = findCol('room')
   for (const site of SITES) {
     const rows = sql(`
       SELECT JSON_OBJECT('id', cat.id, 'uid', cat.uid, 'group', g.handle,

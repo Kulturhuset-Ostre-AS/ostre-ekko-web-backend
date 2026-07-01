@@ -1,3 +1,7 @@
+// ⚠️ DEPRECATED — GraphQL export path (abandoned: Craft 3 GraphQL would not register
+// entry types on the restored DB). Use the SQL path instead: see migration/MIGRATION.md
+// (sql-export.mjs, sql-transfer-assets.mjs, sql-import*.mjs, sql-verify.mjs).
+
 // Phase 5: import exported Craft data into Payload via the Local API.
 // Two passes so cross-collection relationships resolve regardless of import order:
 //   pass 1: create every doc with scalar fields + craftId (relations null)

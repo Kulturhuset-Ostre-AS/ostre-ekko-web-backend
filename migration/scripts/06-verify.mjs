@@ -1,3 +1,7 @@
+// ⚠️ DEPRECATED — GraphQL export path (abandoned: Craft 3 GraphQL would not register
+// entry types on the restored DB). Use the SQL path instead: see migration/MIGRATION.md
+// (sql-export.mjs, sql-transfer-assets.mjs, sql-import*.mjs, sql-verify.mjs).
+
 // Phase 6: verify the import. Compares per-section entry counts (Craft export vs
 // Payload) and spot-checks a few fields. Exit code 1 if counts mismatch.
 import { readJSON, LOCALES, log, warn } from "./lib.mjs";
