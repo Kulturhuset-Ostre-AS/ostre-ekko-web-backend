@@ -86,7 +86,23 @@ fields: `complexContent`, and the festival `program` / `tickets` / `sections`.
 ### 5. Verify
 
 ```bash
-node scripts/sql-verify.mjs        # counts vs export + media-serve + spot-checks
+node scripts/sql-verify.mjs        # counts vs export + media-serve + UNIQUE-SLUG guard
+```
+Fails (non-zero exit) on count mismatch, media that won't serve, or **duplicate slugs**
+(the revision-import regression). "verification passed" = safe.
+
+### Re-running the import (only for a re-run, not a first import)
+
+A first import goes into an empty DB. To re-import (e.g. after fixing the export), reset
+the content first — this truncates the content collections and clears the content half
+of the id-map, but **keeps already-transferred media** so you skip step 2:
+
+```bash
+node scripts/sql-reset.mjs          # wipe content, keep media + asset-map
+node scripts/sql-import.mjs         # pass 1
+node scripts/sql-import-relations.mjs   # pass 2
+node scripts/sql-verify.mjs
+# (add --with-media to sql-reset + re-run sql-transfer-assets.mjs to also redo media)
 ```
 
 ### 6. Point the frontend at Payload & tear down the source
@@ -148,7 +164,8 @@ Payload admin user exists). Long-running; watch the logs it writes to `data/sql/
 | `scripts/sql-transfer-assets.mjs` | asset files → Payload media |
 | `scripts/sql-import.mjs` | pass 1: create docs |
 | `scripts/sql-import-relations.mjs` | pass 2: relations + matrix |
-| `scripts/sql-verify.mjs` | verification |
+| `scripts/sql-verify.mjs` | verification (counts + media-serve + unique-slug guard) |
+| `scripts/sql-reset.mjs` | wipe content for a clean re-import (keeps media) |
 | `scripts/html-to-lexical.mjs` | shared HTML→lexical converter |
 | `scripts/run-all.sh` | orchestrator for steps 1–5 |
 | ~~`scripts/01-06*.mjs`, `PLAN.md`~~ | **deprecated** GraphQL path — do not use |

@@ -78,6 +78,22 @@ async function main() {
   const withImg = ev.filter((e) => e.eventFeaturedPhoto && typeof e.eventFeaturedPhoto === 'object' && e.eventFeaturedPhoto.url).length
   console.log(`  ${withImg}/${ev.length} sampled events have a featured image`)
 
+  // Duplicate slugs — the failure mode from importing Craft revisions. Public pages
+  // use where:{slug}, limit:1, so duplicate slugs silently render the wrong doc.
+  console.log('\n-- unique slugs (regression guard for revision import) --')
+  for (const col of ['events', 'news', 'artists']) {
+    const docs = (await api(`/${col}?limit=2000&depth=0&locale=nb`)).docs || []
+    const counts = new Map()
+    for (const d of docs) if (d.slug) counts.set(d.slug, (counts.get(d.slug) || 0) + 1)
+    const dupes = [...counts.entries()].filter(([, c]) => c > 1)
+    if (dupes.length) {
+      warn++
+      console.log(`  ${col}: ✗ ${dupes.length} DUPLICATE slug(s) — did revisions/drafts get imported? e.g. ${dupes.slice(0, 3).map(([s, c]) => `${s}(×${c})`).join(', ')}`)
+    } else {
+      console.log(`  ${col}: ✓ ${counts.size} unique slugs, no duplicates`)
+    }
+  }
+
   console.log(warn ? `\n⚠ ${warn} check(s) flagged — review above.` : '\n✔ verification passed')
   process.exit(warn ? 1 : 0)
 }
