@@ -1,13 +1,14 @@
 import type { CollectionConfig } from 'payload'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
+import { previewFor } from '../preview'
 
 // Craft `arena` channel. Frontend reads: title, id, complexContent (incl. video
 // blocks) and related artists.
 export const Arena: CollectionConfig = {
   slug: 'arena',
   access: { read: () => true },
-  admin: { useAsTitle: 'title' },
+  admin: { useAsTitle: 'title', preview: previewFor('arena') },
   fields: [
     craftId,
     { name: 'title', type: 'text', required: true, localized: true },
