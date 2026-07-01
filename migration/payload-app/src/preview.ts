@@ -33,5 +33,5 @@ export function frontendUrl(collection: string, doc: Doc, locale?: string): stri
  * currently selected in the editor (nb → /…, en → /en/…). */
 export const previewFor =
   (collection: string): NonNullable<CollectionConfig['admin']>['preview'] =>
-  (doc, { locale } = {} as { locale?: string }) =>
-    frontendUrl(collection, doc as Doc, locale)
+  (doc, options) =>
+    frontendUrl(collection, doc as Doc, (options as { locale?: string })?.locale)

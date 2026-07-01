@@ -33,6 +33,12 @@ variable "db_tier" {
   default     = "db-f1-micro"
 }
 
+variable "db_edition" {
+  description = "Cloud SQL edition. ENTERPRISE allows cheap shared-core tiers (db-f1-micro); ENTERPRISE_PLUS only allows db-perf-optimized-* tiers."
+  type        = string
+  default     = "ENTERPRISE"
+}
+
 variable "db_disk_size_gb" {
   description = "Initial data disk size in GB."
   type        = number

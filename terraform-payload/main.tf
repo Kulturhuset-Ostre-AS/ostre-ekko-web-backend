@@ -73,7 +73,10 @@ resource "google_sql_database_instance" "pg" {
   depends_on = [google_project_service.apis]
 
   settings {
-    tier              = var.db_tier
+    tier = var.db_tier
+    # Shared-core tiers (db-f1-micro / db-g1-small) require the ENTERPRISE edition;
+    # the newer ENTERPRISE_PLUS default only allows db-perf-optimized-* tiers.
+    edition           = var.db_edition
     availability_type = "ZONAL"
     disk_size         = var.db_disk_size_gb
     disk_type         = "PD_SSD"
@@ -85,11 +88,17 @@ resource "google_sql_database_instance" "pg" {
     }
 
     ip_configuration {
-      # No public IP. Reached only via the Cloud SQL Auth Proxy connector from
-      # Cloud Run (instance connection name), NOT via VPC private IP. See the
-      # SERVICE NETWORKING note above — private_network is deliberately UNSET.
-      ipv4_enabled                                  = false
-      enable_private_path_for_google_cloud_services = true
+      # Cloud SQL requires at least one connectivity type. We enable a public IP
+      # but grant NO authorized_networks, so nothing on the internet can connect.
+      # Cloud Run reaches the DB via the Cloud SQL Auth Proxy socket (instance
+      # connection name over Google's internal path), NOT this public IP and NOT
+      # via VPC private IP — so private_network stays UNSET and there is no
+      # servicenetworking peering to conflict with the Craft-5 test project.
+      ipv4_enabled = true
+      # No authorized_networks block => the public IP is unreachable from anywhere.
+      # (enable_private_path_for_google_cloud_services is omitted: it requires a
+      # private network and is not applicable to a public-IP-only instance. Cloud
+      # Run connects via the Auth Proxy socket regardless.)
     }
   }
 }
@@ -215,8 +224,10 @@ locals {
   payload_image = var.payload_image != "" ? var.payload_image : "us-docker.pkg.dev/cloudrun/container/hello"
 
   # Cloud SQL Auth Proxy socket connection string. Host is the Unix socket dir
-  # /cloudsql/<connection_name>; no VPC private IP involved.
-  database_uri = "postgres://${var.db_user}:${random_password.db.result}@/${var.db_name}?host=/cloudsql/${google_sql_database_instance.pg.connection_name}"
+  # /cloudsql/<connection_name>; no VPC private IP involved. The password is
+  # urlencode()'d — random_password can contain @ # / etc. that would otherwise
+  # break URL parsing (node-postgres parses this as a URL).
+  database_uri = "postgres://${var.db_user}:${urlencode(random_password.db.result)}@/${var.db_name}?host=/cloudsql/${google_sql_database_instance.pg.connection_name}"
 }
 
 resource "google_cloud_run_v2_service" "payload" {

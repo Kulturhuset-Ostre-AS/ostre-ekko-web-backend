@@ -38,6 +38,15 @@ public_html/error_log
 
 # Terraform — not part of the image build
 terraform/.terraform/
+terraform-payload/.terraform/
+
+# Payload app: exclude generated/local-only + the whole migration dataset & media.
+**/.next
+migration/payload-app/media-uploads/
+migration/data/
+migration/scratch-img/
+migration/craft3-backup/
+**/*.tsbuildinfo
 terraform/.terraform.lock.hcl
 terraform/*.tfstate
 terraform/*.tfstate.*
