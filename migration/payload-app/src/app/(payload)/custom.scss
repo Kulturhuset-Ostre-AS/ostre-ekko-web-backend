@@ -1,1 +1,5 @@
-/* Optional admin panel style overrides. */
+/* Payload admin base styles — REQUIRED. Without this import the admin panel renders
+   completely unstyled (raw HTML). Add custom overrides below the import. */
+@import '~@payloadcms/ui/scss/app.scss';
+
+/* Custom admin panel overrides go here. */
