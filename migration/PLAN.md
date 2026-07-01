@@ -1,3 +1,8 @@
+> ⚠️ **DEPRECATED / HISTORICAL.** This describes the GraphQL export path that was
+> **abandoned** (Craft 3 GraphQL would not register entry types on a restored DB).
+> The migration was done via **direct SQL** — see **MIGRATION.md** for the real,
+> reproducible runbook. This file is kept only for design context.
+
 # Craft 3 → Payload migration plan
 
 Migrate the EKKO / Østre festival backend from the **original Craft 3.7.20** install
