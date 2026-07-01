@@ -21,7 +21,11 @@ const dirname = path.dirname(fileURLToPath(import.meta.url))
 export default buildConfig({
   serverURL: process.env.PAYLOAD_PUBLIC_SERVER_URL || 'http://localhost:3000',
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-change-me',
-  admin: { user: Users.slug },
+  admin: {
+    user: Users.slug,
+    // Where Payload generates/reads the admin importMap (matches create-payload-app).
+    importMap: { baseDir: path.resolve(dirname) },
+  },
   editor: lexicalEditor(),
 
   // Mirror Craft's two sites (en, nb). nb (Norwegian Bokmål) is the default.
