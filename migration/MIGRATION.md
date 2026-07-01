@@ -121,8 +121,13 @@ bash migration/docker/00-craft3-down.sh
    `\r\n` that the JSON export introduces. It only maps tags present in EKKO content;
    exotic markup degrades to plain text.
 
-6. **`entries` raw count ≫ published count.** `craft_entries` includes drafts/revisions;
-   the export/import distinct-by-element counts (~2240 events, not 3373) are correct.
+6. **`craft_entries` includes REVISIONS and DRAFTS — filter them out.** Every saved
+   version of an entry is a row in `craft_entries` (with `revisionId`/`draftId` set).
+   `sql-export.mjs` filters to canonical entries (`revisionId IS NULL AND draftId IS
+   NULL AND dateDeleted IS NULL`); without this you import the whole edit history as
+   separate live docs → massively inflated counts (events 3373 vs ~429 real) and
+   duplicate slugs, so `/slug` pages render an arbitrary version and edits "don't show."
+   Canonical counts: events ~257, artists ~1250, arena ~5 (per nb site).
 
 7. **3 source assets are unrecoverable** (2 DB records point to renamed/missing files,
    1 corrupt TIFF). Expect ~2563/2566.
