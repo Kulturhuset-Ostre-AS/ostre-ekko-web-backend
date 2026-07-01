@@ -1,0 +1,62 @@
+# Builds the Payload container image and pushes it to Artifact Registry via
+# Cloud Build. Manual only — building shouldn't happen on every push.
+#
+# The AR repo `ekko-payload` and the Cloud Run service are created by the
+# terraform-payload module; run that (apply) once BEFORE the first image deploy
+# so the repo exists. After a build, deploy the new image either by:
+#   a) setting the PAYLOAD_IMAGE repo variable (or the payload_image input) and
+#      running payload-terraform.yml apply, OR
+#   b) running deploy/payload/deploy-cloud-run.sh for an image-only rollout.
+#
+# Prerequisites (reuses WIF from the other workflows):
+#   secrets:  GCP_WIF_PROVIDER, GCP_WIF_SERVICE_ACCOUNT
+#   variables: GCP_PROJECT_ID  (and optionally GCP_REGION, default europe-north1)
+# The WIF service account needs roles/cloudbuild.builds.editor +
+# roles/artifactregistry.writer + roles/storage.admin (Cloud Build staging).
+
+name: payload-build-image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  REGION: ${{ vars.GCP_REGION || 'europe-north1' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup gcloud
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Cloud Build (build + push image)
+        env:
+          PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+        run: |
+          set -euo pipefail
+          gcloud builds submit \
+            --project="${PROJECT_ID}" \
+            --region="${REGION}" \
+            --config=deploy/payload/cloudbuild.yaml \
+            --substitutions=_REGION="${REGION}",SHORT_SHA="${GITHUB_SHA::7}" \
+            .
+
+      - name: Image ref
+        env:
+          PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+        run: |
+          echo "Pushed: ${REGION}-docker.pkg.dev/${PROJECT_ID}/ekko-payload/payload:${GITHUB_SHA::7}"
+          echo "Set repo variable PAYLOAD_IMAGE to this ref (or pass it to payload-terraform apply) to deploy it."

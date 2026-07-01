@@ -1,0 +1,47 @@
+# Build and push the Payload 3 CMS image to Artifact Registry.
+#
+# Usage (from repo root):
+#   gcloud builds submit . \
+#     --config=deploy/payload/cloudbuild.yaml \
+#     --substitutions=SHORT_SHA=$(git rev-parse --short HEAD) \
+#     --project=YOUR_PROJECT_ID
+#
+# NOTE: the Artifact Registry repo `ekko-payload` is created by the
+# terraform-payload/ module and MUST exist before this build runs (the push
+# steps will fail otherwise). Terraform owns the repo; this file only produces
+# images into it.
+#
+# Build context is migration/payload-app (where Dockerfile.prod + source live).
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -f
+      - migration/payload-app/Dockerfile.prod
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:$SHORT_SHA
+      - -t
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:latest
+      - migration/payload-app
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:$SHORT_SHA
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:latest
+
+options:
+  machineType: E2_HIGHCPU_8
+  logging: CLOUD_LOGGING_ONLY
+
+substitutions:
+  _REGION: europe-north1
+
+images:
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:$SHORT_SHA
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/ekko-payload/payload:latest

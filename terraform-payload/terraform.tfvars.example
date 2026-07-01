@@ -1,0 +1,24 @@
+# Copy to terraform.tfvars and fill in. All resources are named ekko-payload-*
+# and are fully isolated from the Craft module in terraform/.
+
+# Required: the shared GCP project ID.
+project_id = "my-gcp-project"
+
+# Region for Cloud SQL, buckets, Cloud Run, and Artifact Registry.
+region = "europe-north1"
+
+# The public HTTPS URL Payload serves at (exposed as PAYLOAD_PUBLIC_SERVER_URL).
+payload_public_server_url = "https://cms-payload.ekko.no"
+
+# Comma-separated origins allowed to call Payload from the frontend (PAYLOAD_CORS).
+payload_cors = "https://ekko.no,https://www.ekko.no"
+
+# Artifact Registry image ref for Cloud Run. Leave empty on the first apply to
+# use a placeholder image; set it once CI has pushed a real image.
+# e.g. europe-north1-docker.pkg.dev/my-gcp-project/ekko-payload/payload:latest
+payload_image = ""
+
+# WIF service account GitHub Actions uses to build/push images and deploy Cloud
+# Run. When set, run.admin + artifactregistry.writer + iam.serviceAccountUser
+# are granted. Leave empty to skip.
+deploy_service_account_email = ""

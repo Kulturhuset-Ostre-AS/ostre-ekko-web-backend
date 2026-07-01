@@ -1,0 +1,86 @@
+# Terraform for the PAYLOAD cloud deployment (Cloud Run + Cloud SQL Postgres +
+# GCS media). This is SEPARATE from the Craft production module:
+#   - runs in `terraform-payload/` (not `terraform/`)
+#   - uses its OWN state prefix `terraform/ekko-payload` (Craft uses terraform/ekko)
+#   - creates only `ekko-payload-*` resources
+# It shares the same GCP project and the same WIF credentials as terraform-gcp.yml,
+# but never touches Craft state or resources.
+#
+# Prerequisites (reuses the ones already set for terraform-gcp.yml):
+#   secrets:  GCP_WIF_PROVIDER, GCP_WIF_SERVICE_ACCOUNT, TF_STATE_BUCKET
+#   variables: GCP_PROJECT_ID
+# Additionally, to deploy an image, set the repo variable PAYLOAD_IMAGE (or pass it
+# as an input) once the image has been built by payload-build-image.yml.
+
+name: payload-terraform
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Terraform action to run"
+        required: true
+        default: plan
+        type: choice
+        options:
+          - plan
+          - apply
+      payload_image:
+        description: "Artifact Registry image ref for Cloud Run (optional; overrides the PAYLOAD_IMAGE repo var)"
+        required: false
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  TF_IN_AUTOMATION: true
+  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+  # Image ref: workflow input wins, else the repo variable, else empty (plan-only).
+  TF_VAR_payload_image: ${{ github.event.inputs.payload_image || vars.PAYLOAD_IMAGE }}
+  # Public URL + CORS for the deployed Payload; set these as repo variables.
+  TF_VAR_payload_public_server_url: ${{ vars.PAYLOAD_PUBLIC_SERVER_URL }}
+  TF_VAR_payload_cors: ${{ vars.PAYLOAD_CORS }}
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform-payload
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Google Cloud (WIF)
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+          service_account: ${{ secrets.GCP_WIF_SERVICE_ACCOUNT }}
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.0"
+
+      - name: Terraform init (GCS backend, isolated prefix)
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=${{ secrets.TF_STATE_BUCKET }}" \
+            -backend-config="prefix=terraform/ekko-payload"
+
+      - name: Terraform fmt (check)
+        run: terraform fmt -check -recursive
+
+      - name: Terraform validate
+        run: terraform validate
+
+      - name: Terraform plan
+        if: github.event.inputs.action == 'plan'
+        run: terraform plan -input=false -no-color
+
+      - name: Terraform apply
+        if: github.event.inputs.action == 'apply'
+        run: terraform apply -input=false -no-color -auto-approve
