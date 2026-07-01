@@ -10,10 +10,12 @@ export const Performance: CollectionConfig = {
   fields: [
     craftId,
     { name: 'title', type: 'text', required: true, localized: true },
+    { name: 'fullTitle', type: 'text', localized: true, admin: { description: 'Full title (frontend uses this for display)' } },
     slugField,
     { name: 'date', type: 'date' },
     { name: 'time', type: 'text', admin: { description: 'Start time (HH:mm)' } },
     { name: 'timeEnd', type: 'text', admin: { description: 'End time (HH:mm)' } },
+    { name: 'ekstraInfo', type: 'text', localized: true, admin: { description: 'Extra info shown on the performance' } },
     {
       name: 'location',
       type: 'relationship',

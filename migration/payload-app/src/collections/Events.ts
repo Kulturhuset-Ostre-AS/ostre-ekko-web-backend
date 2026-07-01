@@ -50,6 +50,7 @@ export const Events: CollectionConfig = {
       filterOptions: { group: { equals: 'locations' } },
       hasMany: true,
     },
+    { name: 'layout', type: 'text', admin: { description: 'Craft layout variant' } },
     { name: 'intro', type: 'richText', editor: lexicalEditor() },
     { name: 'description', type: 'richText', editor: lexicalEditor() },
     { name: 'ticketLink', type: 'text' },
@@ -63,6 +64,12 @@ export const Events: CollectionConfig = {
     { name: 'complexContent', type: 'blocks', blocks: complexContentBlocks },
 
     // ---- festival-type extras (Craft festival_Entry) ----
+    // Festival theming / "skin" colours (Craft Color + Lightswitch fields).
+    { name: 'festivalColor', type: 'text', admin: { condition: (d) => d.entryType === 'festival', description: 'Festival background colour (hex, e.g. #ff743c)' } },
+    { name: 'festivalSectionBgColor', type: 'text', admin: { condition: (d) => d.entryType === 'festival', description: 'Section background colour (hex)' } },
+    { name: 'festivalSectionTextColor', type: 'text', admin: { condition: (d) => d.entryType === 'festival', description: 'Section text colour (hex)' } },
+    { name: 'darkMode', type: 'checkbox', admin: { condition: (d) => d.entryType === 'festival', description: 'Dark mode' } },
+    { name: 'festivalLinkInvert', type: 'checkbox', admin: { condition: (d) => d.entryType === 'festival', description: 'Invert link colour' } },
     { name: 'lineup', type: 'textarea', admin: { condition: (d) => d.entryType === 'festival' } },
     {
       name: 'festivalSectionGraphicElements',

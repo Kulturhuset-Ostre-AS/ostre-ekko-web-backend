@@ -22,6 +22,8 @@ export const News: CollectionConfig = {
     { name: 'newsPhoto', type: 'upload', relationTo: 'media' },
     { name: 'pagePhoto', type: 'upload', relationTo: 'media' },
     { name: 'intro', type: 'richText', editor: lexicalEditor() },
+    { name: 'newsContent', type: 'richText', editor: lexicalEditor() },
+    { name: 'newsMediaPosition', type: 'text' },
     { name: 'complexContent', type: 'blocks', blocks: complexContentBlocks },
   ],
 }

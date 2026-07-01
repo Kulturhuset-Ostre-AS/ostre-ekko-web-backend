@@ -73,21 +73,32 @@ function scalarData(collection, row) {
         openingTime: row.openingTime || undefined, closingTime: row.closingTime || undefined,
         intro: rt(row.intro), description: rt(row.description),
         ticketLink: row.ticketLink || undefined, ticketDescription: htmlToLexical(row.ticketDescription),
-        lineup: row.lineup || undefined,
+        lineup: row.lineup || undefined, layout: row.layout || undefined,
+        // festival theme / "skin" colours
+        festivalColor: row.festivalColor || undefined,
+        festivalSectionBgColor: row.festivalSectionBgColor || undefined,
+        festivalSectionTextColor: row.festivalSectionTextColor || undefined,
+        darkMode: bool(row.darkMode), festivalLinkInvert: bool(row.festivalLinkInvert),
       })
       break
     case 'news':
-      Object.assign(d, { postDate: row.postDate || row.date || undefined, intro: rt(row.newsIntro || row.intro) })
+      Object.assign(d, { postDate: row.postDate || row.date || undefined, intro: rt(row.newsIntro || row.intro),
+        newsContent: rt(row.newsContent), newsMediaPosition: row.newsMediaPosition || undefined })
       break
     case 'artists':
       Object.assign(d, { artistName: row.artistName || undefined, artistMeta: row.artistMeta || undefined,
-        bio: rt(row.description || row.intro) })
+        bio: rt(row.description || row.intro), shortTitle: row.shortTitle || undefined,
+        openingTimes: row.openingTimes || undefined,
+        isFeatured: bool(row.isFeatured), isVisible: row.isVisible == null ? true : bool(row.isVisible),
+        hideMoreLink: bool(row.hideMoreLink) })
       break
     case 'performance':
-      Object.assign(d, { date: row.date || undefined, time: row.time || undefined, timeEnd: row.timeEnd || undefined })
+      Object.assign(d, { date: row.date || undefined, time: row.time || undefined, timeEnd: row.timeEnd || undefined,
+        fullTitle: row.fullTitle || undefined, ekstraInfo: row.ekstraInfo || undefined })
       break
     case 'arena':
-      // arena entries are mostly title + complexContent
+      Object.assign(d, { artistName: row.artistName || undefined, projectTitle: row.projectTitle || undefined,
+        videoUrl: row.videoUrl || undefined, pageContent: rt(row.pageContent) })
       break
   }
   return d
