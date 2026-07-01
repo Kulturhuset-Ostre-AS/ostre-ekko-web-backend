@@ -91,7 +91,10 @@ function entriesQuery(sectionHandle, siteId, fieldCols) {
   return `
     SELECT ${jsonObj}
     FROM craft_entries e
-    JOIN craft_elements el ON el.id=e.id AND el.dateDeleted IS NULL
+    JOIN craft_elements el ON el.id=e.id
+      AND el.dateDeleted IS NULL
+      AND el.revisionId IS NULL   -- exclude Craft revision history (old saved versions)
+      AND el.draftId IS NULL      -- exclude drafts
     JOIN craft_sections s ON e.sectionId=s.id
     JOIN craft_entrytypes et ON e.typeId=et.id
     JOIN craft_elements_sites es ON es.elementId=e.id AND es.siteId=${siteId}
@@ -131,6 +134,10 @@ function exportMatrix(fieldHandle, table) {
      FROM craft_matrixblocks mb
      JOIN craft_matrixblocktypes bt ON mb.typeId=bt.id
      JOIN craft_elements el ON el.id=mb.id AND el.dateDeleted IS NULL
+     -- owner must be a canonical entry (not a revision/draft), else we'd carry blocks
+     -- from old saved versions.
+     JOIN craft_elements owner ON owner.id=mb.ownerId
+       AND owner.dateDeleted IS NULL AND owner.revisionId IS NULL AND owner.draftId IS NULL
      JOIN ${table} mc ON mc.elementId=mb.id
      ORDER BY mb.ownerId, mb.sortOrder;`,
     { json: true },
@@ -185,7 +192,8 @@ function main() {
         'title', c.title, 'slug', es.slug,
         'fullTitle', c.field_fullTitle, 'venue', c.${venueCol}, 'room', c.${roomCol})
       FROM craft_categories cat
-      JOIN craft_elements el ON el.id=cat.id AND el.dateDeleted IS NULL
+      JOIN craft_elements el ON el.id=cat.id
+        AND el.dateDeleted IS NULL AND el.revisionId IS NULL AND el.draftId IS NULL
       JOIN craft_categorygroups g ON cat.groupId=g.id
       JOIN craft_elements_sites es ON es.elementId=cat.id AND es.siteId=${site.id}
       JOIN craft_content c ON c.elementId=cat.id AND c.siteId=${site.id}
