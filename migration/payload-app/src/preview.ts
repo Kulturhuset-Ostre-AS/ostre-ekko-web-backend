@@ -35,3 +35,14 @@ export const previewFor =
   (collection: string): NonNullable<CollectionConfig['admin']>['preview'] =>
   (doc, options) =>
     frontendUrl(collection, doc as Doc, (options as { locale?: string })?.locale)
+
+/** `admin.livePreview.url` for a collection. Same target as the Preview button, but
+ * the frontend route detects the live-preview iframe and subscribes to draft updates
+ * via @payloadcms/live-preview-react. Returns the frontend base when the doc has no
+ * slug yet (new, unsaved docs) so the iframe still loads. */
+export const livePreviewFor =
+  (collection: string) =>
+  ({ data, locale }: { data: Doc; locale?: string | { code?: string } }) => {
+    const localeCode = typeof locale === 'string' ? locale : locale?.code
+    return frontendUrl(collection, data, localeCode) ?? `${FRONTEND}${localePrefix(localeCode)}`
+  }

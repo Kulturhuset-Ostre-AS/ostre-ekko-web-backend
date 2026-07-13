@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
-import { previewFor } from '../preview'
+import { previewFor, livePreviewFor } from '../preview'
 
 // Craft `events` channel. Holds two Craft entry types: `event` and `festival`.
 // Modeled as one collection with an `entryType` discriminator (frontend reads it as
@@ -16,6 +16,17 @@ export const Events: CollectionConfig = {
     useAsTitle: 'title',
     defaultColumns: ['title', 'entryType', 'date'],
     preview: previewFor('events'), // opens /ostre/:slug or /festival/:slug in the frontend
+    // Live Preview: renders the frontend in an in-editor iframe that updates as you
+    // type. Same target URLs as the Preview button; the frontend route subscribes to
+    // the draft via @payloadcms/live-preview-react. Enabled for festivals/events.
+    livePreview: {
+      url: livePreviewFor('events'),
+      breakpoints: [
+        { name: 'mobile', label: 'Mobile', width: 375, height: 667 },
+        { name: 'tablet', label: 'Tablet', width: 768, height: 1024 },
+        { name: 'desktop', label: 'Desktop', width: 1440, height: 900 },
+      ],
+    },
   },
   fields: [
     craftId,
