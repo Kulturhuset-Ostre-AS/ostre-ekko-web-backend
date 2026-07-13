@@ -91,3 +91,31 @@ becomes optional (could be removed to simplify).
   leaks drafts publicly.
 - Editors must press Publish (workflow change, but it *restores* Craft
   behaviour rather than introducing something new).
+
+## Re-import: do NOT import old Craft revisions (decision)
+
+Even once Payload versions are enabled, Craft's ~3k historical revisions stay
+out of any (re-)import:
+
+- **API replay can't preserve metadata.** Payload creates versions as a side
+  effect of saves; their author/timestamp cannot be set via the API. Every
+  imported revision would read "Import user, migration day" — an audit trail
+  that lies is worse than none. `maxPerDoc` would prune most of them anyway.
+- **Direct inserts into `_<slug>_v` tables are off the table.** They are
+  Drizzle-managed internal schema (full relational snapshot per version);
+  hand-written rows are fragile and break on Payload upgrades.
+- **The archive is the Craft DB itself.** Keep the final Craft SQL dump (and
+  the `docker-compose.craft3.yml` recipe) archived — real authors, real
+  timestamps, faithful history if archaeology is ever needed. Version history
+  in Payload starts fresh at cutover; that is normal for CMS migrations.
+
+### Exception — in-flight drafts at final cutover
+
+Revisions are history; **drafts are pending work**. At final migration:
+
+1. Check Craft for active drafts:
+   `SELECT ... FROM craft_entries WHERE draftId IS NOT NULL` (recent
+   `dateUpdated` first).
+2. Preferably: have editors publish or discard them before cutover.
+3. Otherwise: import the few that remain as **Payload drafts** — supported
+   properly via the API (`?draft=true` on create/update), unlike revisions.
