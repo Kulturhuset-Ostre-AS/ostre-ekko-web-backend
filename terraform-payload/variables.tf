@@ -105,6 +105,12 @@ variable "payload_cors" {
   default     = ""
 }
 
+variable "frontend_url" {
+  description = "Public base URL of the frontend site. Exposed as FRONTEND_URL; the admin Preview buttons open pages there (falls back to localhost:5173 when empty)."
+  type        = string
+  default     = ""
+}
+
 variable "deploy_service_account_email" {
   description = "Email of the WIF-federated service account GitHub Actions uses to deploy. When non-empty, run.admin + artifactregistry.writer + iam.serviceAccountUser are granted so CI can build/push images and deploy Cloud Run. Leave empty to skip."
   type        = string

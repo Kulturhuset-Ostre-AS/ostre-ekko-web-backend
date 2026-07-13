@@ -308,6 +308,11 @@ resource "google_cloud_run_v2_service" "payload" {
       }
 
       env {
+        name  = "FRONTEND_URL"
+        value = var.frontend_url
+      }
+
+      env {
         name  = "GCS_BUCKET"
         value = google_storage_bucket.media.name
       }
