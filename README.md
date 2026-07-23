@@ -1,6 +1,8 @@
 # Ekko — Craft CMS (backend)
 
-This repository contains the **Craft CMS** installation that powers content and APIs for the public **Ekko** website: the music festival, the **Østre** venue, and the wider association. The tree follows the **legacy hosting layout** (`cms/` application root + `public_html/` web root) migrated from classic PHP hosting so paths match production while you patch and plan upgrades.
+This repository contains the **Craft CMS** installation that powers content and APIs for the public **Ekko** website: the music festival, the **Østre** venue, and the wider association. It runs **headless** (no Twig templates) and serves content to the frontend over **GraphQL**. The tree keeps the **legacy hosting layout** (`cms/` application root + `public_html/` web root) so paths match the original production install.
+
+**Current stack:** Craft CMS **5.9** · PHP **8.2** · MySQL (Cloud SQL) · assets on **Google Cloud Storage** · deployed as Docker on a **GCP VM** behind a **Cloudflare Tunnel**. See [Status & roadmap](#status--roadmap) for what has been done and what remains.
 
 On GitHub it lives alongside the public site:
 
@@ -14,6 +16,7 @@ For local work, cloning both repos into the same parent folder is convenient (fo
 ## Table of contents
 
 - [GitHub](#github)
+- [Status & roadmap](#status--roadmap)
 - [Architecture](#architecture)
 - [Repository layout](#repository-layout)
 - [Prerequisites](#prerequisites)
@@ -35,6 +38,56 @@ For local work, cloning both repos into the same parent folder is convenient (fo
 - **Sibling frontend**: [github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend](https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend)
 
 Create the backend repository in the **Kulturhuset-Ostre-AS** organization if it does not exist yet, then push this working copy as `origin`. Keep deploy keys, Actions secrets, and environment-specific values out of git (see [Environment](#environment)).
+
+## Status & roadmap
+
+### Snapshot (2026-06-29)
+
+Quick meeting snapshot across backend + frontend repos:
+
+- **Backend repo (`ostre-ekko-web-backend`)**
+   - Branch: `main` (aligned with `origin/main`).
+   - Local uncommitted changes: `README.md`, `docker/README.md`.
+   - Recent focus: GCP/VM deploy hardening, Cloudflare forwarded-header trust, GCS volume migration, and deployment pipeline updates.
+- **Frontend repo (`ostre-ekko-web-frontend`)**
+   - Branch: `test/craft5-local-api` (tracking `origin/test/craft5-local-api`).
+   - Local uncommitted/untracked work includes: `.github/workflows/ci.yml`, `README.md`, `docs/monitoring.md`, `.github/workflows/deploy.yml`, `.dev.vars.local`, `.dev.vars.online`, `AGENTS.md`, `package-lock.json`.
+   - Recent focus: Craft 5 API compatibility and festival/navigation stability fixes.
+- **Issue trackers**
+   - Backend tracker (`Kulturhuset-Ostre-AS/ostre-ekko-web-backend`): **0 open issues** (public view).
+   - Frontend tracker at current `origin` (`Kulturhuset-Ostre-AS/ostre-ekko-web-frontend`): returned **404** when checked publicly.
+   - Alternate legacy remote (`JanineZielman/new-ekko-final`): **0 open / 8 closed** issues.
+
+Snapshot of where the backend stands. Items map to git history in this repo and to issues in the sibling **frontend** repo (this repo currently has no issues of its own — backend tasks are tracked there with the **`backend`** label).
+
+### Done
+
+- **Craft upgrade to 5.9.** Migrated from the legacy Craft 3.7 install (`3.7.20 → 3.7.68 → 3.9.15 → 5.9`) on **PHP 8.2**, with a compatible plugin stack. See [docs/craft-post-upgrade-audit.md](docs/craft-post-upgrade-audit.md).
+- **Headless mode.** Server-rendered Twig removed; the frontend consumes content over GraphQL only (`cms/templates/` is empty, legacy URL routes dropped).
+- **GraphQL API contract stabilised.** Endpoint `POST /api`, private-token auth, `sectionId` → `sectionAnchorId` field rename, Craft 5 entry-type / matrix naming. Documented in [docs/graphql-frontend-migration.md](docs/graphql-frontend-migration.md).
+- **Assets on Google Cloud Storage.** Public asset volumes moved from local FS to GCS via the `craftcms/google-cloud` plugin. See [docs/gcs-craft-plugin.md](docs/gcs-craft-plugin.md).
+- **Database on Cloud SQL (MySQL).** Local dump import path documented in [docs/cloud-sql-import.md](docs/cloud-sql-import.md).
+- **GCP infrastructure as code.** Terraform baseline (Cloud SQL, GCS buckets, IAM, Secret Manager, VPC peering) under `terraform/`.
+- **Containerised production deploy.** Prebuilt PHP/nginx images via Cloud Build, deployed as Docker on a GCE VM (cloud-init + systemd) behind a **Cloudflare Tunnel**, with CP requests trusting Cloudflare forwarded headers. See [docs/gcp-vm-docker-deploy.md](docs/gcp-vm-docker-deploy.md) and [docs/gcp-bring-up.md](docs/gcp-bring-up.md).
+- **Bilingual site structure.** Two sites in the **EKKO** site group — `nb` (`nb-NO`, primary, root URL) and `en` (`en`, `/en/`) — with per-field translation settings already configured.
+
+### In progress / planned
+
+Backend-relevant work tracked as frontend-repo issues:
+
+- **Editor control over the colour profile** — let editors change site colours from the CP for both the Østre and Ekko sites. ([frontend #6](https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend/issues/6), label `backend`)
+- **Editable Østre front-page image** — backend support for changing the Østre homepage cover image. ([frontend #5](https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend/issues/5), label `backend`)
+- **English version of the site (editorial workflow)** — the bilingual *structure* exists; remaining work is making it easy for editors to author/maintain EN content, ideally with a way to copy the NO entry as a starting point or **suggested machine translations** that can be confirmed/edited. No translation plugin is installed yet. ([frontend #17](https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend/issues/17))
+- **Membership system for Ekko / Østre** — sales, registration and admin of memberships (payment, confirmation e-mail, member register, CSV export, GDPR consent). The issue lists explicit **backend** requirements (edit price/description, export list, add/edit members, active/expired status). ([frontend #7](https://github.com/Kulturhuset-Ostre-AS/ostre-ekko-web-frontend/issues/7), label `medlemskapssystem`)
+
+### Watch list (maintenance, not blocking)
+
+From the [post-upgrade audit](docs/craft-post-upgrade-audit.md):
+
+- **`composer audit`** advisory on `google/protobuf` (`CVE-2026-6409`, pulled in via Google client libs) — track upstream bumps.
+- **Abandoned Composer packages**: `aelvan/mailchimp-subscribe`, `craftcms/redactor` (Craft suggests **CKEditor**), `google/crc32` — plan replacements on your own timeline.
+- **`cms/config/project__backup/`** — pre-upgrade Project Config copy, not loaded by Craft; safe to delete or gitignore.
+- **`modules/ekkomodule`** — headers still say “Craft 3.x”; only matters if that helper code is touched. Irrelevant to headless GraphQL.
 
 ## Architecture
 
@@ -62,7 +115,7 @@ Craft is the **system of record** for structured content, assets, and global set
 
 Large or generated paths (`public_html/uploads/`, `public_html/imager/`, `public_html/cpresources/`) are **gitignored**; sync them from your backup or GCS when running locally.
 
-Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation starts at [Craft CMS 3.x](https://craftcms.com/docs/3.x/).
+Installed **Craft 5.9** (see `cms/composer.json` / `cms/composer.lock`). Reference: [Craft CMS 5.x docs](https://craftcms.com/docs/5.x/). The repo was migrated from the original Craft 3.7 install — see the git history (`3.7.20 → 3.9.15 → 5.9`) and [docs/craft-post-upgrade-audit.md](docs/craft-post-upgrade-audit.md).
 
 ## Prerequisites
 
@@ -73,7 +126,7 @@ Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation star
 
 ## Local development
 
-1. **PHP 7.4** (or the lowest version you deploy) is appropriate for **Craft 3.7**; newer PHP may not be supported until you upgrade Craft.
+1. **PHP 8.2** (matches `composer.json` `platform.php` and the Docker images) is required for **Craft 5**.
 2. Install dependencies from the **`cms/`** directory:
 
    ```bash
@@ -85,7 +138,7 @@ Installed **Craft 3.7.20** (see `cms/composer.json`). Upgrade documentation star
 5. Import a database dump and sync **`public_html/uploads/`** (and optionally **`public_html/imager/`**) if you need assets locally — see [`docs/database-export.md`](docs/database-export.md) and [`docs/local-media-sync.md`](docs/local-media-sync.md).
 6. Open the control panel (this project uses trigger **`admin`**, not `/cp` — see `cms/config/general.php`).
 
-**Docker on a VM:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 7.4 FPM; optional MariaDB profile for local DB).
+**Docker on a VM:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 8.2 FPM; optional MariaDB profile for local DB). Production deploy is documented in [docs/gcp-vm-docker-deploy.md](docs/gcp-vm-docker-deploy.md).
 
 For day-to-day work, use Craft’s documented workflows for migrations, Project Config, and backups rather than editing production data directly.
 

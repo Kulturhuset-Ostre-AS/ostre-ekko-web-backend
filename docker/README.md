@@ -1,6 +1,6 @@
-# Docker on a VM (Craft 3.7)
+# Docker on a VM (Craft 5)
 
-Compose runs **nginx + PHP 7.4 FPM** with the repo mounted at **`/var/www`** so `public_html/index.php` and `cms/` match production layout.
+Compose runs **nginx + PHP 8.2 FPM** (`serversideup/php:8.2-fpm-alpine`, see `docker/php/Dockerfile`) with the repo mounted at **`/var/www`** so `public_html/index.php` and `cms/` match production layout.
 
 ## On the VM (Debian / Ubuntu on GCP)
 
