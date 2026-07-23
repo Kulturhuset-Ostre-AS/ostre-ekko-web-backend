@@ -6,7 +6,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { htmlToLexical, htmlToPlain } from './html-to-lexical.mjs'
+import { makeBuilders, statusOf } from './sql-shared.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SQL = path.resolve(__dirname, '..', 'data', 'sql')
@@ -22,7 +22,8 @@ const assetMap = exists('asset-map.json') ? read('asset-map.json') : {}
 const relations = read('_relations.json') // sourceId -> field -> [targetId]
 const matrix = read('_matrix.json') // field -> ownerId -> siteId -> [blocks]
 
-// craftId -> { title, slug } per section (PATCH revalidates required title; carry it).
+// craftId -> { title, slug, status } per section (PATCH revalidates required title;
+// carry it. status decides whether the patch saves as draft or published).
 // Load BOTH locales so en-only entries (no nb row) still have a title to satisfy the
 // required localized field when we patch in the nb locale.
 const titleBySection = {}
@@ -31,7 +32,15 @@ for (const section of ['events', 'news', 'arena', 'artists', 'performance']) {
   for (const loc of ['en', 'nb']) { // nb last so it wins when present
     const f = `${section}.${loc}.json`
     if (!exists(f)) continue
-    for (const row of read(f)) t[row.id] = { title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}` }
+    for (const row of read(f)) t[row.id] = { title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}`, status: statusOf(row) }
+    // Standalone drafts land in id-map when sql-import-drafts has run (re-runs of
+    // this pass). They must keep draft status — patching them as published would
+    // publish never-published content.
+    const df = `${section}.drafts.${loc}.json`
+    if (!exists(df)) continue
+    for (const row of read(df)) {
+      if (row.draftOf == null) t[row.id] = { title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}`, status: 'draft' }
+    }
   }
   titleBySection[section] = t
 }
@@ -47,74 +56,9 @@ function findPayloadId(craftId) {
 }
 const mediaId = (craftAssetId) => assetMap[craftAssetId]
 
-// Craft relation field -> Payload field name on the doc (per collection). Assets vs
-// entries vs categories handled by what the target resolves to.
-const FIELD_MAP = {
-  // events
-  eventFeaturedPhoto: 'eventFeaturedPhoto', gallery: 'gallery', organizer: 'organizer',
-  location: 'location', performances: 'performances', linkedEvents: 'linkedEvents',
-  linkedFestival: 'linkedFestival', linkednews: 'linkednews',
-  festivalSectionGraphicElements: 'festivalSectionGraphicElements',
-  // artists / performance
-  artistFeaturedPhoto: 'artistFeaturedPhoto', artist: 'artist', performance: 'performance',
-  images: 'images',
-  // news
-  newsPhoto: 'newsPhoto', pagePhoto: 'pagePhoto',
-}
-// Fields that are single (not hasMany) on the Payload side.
-const SINGLE = new Set(['eventFeaturedPhoto', 'artistFeaturedPhoto', 'newsPhoto', 'pagePhoto', 'organizer'])
-// Fields that point to media (assets) rather than entries.
-const ASSET_FIELDS = new Set(['eventFeaturedPhoto', 'artistFeaturedPhoto', 'newsPhoto', 'pagePhoto', 'gallery', 'images', 'festivalSectionGraphicElements'])
-
-// ---- festival matrix array fields (program / tickets / sections) ----
-const dt = (v) => (v ? v.replace(' ', 'T') + '.000Z' : undefined)
-const hhmm = (v) => (v && v.includes(' ') ? v.split(' ')[1].slice(0, 5) : v || undefined)
-
-function buildProgram(craftId, siteId) {
-  return (matrix.program?.[craftId]?.[siteId] || []).map((b) => ({
-    date: dt(b.day_date), startTime: hhmm(b.day_startTime), endTime: hhmm(b.day_endTime),
-    ticketInformation: htmlToPlain(b.day_ticketInformation),
-  }))
-}
-function buildTickets(craftId, siteId) {
-  return (matrix.tickets?.[craftId]?.[siteId] || []).map((b) => ({
-    description: b.ticket_description || undefined, subdescription: b.ticket_subdescription || undefined,
-    price: b.ticket_price || undefined, ticketLink: b.ticket_ticketLink || undefined,
-    textContent: htmlToPlain(b.text_textContent),
-  })).filter((t) => t.description || t.price || t.ticketLink || t.textContent)
-}
-function buildSections(craftId, siteId) {
-  return (matrix.sections?.[craftId]?.[siteId] || []).map((b) => {
-    // section images are a relation on the block element
-    const imgs = (relations[b.id]?.images || relations[b.id]?.image || []).map(mediaId).filter(Boolean)
-    return {
-      sectionTitle: b.entry_sectionTitle || undefined,
-      sectionBody: htmlToLexical(b.entry_sectionBody),
-      ...(imgs.length ? { images: imgs } : {}),
-    }
-  }).filter((s) => s.sectionTitle || s.sectionBody || s.images)
-}
-
-// Build Payload complexContent blocks from Craft matrix blocks for one owner+site.
-function buildComplexContent(ownerCraftId, siteId) {
-  const blocks = matrix.complexcontent?.[ownerCraftId]?.[siteId] || []
-  const out = []
-  for (const b of blocks) {
-    switch (b.blockType) {
-      case 'text': out.push({ blockType: 'text2', text: htmlToLexical(b.text_text || b.text) }); break
-      case 'video': out.push({ blockType: 'video', videoUrl: b.video_videoUrl || b.videoUrl }); break
-      case 'embed': out.push({ blockType: 'embed', code: b.embed_code || b.code }); break
-      case 'imageBlock': {
-        // imageBlock image is a relation on the block element; resolved via relations map
-        const imgRels = relations[b.id]?.image || relations[b.id]?.imageBlock || []
-        const mid = imgRels.map(mediaId).filter(Boolean)[0]
-        out.push({ blockType: 'imageBlock', image: mid })
-        break
-      }
-    }
-  }
-  return out.filter((b) => b.text || b.videoUrl || b.code || b.image)
-}
+// Relation/matrix -> Payload field builders live in sql-shared.mjs (shared with
+// the drafts pass).
+const { buildRelationData } = makeBuilders({ relations, matrix, findPayloadId, mediaId })
 
 let TOKEN = ''
 async function login() {
@@ -124,8 +68,8 @@ async function login() {
     body: JSON.stringify({ email: EMAIL, password: PASSWORD }) }).then((x) => x.json())
   TOKEN = r.token; if (!TOKEN) throw new Error('login failed')
 }
-async function patch(col, id, data, locale) {
-  const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}`, {
+async function patch(col, id, data, locale, { draft = false } = {}) {
+  const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}${draft ? '&draft=true' : ''}`, {
     method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}` },
     body: JSON.stringify(data) })
   if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 150)}`)
@@ -143,38 +87,16 @@ async function main() {
       // Carry title/slug — PATCH revalidates the required localized title field.
       const t = titles[craftId] || {}
       const data = { ...(t.title ? { title: t.title } : {}), ...(t.slug ? { slug: t.slug } : {}) }
-      // relationships / uploads
-      const rels = relations[craftId] || {}
-      for (const [craftField, targets] of Object.entries(rels)) {
-        const pField = FIELD_MAP[craftField]
-        if (!pField) continue
-        let ids
-        if (ASSET_FIELDS.has(craftField)) {
-          ids = targets.map(mediaId).filter(Boolean)
-        } else {
-          ids = targets.map((t) => findPayloadId(t)?.id).filter(Boolean)
-        }
-        if (!ids.length) continue
-        data[pField] = SINGLE.has(craftField) ? ids[0] : ids
-      }
-      // matrix complexContent (events/news/artists/arena)
-      if (['events', 'news', 'artists', 'arena'].includes(col)) {
-        const cc = buildComplexContent(craftId, 1) // nb site blocks
-        if (cc.length) data.complexContent = cc
-      }
-      // festival matrix array fields (program / tickets / sections) — events only
-      if (col === 'events') {
-        const program = buildProgram(craftId, 1)
-        const tickets = buildTickets(craftId, 1)
-        const sections = buildSections(craftId, 1)
-        if (program.length) data.program = program
-        if (tickets.length) data.tickets = tickets
-        if (sections.length) data.sections = sections
-      }
-      // Only patch if there's real relation/matrix data (title/slug alone = skip).
-      const hasPayload = Object.keys(data).some((k) => k !== 'title' && k !== 'slug')
+      // relationships / uploads / matrix-derived fields (nb site blocks)
+      Object.assign(data, buildRelationData(col, craftId))
+      // Keep the doc's status: a plain PATCH on a Craft-disabled (draft) doc would
+      // publish it, so those save via draft=true with _status carried along.
+      const isDraft = t.status === 'draft'
+      data._status = isDraft ? 'draft' : 'published'
+      // Only patch if there's real relation/matrix data (title/slug/status alone = skip).
+      const hasPayload = Object.keys(data).some((k) => !['title', 'slug', '_status'].includes(k))
       if (hasPayload) {
-        try { await patch(col, payloadId, data, 'nb') }
+        try { await patch(col, payloadId, data, 'nb', { draft: isDraft }) }
         catch (e) { if (n < 20) console.warn(`  ✗ ${col}#${craftId}: ${e.message.slice(0, 110)}`) }
       }
       n++

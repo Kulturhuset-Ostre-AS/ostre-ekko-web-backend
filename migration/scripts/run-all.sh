@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Orchestrate the SQL migration (steps 1-5 of MIGRATION.md).
+# Orchestrate the SQL migration (steps 1-6 of MIGRATION.md).
 #
 # Assumes step 0 is done: Payload + Craft 3 containers are up (docker compose ...
 # payload up; docker/00-craft3-up.sh) and a Payload admin user exists (or the scripts
@@ -18,10 +18,11 @@ if ! curl -s -o /dev/null -X POST http://localhost:3000/api/graphql \
   echo "Payload not reachable at :3000 — run step 0 first (see MIGRATION.md)." >&2; exit 1
 fi
 
-run "1/5  export (Craft SQL -> JSON)"        sql-export.mjs
-run "2/5  transfer assets (files -> media)"  sql-transfer-assets.mjs
-run "3/5  import pass 1 (create docs)"        sql-import.mjs
-run "4/5  import pass 2 (relations+matrix)"  sql-import-relations.mjs
-run "5/5  verify"                             sql-verify.mjs
+run "1/6  export (Craft SQL -> JSON)"        sql-export.mjs
+run "2/6  transfer assets (files -> media)"  sql-transfer-assets.mjs
+run "3/6  import pass 1 (create docs)"        sql-import.mjs
+run "4/6  import pass 2 (relations+matrix)"  sql-import-relations.mjs
+run "5/6  import pass 3 (drafts)"             sql-import-drafts.mjs
+run "6/6  verify"                             sql-verify.mjs
 
 echo; echo "✔ migration complete. Point the frontend at Payload (see MIGRATION.md)."

@@ -11,7 +11,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { htmlToLexical, htmlToPlain } from './html-to-lexical.mjs'
+import { scalarData, statusOf } from './sql-shared.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -24,13 +24,7 @@ const LOCALES = [{ site: 'nb', locale: 'nb' }, { site: 'en', locale: 'en' }]
 const read = (f) => JSON.parse(fs.readFileSync(path.join(SQL, f), 'utf8'))
 const exists = (f) => fs.existsSync(path.join(SQL, f))
 
-// ---- Craft HTML rich text -> minimal lexical (Craft 3 Redactor stores HTML) -------
-// Craft 3 rich text is an HTML string, not lexical. Wrap it as a lexical doc with a
-// Rich text uses the faithful shared converter (html-to-lexical.mjs): preserves
-// bold/italic/links/headings/lists/linebreaks/embeds, unescapes literal \r\n.
-const bool = (v) => v === '1' || v === 1 || v === true
-const num = (v) => (v == null || v === '' ? undefined : Number(v))
-const plain = htmlToPlain
+// Rich-text/scalar mapping lives in sql-shared.mjs (shared with the drafts pass).
 
 // ---- API helpers -----------------------------------------------------------------
 let TOKEN = ''
@@ -54,54 +48,6 @@ async function login() {
   }).then((x) => x.json())
   TOKEN = r.token
   if (!TOKEN) throw new Error('login failed')
-}
-
-// ---- field mapping: Craft content row -> Payload data (scalars only, pass 1) -------
-// Field handles arrive already de-UID'd from the export (sql-export cleanFieldName),
-// so scalarData reads clean handles like `venue`/`room`/`contact` regardless of the
-// install's field-layout UID suffixes.
-
-function scalarData(collection, row) {
-  const d = { craftId: Number(row.id), title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}` }
-  const rt = (v) => htmlToLexical(v)
-  switch (collection) {
-    case 'events':
-      Object.assign(d, {
-        entryType: row.typeHandle === 'festival' ? 'festival' : 'event',
-        date: row.date || undefined, dateEnd: row.dateEnd || undefined,
-        isMultiDay: bool(row.isMultiDay), singlePage: bool(row.singlePage), showArtistInfo: bool(row.showArtistInfo),
-        openingTime: row.openingTime || undefined, closingTime: row.closingTime || undefined,
-        intro: rt(row.intro), description: rt(row.description),
-        ticketLink: row.ticketLink || undefined, ticketDescription: htmlToLexical(row.ticketDescription),
-        lineup: row.lineup || undefined, layout: row.layout || undefined,
-        // festival theme / "skin" colours
-        festivalColor: row.festivalColor || undefined,
-        festivalSectionBgColor: row.festivalSectionBgColor || undefined,
-        festivalSectionTextColor: row.festivalSectionTextColor || undefined,
-        darkMode: bool(row.darkMode), festivalLinkInvert: bool(row.festivalLinkInvert),
-      })
-      break
-    case 'news':
-      Object.assign(d, { postDate: row.postDate || row.date || undefined, intro: rt(row.newsIntro || row.intro),
-        newsContent: rt(row.newsContent), newsMediaPosition: row.newsMediaPosition || undefined })
-      break
-    case 'artists':
-      Object.assign(d, { artistName: row.artistName || undefined, artistMeta: row.artistMeta || undefined,
-        bio: rt(row.description || row.intro), shortTitle: row.shortTitle || undefined,
-        openingTimes: row.openingTimes || undefined,
-        isFeatured: bool(row.isFeatured), isVisible: row.isVisible == null ? true : bool(row.isVisible),
-        hideMoreLink: bool(row.hideMoreLink) })
-      break
-    case 'performance':
-      Object.assign(d, { date: row.date || undefined, time: row.time || undefined, timeEnd: row.timeEnd || undefined,
-        fullTitle: row.fullTitle || undefined, ekstraInfo: row.ekstraInfo || undefined })
-      break
-    case 'arena':
-      Object.assign(d, { artistName: row.artistName || undefined, projectTitle: row.projectTitle || undefined,
-        videoUrl: row.videoUrl || undefined, pageContent: rt(row.pageContent) })
-      break
-  }
-  return d
 }
 
 const SECTION_TO_COLLECTION = {
@@ -142,7 +88,10 @@ async function main() {
     for (const { site, locale } of LOCALES) {
       if (!exists(`${section}.${site}.json`)) continue
       for (const row of read(`${section}.${site}.json`)) {
-        await upsert(collection, row.id, scalarData(collection, row), locale, idMap)
+        // Craft `enabled` -> Payload `_status`. Disabled entries were hidden on the
+        // Craft site; they become drafts (saved via draft=true so nothing publishes).
+        const data = { ...scalarData(collection, row), _status: statusOf(row) }
+        await upsert(collection, row.id, data, locale, idMap, { draft: data._status === 'draft' })
         n++
         if (n % 250 === 0) { save(idMap); console.log(`  ${collection}… ${n}`) }
       }
@@ -154,14 +103,16 @@ async function main() {
   console.log('\nPass 1 complete. Run sql-import-relations.mjs for relations + matrix.')
 }
 
-// create on first locale, update on subsequent locales (same craftId doc)
-async function upsert(collection, craftId, data, locale, idMap) {
+// create on first locale, update on subsequent locales (same craftId doc).
+// `draft: true` saves via Payload's draft mechanism so the doc never publishes.
+async function upsert(collection, craftId, data, locale, idMap, { draft = false } = {}) {
   const existing = idMap[collection]?.[craftId]
+  const q = `locale=${locale}${draft ? '&draft=true' : ''}`
   try {
     if (existing) {
-      await api(`/${collection}/${existing}?locale=${locale}`, { method: 'PATCH', body: JSON.stringify(data) })
+      await api(`/${collection}/${existing}?${q}`, { method: 'PATCH', body: JSON.stringify(data) })
     } else {
-      const r = await api(`/${collection}?locale=${locale}`, { method: 'POST', body: JSON.stringify(data) })
+      const r = await api(`/${collection}?${q}`, { method: 'POST', body: JSON.stringify(data) })
       ;(idMap[collection] ||= {})[craftId] = r.doc.id
     }
   } catch (e) {

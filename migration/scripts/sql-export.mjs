@@ -72,6 +72,8 @@ function relationFieldHandles() {
 // ---- sections to export ----------------------------------------------------------
 const SECTIONS = ['events', 'news', 'arena', 'artists', 'performance',
   'about', 'archive', 'homepage', 'legal', 'oestre', 'ekko_festival_info']
+// Sections that map to versioned Payload collections; drafts are exported for these.
+const CONTENT_SECTIONS = ['events', 'news', 'arena', 'artists', 'performance']
 
 // Build the SELECT of all content field columns for a site, as one JSON_OBJECT.
 function entriesQuery(sectionHandle, siteId, fieldCols) {
@@ -100,6 +102,35 @@ function entriesQuery(sectionHandle, siteId, fieldCols) {
     JOIN craft_elements_sites es ON es.elementId=e.id AND es.siteId=${siteId}
     JOIN craft_content c ON c.elementId=e.id AND c.siteId=${siteId}
     LEFT JOIN craft_structureelements st ON st.elementId=e.id
+    WHERE s.handle='${sectionHandle}'
+    GROUP BY e.id;`
+}
+
+// Craft drafts for a section: same content shape as entriesQuery, plus draft
+// metadata. `draftOf` is the canonical entry id (NULL = standalone draft that was
+// never published), `provisional` marks Craft's per-user autosaved WIP drafts.
+function draftsQuery(sectionHandle, siteId, fieldCols) {
+  const base = [
+    `'id', e.id`, `'uid', e.uid`, `'typeId', e.typeId`, `'typeHandle', et.handle`,
+    `'sectionHandle', s.handle`, `'title', c.title`, `'slug', es.slug`, `'uri', es.uri`,
+    `'enabled', el.enabled`, `'postDate', e.postDate`,
+    `'draftId', el.draftId`, `'draftOf', d.sourceId`, `'draftName', d.name`,
+    `'provisional', d.provisional`, `'dateUpdated', el.dateUpdated`,
+  ]
+  const fieldPairs = fieldCols.map((col) => `'${cleanFieldName(col)}', c.${col}`)
+  const jsonObj = `JSON_OBJECT(${[...base, ...fieldPairs].join(', ')})`
+  return `
+    SELECT ${jsonObj}
+    FROM craft_entries e
+    JOIN craft_elements el ON el.id=e.id
+      AND el.dateDeleted IS NULL
+      AND el.revisionId IS NULL   -- still exclude revision history
+      AND el.draftId IS NOT NULL  -- drafts only
+    JOIN craft_drafts d ON d.id=el.draftId
+    JOIN craft_sections s ON e.sectionId=s.id
+    JOIN craft_entrytypes et ON e.typeId=et.id
+    JOIN craft_elements_sites es ON es.elementId=e.id AND es.siteId=${siteId}
+    JOIN craft_content c ON c.elementId=e.id AND c.siteId=${siteId}
     WHERE s.handle='${sectionHandle}'
     GROUP BY e.id;`
 }
@@ -134,10 +165,11 @@ function exportMatrix(fieldHandle, table) {
      FROM craft_matrixblocks mb
      JOIN craft_matrixblocktypes bt ON mb.typeId=bt.id
      JOIN craft_elements el ON el.id=mb.id AND el.dateDeleted IS NULL
-     -- owner must be a canonical entry (not a revision/draft), else we'd carry blocks
-     -- from old saved versions.
+     -- owner must be a canonical entry or a draft (not a revision), else we'd carry
+     -- blocks from old saved versions. Draft-owned blocks are keyed by the draft
+     -- element id and consumed by sql-import-drafts.mjs.
      JOIN craft_elements owner ON owner.id=mb.ownerId
-       AND owner.dateDeleted IS NULL AND owner.revisionId IS NULL AND owner.draftId IS NULL
+       AND owner.dateDeleted IS NULL AND owner.revisionId IS NULL
      JOIN ${table} mc ON mc.elementId=mb.id
      ORDER BY mb.ownerId, mb.sortOrder;`,
     { json: true },
@@ -180,6 +212,18 @@ function main() {
       console.log(`  ${section}.${site.handle}: ${rows.length}`)
     }
   }
+
+  // Drafts per content section per site (imported last, by sql-import-drafts.mjs).
+  let draftTotal = 0
+  for (const section of CONTENT_SECTIONS) {
+    for (const site of SITES) {
+      const rows = sql(draftsQuery(section, site.id, fieldCols), { json: true })
+      writeJSON(`${section}.drafts.${site.handle}.json`, rows)
+      draftTotal += rows.length
+      console.log(`  ${section}.drafts.${site.handle}: ${rows.length}`)
+    }
+  }
+  console.log(`  drafts total: ${draftTotal}`)
 
   // Categories. venue/room may carry install-specific UID suffixes; resolve by handle.
   const allCols = contentColumns('craft_content')

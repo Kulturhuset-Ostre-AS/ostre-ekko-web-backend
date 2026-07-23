@@ -83,13 +83,27 @@ node scripts/sql-import-relations.mjs
 Patches relationships/uploads (by `craftId` / `asset-map`) and reconstructs the Matrix
 fields: `complexContent`, and the festival `program` / `tickets` / `sections`.
 
-### 5. Verify
+### 5. Import content — pass 3 (drafts)
+
+```bash
+node scripts/sql-import-drafts.mjs
+```
+Imports Craft drafts as Payload drafts (must run LAST so the draft is each doc's
+newest version): standalone drafts (never published) become draft-only docs;
+saved drafts of published entries are layered on top via `draft=true` (newest per
+entry). Craft *provisional* drafts (per-user autosave buffers) are skipped.
+Throughout all passes, Craft's `enabled` flag maps to `_status`
+(`published`/`draft`), so Craft-disabled entries import as drafts.
+
+### 6. Verify
 
 ```bash
 node scripts/sql-verify.mjs        # counts vs export + media-serve + UNIQUE-SLUG guard
 ```
-Fails (non-zero exit) on count mismatch, media that won't serve, or **duplicate slugs**
-(the revision-import regression). "verification passed" = safe.
+Fails (non-zero exit) on count mismatch, media that won't serve, **duplicate
+published slugs** (the revision-import regression), or a **draft leak** (an
+unauthenticated read seeing more docs than there are published ones).
+"verification passed" = safe.
 
 ### Re-running the import (only for a re-run, not a first import)
 
@@ -101,11 +115,12 @@ of the id-map, but **keeps already-transferred media** so you skip step 2:
 node scripts/sql-reset.mjs          # wipe content, keep media + asset-map
 node scripts/sql-import.mjs         # pass 1
 node scripts/sql-import-relations.mjs   # pass 2
+node scripts/sql-import-drafts.mjs  # pass 3 (drafts — always last)
 node scripts/sql-verify.mjs
 # (add --with-media to sql-reset + re-run sql-transfer-assets.mjs to also redo media)
 ```
 
-### 6. Point the frontend at Payload & tear down the source
+### 7. Point the frontend at Payload & tear down the source
 
 ```bash
 cd ../../ostre-ekko-web-frontend && cp .dev.vars.payload.example .dev.vars && yarn dev
@@ -164,6 +179,8 @@ Payload admin user exists). Long-running; watch the logs it writes to `data/sql/
 | `scripts/sql-transfer-assets.mjs` | asset files → Payload media |
 | `scripts/sql-import.mjs` | pass 1: create docs |
 | `scripts/sql-import-relations.mjs` | pass 2: relations + matrix |
+| `scripts/sql-import-drafts.mjs` | pass 3: Craft drafts → Payload drafts (standalone + layered) |
+| `scripts/sql-shared.mjs` | shared scalar/relation mappers for the import passes |
 | `scripts/sql-verify.mjs` | verification (counts + media-serve + unique-slug guard) |
 | `scripts/sql-reset.mjs` | wipe content for a clean re-import (keeps media) |
 | `scripts/html-to-lexical.mjs` | shared HTML→lexical converter |

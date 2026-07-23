@@ -65,13 +65,32 @@ becomes optional (could be removed to simplify).
 
 ## Implementation checklist (contained task, same branch)
 
+> **Status (2026-07-23): implemented.** Versions/drafts are enabled on the five
+> content collections (`src/versioned.ts`), the schema migration exists
+> (`20260723_120354_versions_drafts`), and the import pipeline now maps
+> `enabled` → `_status` directly (superseding the backfill in step 3 — a re-import
+> sets status on every doc, no post-hoc patching). NEW since this doc was written:
+> Craft *drafts* are also imported (decision revised — see "Craft drafts ARE
+> imported" below), and preview draft-fetching uses a shared `PREVIEW_SECRET`
+> (Terraform secret + `PAYLOAD_PREVIEW_SECRET` on the frontend).
+
 1. **Collection config** — add to Events, News, Arena, Artists, Performance:
    `versions: { drafts: { autosave: true }, maxPerDoc: 20 }` (tune count).
 2. **Migration** — `payload migrate:create` + run against the cloud DB
    (creates `_<slug>_v` version tables and the `_status` column).
-3. **Backfill** — set `_status = 'published'` on all existing docs (classic
-   gotcha: pre-existing rows otherwise have no status and can vanish from
-   published queries).
+3. **Backfill** — set `_status` on all existing docs (classic gotcha:
+   pre-existing rows otherwise have no status and can vanish from published
+   queries). **Not a blanket `'published'`:** the export carried Craft's
+   `enabled` flag but `sql-import.mjs` never read it, so ~42 entries that
+   were *disabled* (hidden) in Craft were imported as publicly visible docs
+   (news ~12, events ~6, artists 4 — plus `en` counterparts; count via
+   `"enabled": 0` in `migration/data/sql/*.json`). Backfill
+   `'published'` where Craft had `enabled = 1` and `'draft'` where
+   `enabled = 0` — docs retain `craftId`, so join against the export JSON.
+   This fixes the latent visibility bug and hands editors the hidden
+   entries back as drafts. (No Craft *drafts* are in Payload at all —
+   `sql-export.mjs` filters `draftId IS NULL` — so this is only about
+   the enabled flag.)
 4. **Access control** — public reads must exclude drafts, e.g.
    `read: ({ req }) => req.user ? true : { _status: { equals: 'published' } }`.
    Today `read: () => true` would leak drafts to the site.
@@ -109,13 +128,23 @@ out of any (re-)import:
   timestamps, faithful history if archaeology is ever needed. Version history
   in Payload starts fresh at cutover; that is normal for CMS migrations.
 
-### Exception — in-flight drafts at final cutover
+### Craft drafts ARE imported (decision revised 2026-07-23)
 
-Revisions are history; **drafts are pending work**. At final migration:
+Revisions are history; **drafts are pending work** — and they are now part of
+the standard pipeline, not a cutover exception. `sql-export.mjs` exports them
+(`<section>.drafts.<site>.json`, incl. draft-owned matrix blocks/relations) and
+`sql-import-drafts.mjs` (pass 3, always last) imports them:
 
-1. Check Craft for active drafts:
-   `SELECT ... FROM craft_entries WHERE draftId IS NOT NULL` (recent
-   `dateUpdated` first).
-2. Preferably: have editors publish or discard them before cutover.
-3. Otherwise: import the few that remain as **Payload drafts** — supported
-   properly via the API (`?draft=true` on create/update), unlike revisions.
+- **Standalone drafts** (`draftOf = null`, never published) → new draft-only
+  docs (`?draft=true` create). 36 in the current dump.
+- **Saved drafts of published entries** → layered on the imported doc as its
+  newest version (`?draft=true` PATCH), keeping the canonical `craftId`; only
+  the newest draft per entry (Payload has one working draft). 5 in the dump.
+- **Provisional drafts are skipped** (43): Craft's per-user autosave buffers —
+  unsaved typing, not deliberately saved content. Editors who need one can
+  recover it from the archived Craft DB.
+
+Preview of drafts on the frontend: admin Preview/Live-Preview URLs carry
+`?preview=<PREVIEW_SECRET>`; the frontend loader echoes the secret as an
+`x-preview-secret` header (unlocking draft reads in `versioned.ts`) and queries
+GraphQL with `draft: true`.

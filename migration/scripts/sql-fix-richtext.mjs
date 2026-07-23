@@ -33,8 +33,8 @@ async function login() {
     body: JSON.stringify({ email: EMAIL, password: PASSWORD }) }).then((x) => x.json())
   TOKEN = r.token; if (!TOKEN) throw new Error('login failed')
 }
-async function patch(col, id, data, locale) {
-  const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}`, {
+async function patch(col, id, data, locale, { draft = false } = {}) {
+  const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}${draft ? '&draft=true' : ''}`, {
     method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}` },
     body: JSON.stringify(data) })
   if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 120)}`)
@@ -53,7 +53,10 @@ async function main() {
       for (const row of read(f)) {
         const pid = idMap[collection]?.[row.id]
         if (!pid) continue
-        const data = { title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}` }
+        // Keep the doc's status — a plain PATCH would publish Craft-disabled (draft) docs.
+        const isDraft = !(row.enabled === '1' || row.enabled === 1)
+        const data = { title: row.title || '(untitled)', slug: row.slug || `craft-${row.id}`,
+          _status: isDraft ? 'draft' : 'published' }
         let any = false
         for (const [pField, craftCol] of fields) {
           const lex = htmlToLexical(row[craftCol])
@@ -61,7 +64,7 @@ async function main() {
         }
         n++
         if (!any) continue
-        try { await patch(collection, pid, data, locale); patched++ }
+        try { await patch(collection, pid, data, locale, { draft: isDraft }); patched++ }
         catch (e) { if (patched < 15) console.warn(`  ✗ ${collection}#${row.id} (${locale}): ${e.message.slice(0, 100)}`) }
         if (n % 250 === 0) console.log(`  ${collection}… ${n} (${patched} patched)`)
       }
