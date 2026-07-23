@@ -2,12 +2,14 @@ import type { CollectionConfig } from 'payload'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
+import { versions, readPublished } from '../versioned'
 
 // Craft `artists` structure section. Frontend reads: title, slug, artistName,
 // artistFeaturedPhoto (as featuredImage), performances, complexContent blocks.
 export const Artists: CollectionConfig = {
   slug: 'artists',
-  access: { read: () => true },
+  versions,
+  access: { read: readPublished },
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'artistName'] },
   fields: [
     craftId,

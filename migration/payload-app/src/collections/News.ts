@@ -3,12 +3,14 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
 import { previewFor } from '../preview'
+import { versions, readPublished } from '../versioned'
 
 // Craft `news` channel (entry type `newsEntry`). Frontend reads: title, slug,
 // postDate, newsPhoto, pagePhoto, complexContent.
 export const News: CollectionConfig = {
   slug: 'news',
-  access: { read: () => true },
+  versions,
+  access: { read: readPublished },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'postDate'],

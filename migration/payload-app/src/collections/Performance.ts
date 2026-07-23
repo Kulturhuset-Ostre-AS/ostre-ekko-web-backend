@@ -1,11 +1,13 @@
 import type { CollectionConfig } from 'payload'
 import { craftId, slugField } from '../fields/common'
+import { versions, readPublished } from '../versioned'
 
 // Craft `performance` structure section. Referenced by events.performances and
 // artist pages. Frontend reads: title, slug, date, time, timeEnd, location, artist.
 export const Performance: CollectionConfig = {
   slug: 'performance',
-  access: { read: () => true },
+  versions,
+  access: { read: readPublished },
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'date'] },
   fields: [
     craftId,

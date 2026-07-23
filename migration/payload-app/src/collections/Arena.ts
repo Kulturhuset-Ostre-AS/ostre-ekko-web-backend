@@ -3,12 +3,14 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
 import { previewFor } from '../preview'
+import { versions, readPublished } from '../versioned'
 
 // Craft `arena` channel. Frontend reads: title, id, complexContent (incl. video
 // blocks) and related artists.
 export const Arena: CollectionConfig = {
   slug: 'arena',
-  access: { read: () => true },
+  versions,
+  access: { read: readPublished },
   admin: { useAsTitle: 'title', preview: previewFor('arena') },
   fields: [
     craftId,

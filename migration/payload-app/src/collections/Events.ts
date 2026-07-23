@@ -3,6 +3,7 @@ import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { craftId, slugField } from '../fields/common'
 import { complexContentBlocks } from '../blocks/complexContent'
 import { previewFor, livePreviewFor } from '../preview'
+import { versions, readPublished } from '../versioned'
 
 // Craft `events` channel. Holds two Craft entry types: `event` and `festival`.
 // Modeled as one collection with an `entryType` discriminator (frontend reads it as
@@ -11,7 +12,8 @@ import { previewFor, livePreviewFor } from '../preview'
 // linkedEvents, linkedFestival.
 export const Events: CollectionConfig = {
   slug: 'events',
-  access: { read: () => true },
+  versions,
+  access: { read: readPublished },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'entryType', 'date'],
