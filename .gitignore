@@ -56,3 +56,12 @@ terraform/crash.log
 terraform/crash.*.log
 terraform/override.tf
 terraform/*_override.tf
+
+# Payload GCP module (terraform-payload/) — lock file IS committed
+terraform-payload/.terraform/
+terraform-payload/*.tfstate
+terraform-payload/*.tfstate.*
+terraform-payload/*.tfvars
+!terraform-payload/terraform.tfvars.example
+terraform-payload/crash.log
+terraform-payload/crash.*.log

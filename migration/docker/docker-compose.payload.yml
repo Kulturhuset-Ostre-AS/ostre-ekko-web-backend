@@ -36,6 +36,8 @@ services:
     environment:
       DATABASE_URI: postgres://payload:payload@postgres:5432/payload
       PAYLOAD_SECRET: dev-secret-change-me
+      # Shared with the frontend (PAYLOAD_PREVIEW_SECRET) so preview loaders can read drafts.
+      PREVIEW_SECRET: dev-preview-secret
       PAYLOAD_PUBLIC_SERVER_URL: http://localhost:3000
       FRONTEND_URL: http://localhost:5173
       PAYLOAD_CORS: http://localhost:5173,http://localhost:8788,http://localhost:3001

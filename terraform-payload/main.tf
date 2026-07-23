@@ -203,6 +203,36 @@ resource "google_secret_manager_secret_iam_member" "payload_secret_accessor" {
   member    = google_service_account.run.member
 }
 
+# Shared preview secret: appended to admin Preview URLs and checked by the
+# frontend's loaders so they may fetch draft content (see payload-app src/preview.ts
+# and src/versioned.ts). The SAME value must be set on the frontend deploy as
+# PAYLOAD_PREVIEW_SECRET.
+resource "random_password" "preview_secret" {
+  length  = 32
+  special = false
+}
+
+resource "google_secret_manager_secret" "preview_secret" {
+  secret_id = "${var.name_prefix}-preview-secret"
+
+  replication {
+    auto {}
+  }
+
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_secret_manager_secret_version" "preview_secret" {
+  secret      = google_secret_manager_secret.preview_secret.id
+  secret_data = random_password.preview_secret.result
+}
+
+resource "google_secret_manager_secret_iam_member" "preview_secret_accessor" {
+  secret_id = google_secret_manager_secret.preview_secret.id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = google_service_account.run.member
+}
+
 # -----------------------------------------------------------------------------
 # Artifact Registry repo holding the Payload container image.
 # -----------------------------------------------------------------------------
@@ -298,6 +328,16 @@ resource "google_cloud_run_v2_service" "payload" {
       }
 
       env {
+        name = "PREVIEW_SECRET"
+        value_source {
+          secret_key_ref {
+            secret  = google_secret_manager_secret.preview_secret.secret_id
+            version = "latest"
+          }
+        }
+      }
+
+      env {
         name  = "PAYLOAD_PUBLIC_SERVER_URL"
         value = var.payload_public_server_url
       }
@@ -333,6 +373,7 @@ resource "google_cloud_run_v2_service" "payload" {
     google_project_service.apis,
     google_secret_manager_secret_iam_member.payload_secret_accessor,
     google_secret_manager_secret_iam_member.db_password_accessor,
+    google_secret_manager_secret_iam_member.preview_secret_accessor,
   ]
 }
 

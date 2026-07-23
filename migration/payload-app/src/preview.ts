@@ -4,6 +4,13 @@ import type { CollectionConfig } from 'payload'
 // FRONTEND_URL (e.g. https://ekko.no). Defaults to the local dev frontend.
 const FRONTEND = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '')
 
+// Shared secret that lets the frontend's loaders read drafts (see versioned.ts).
+// Appended to Preview/Live-Preview URLs so the frontend knows the request comes
+// from the admin and fetches draft content instead of the published version.
+const PREVIEW_SECRET = process.env.PREVIEW_SECRET || ''
+const withPreview = (url: string | null) =>
+  url && PREVIEW_SECRET ? `${url}${url.includes('?') ? '&' : '?'}preview=${encodeURIComponent(PREVIEW_SECRET)}` : url
+
 type Doc = Record<string, any>
 
 // Frontend URL prefix per locale. nb is the default (no prefix); en lives under /en.
@@ -34,7 +41,7 @@ export function frontendUrl(collection: string, doc: Doc, locale?: string): stri
 export const previewFor =
   (collection: string): NonNullable<CollectionConfig['admin']>['preview'] =>
   (doc, options) =>
-    frontendUrl(collection, doc as Doc, (options as { locale?: string })?.locale)
+    withPreview(frontendUrl(collection, doc as Doc, (options as { locale?: string })?.locale))
 
 /** `admin.livePreview.url` for a collection. Same target as the Preview button, but
  * the frontend route detects the live-preview iframe and subscribes to draft updates
@@ -44,5 +51,6 @@ export const livePreviewFor =
   (collection: string) =>
   ({ data, locale }: { data: Doc; locale?: string | { code?: string } }) => {
     const localeCode = typeof locale === 'string' ? locale : locale?.code
-    return frontendUrl(collection, data, localeCode) ?? `${FRONTEND}${localePrefix(localeCode)}`
+    const url = frontendUrl(collection, data, localeCode) ?? `${FRONTEND}${localePrefix(localeCode)}`
+    return withPreview(url) as string
   }

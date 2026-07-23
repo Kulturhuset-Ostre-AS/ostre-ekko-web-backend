@@ -28,6 +28,11 @@ output "payload_secret_secret" {
   value       = google_secret_manager_secret.payload_secret.secret_id
 }
 
+output "preview_secret_secret" {
+  description = "Secret Manager secret ID holding PREVIEW_SECRET (value NOT exposed). Set the same value as PAYLOAD_PREVIEW_SECRET on the frontend deploy."
+  value       = google_secret_manager_secret.preview_secret.secret_id
+}
+
 output "artifact_registry_repo" {
   description = "Artifact Registry Docker repository for the Payload image."
   value       = google_artifact_registry_repository.payload.name
