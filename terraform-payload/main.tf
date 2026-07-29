@@ -293,6 +293,16 @@ resource "google_cloud_run_v2_service" "payload" {
         container_port = 8080
       }
 
+      # Sharp image processing during media uploads OOMs the 512 MiB Cloud Run
+      # default (instance killed mid-request -> 503s); 1Gi still died on
+      # 6-11 MB originals, so 2Gi.
+      resources {
+        limits = {
+          memory = "2Gi"
+          cpu    = "1"
+        }
+      }
+
       volume_mounts {
         name       = "cloudsql"
         mount_path = "/cloudsql"
