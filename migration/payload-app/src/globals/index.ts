@@ -70,6 +70,8 @@ export const GlobalInfo: GlobalConfig = {
   ],
 }
 
+import { MembershipConfig } from './MembershipConfig'
+
 export const globals: GlobalConfig[] = [
   Homepage,
   Oestre,
@@ -78,4 +80,5 @@ export const globals: GlobalConfig[] = [
   Legal,
   Archive,
   GlobalInfo,
+  MembershipConfig,
 ]

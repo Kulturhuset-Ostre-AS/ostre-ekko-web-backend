@@ -28,5 +28,12 @@ export const Categories: CollectionConfig = {
     },
     { name: 'venue', type: 'text', admin: { condition: (d) => d.group === 'locations' } },
     { name: 'room', type: 'text', admin: { condition: (d) => d.group === 'locations' } },
+    // Venue capacity — the default max ticket count for ticket types on events
+    // held here (see Events.ticketTypes hook).
+    {
+      name: 'capacity',
+      type: 'number',
+      admin: { condition: (d) => d.group === 'locations', description: 'Kapasitet — brukes som default maks antall billetter' },
+    },
   ],
 }

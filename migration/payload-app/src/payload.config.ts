@@ -5,6 +5,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { gcsStorage } from '@payloadcms/storage-gcs'
 
+import { resendAdapter } from '@payloadcms/email-resend'
 import { Media } from './collections/Media'
 import { Categories } from './collections/Categories'
 import { Tags } from './collections/Tags'
@@ -15,7 +16,13 @@ import { News } from './collections/News'
 import { Arena } from './collections/Arena'
 import { NavigationNodes } from './collections/NavigationNodes'
 import { Users } from './collections/Users'
+import { Orders } from './collections/Orders'
+import { Members } from './collections/Members'
+import { Customers } from './collections/Customers'
+import { Tickets } from './collections/Tickets'
 import { globals } from './globals'
+import { commerceEndpoints } from './commerce/endpoints'
+import { ticketEndpoints } from './commerce/ticket-endpoints'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -76,8 +83,29 @@ export default buildConfig({
     Media,
     NavigationNodes,
     Users,
+    Orders,
+    Members,
+    Customers,
+    Tickets,
   ],
   globals,
+
+  // Commerce: membership (checkout, mock payment, status, CSV) + ticket shop
+  // (availability, checkout, my-tickets, door scanning, wallet placeholder).
+  endpoints: [...commerceEndpoints, ...ticketEndpoints],
+
+  // Transactional email (password resets, membership receipts). Without
+  // RESEND_API_KEY (local dev) Payload falls back to the console adapter —
+  // emails are logged, not sent.
+  ...(process.env.RESEND_API_KEY
+    ? {
+        email: resendAdapter({
+          apiKey: process.env.RESEND_API_KEY,
+          defaultFromAddress: process.env.EMAIL_FROM || 'medlem@ekko.no',
+          defaultFromName: process.env.EMAIL_FROM_NAME || 'Østre / EKKO',
+        }),
+      }
+    : {}),
 
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || 'postgres://payload:payload@localhost:5432/payload' },
