@@ -111,6 +111,12 @@ variable "frontend_url" {
   default     = ""
 }
 
+variable "admin_domain" {
+  description = "Custom domain for the Payload service (admin + API), e.g. admin.ekko.no. Requires the domain verified for the applying account (Search Console) and a DNS-only (grey-cloud) CNAME to ghs.googlehosted.com. Empty = no mapping."
+  type        = string
+  default     = ""
+}
+
 variable "deploy_service_account_email" {
   description = "Email of the WIF-federated service account GitHub Actions uses to deploy. When non-empty, run.admin + artifactregistry.writer + iam.serviceAccountUser are granted so CI can build/push images and deploy Cloud Run. Leave empty to skip."
   type        = string

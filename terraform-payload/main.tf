@@ -387,6 +387,27 @@ resource "google_cloud_run_v2_service" "payload" {
   ]
 }
 
+# Custom domain for the Payload service (admin + API). Cloud Run domain mapping:
+# a preview feature (slight latency overhead) but fine for the low-traffic admin;
+# swap for a global LB + serverless NEG if it ever matters. Prerequisites:
+#  - ekko.no verified for the applying account (Google Search Console)
+#  - Cloudflare DNS: CNAME <admin_domain> -> ghs.googlehosted.com, DNS-only
+#    (grey cloud — Cloud Run terminates TLS itself; a proxied record breaks
+#    cert provisioning). Managed cert appears ~15 min after DNS resolves.
+resource "google_cloud_run_domain_mapping" "admin" {
+  count    = var.admin_domain == "" ? 0 : 1
+  location = var.region
+  name     = var.admin_domain
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.payload.name
+  }
+}
+
 # Public site: allow unauthenticated invocation. This makes the Cloud Run URL
 # world-reachable — expected for a public CMS that enforces its own auth on the
 # admin panel.
