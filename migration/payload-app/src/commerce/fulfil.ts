@@ -50,6 +50,14 @@ export async function completePayment(
     consentNewsletter: Boolean(order.consentNewsletter),
   }
 
+  // Eksplisitt konto-kobling: fra ordren (innlogget kjøp) eller e-post-match.
+  const orderCustomer = typeof order.customer === 'object' ? order.customer?.id : order.customer
+  const matched = orderCustomer
+    ? null
+    : (await payload.find({ collection: 'customers', where: { email: { equals: email } }, limit: 1, depth: 0 })).docs[0]
+  const customerId = orderCustomer || matched?.id
+  if (customerId) (memberData as Record<string, unknown>).customer = customerId
+
   const member = existing.docs[0]
     ? ((await payload.update({ collection: 'members', id: existing.docs[0].id, data: memberData })) as { id: number; memberId?: string })
     : await payload.create({

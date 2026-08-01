@@ -58,6 +58,12 @@ export const Members: CollectionConfig = {
     { name: 'validUntil', type: 'date', required: true, admin: { description: 'Sesongslutt (30/6 eller 31/12)' } },
     { name: 'cardPickedUp', type: 'checkbox', defaultValue: false, label: 'Medlemsbevis hentet' },
     { name: 'source', type: 'select', required: true, defaultValue: 'door', options: ['web', 'door'] },
+    // Eksplisitt bro til kundekontoen (valgfri — dørsalg-medlemmer har ingen).
+    // Settes ved innlogget kjøp og backfylles ved e-post-match; e-post forblir
+    // fallback-nøkkelen, men relasjonen overlever e-postbytte på kontoen.
+    { name: 'customer', type: 'relationship', relationTo: 'customers', index: true, admin: { position: 'sidebar' } },
+    // Utskrift av fysisk medlemskort (CR80) — se /api/commerce/members/:id/card.
+    { name: 'printCard', type: 'ui', admin: { components: { Field: '/components/PrintCardButton' } } },
     { name: 'consentNewsletter', type: 'checkbox', defaultValue: false },
     // Purchase/renewal history: all orders pointing at this member.
     { name: 'orders', type: 'join', collection: 'orders', on: 'member' },

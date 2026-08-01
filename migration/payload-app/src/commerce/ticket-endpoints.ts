@@ -167,6 +167,22 @@ const scanHandler = (consume: boolean): Endpoint['handler'] => async (req) => {
   const payloadStr = decodeURIComponent(String(req.routeParams?.payload || ''))
   const code = verifyQrPayload(payloadStr)
   if (!code) return json(req, 400, { valid: false, error: 'ugyldig/forfalsket QR' })
+  // Medlemskort-QR (MEM:<memberId>): vis medlemsstatus for rabatt i døren.
+  // Konsumeres aldri — et medlemskap "brukes ikke opp" ved skanning.
+  if (code.startsWith('MEM:')) {
+    const memberId = code.slice(4)
+    const mr = await req.payload.find({ collection: 'members', where: { memberId: { equals: memberId } }, limit: 1, depth: 0 })
+    const m = mr.docs[0] as any
+    if (!m) return json(req, 404, { valid: false, error: 'ukjent medlem' })
+    const active = Boolean(m.validUntil && new Date(m.validUntil) >= new Date())
+    return json(req, 200, {
+      valid: active,
+      member: true,
+      typeName: `Medlemskap (${m.membershipType === 'student' ? 'student' : 'ordinært'})`,
+      status: active ? 'aktivt' : 'utløpt',
+      event: { title: `${m.name} · ${m.memberId} · gyldig til ${String(m.validUntil).slice(0, 10)}` },
+    })
+  }
   const r = await req.payload.find({ collection: 'tickets', where: { ticketCode: { equals: code } }, depth: 1, limit: 1 })
   const t = r.docs[0] as any
   if (!t) return json(req, 404, { valid: false, error: 'ukjent billett' })
@@ -202,7 +218,16 @@ const myMembership: Endpoint = {
   handler: async (req) => {
     if (!isCustomer(req)) return json(req, 401, { error: 'ikke innlogget' })
     const email = String((req.user as any).email || '').toLowerCase()
-    const r = await req.payload.find({ collection: 'members', where: { email: { equals: email } }, limit: 1, depth: 0 })
+    // Relasjonen først (overlever e-postbytte), e-post som fallback — og
+    // backfyll relasjonen lazily når e-posten matcher et frittstående medlem.
+    let r = await req.payload.find({ collection: 'members', where: { customer: { equals: req.user!.id } }, limit: 1, depth: 0 })
+    if (!r.docs[0]) {
+      r = await req.payload.find({ collection: 'members', where: { email: { equals: email } }, limit: 1, depth: 0 })
+      const found = r.docs[0] as any
+      if (found && !found.customer) {
+        await req.payload.update({ collection: 'members', id: found.id, data: { customer: req.user!.id } }).catch(() => {})
+      }
+    }
     const m = r.docs[0] as any
     if (!m) return json(req, 200, { member: null })
     return json(req, 200, {
