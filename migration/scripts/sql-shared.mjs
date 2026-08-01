@@ -19,7 +19,11 @@ export function scalarData(collection, row) {
       Object.assign(d, {
         entryType: row.typeHandle === 'festival' ? 'festival' : 'event',
         date: row.date || undefined, dateEnd: row.dateEnd || undefined,
-        isMultiDay: bool(row.isMultiDay), singlePage: bool(row.singlePage), showArtistInfo: bool(row.showArtistInfo),
+        isMultiDay: bool(row.isMultiDay), singlePage: bool(row.singlePage),
+        // Craft lightswitch with NULL means "field default" — prod SHOWS artist
+        // info for those events, so null maps to true (bool(null)=false hid the
+        // artist bios/schedule on 174 events — the "thin pages" parity finding).
+        showArtistInfo: row.showArtistInfo == null ? true : bool(row.showArtistInfo),
         openingTime: row.openingTime || undefined, closingTime: row.closingTime || undefined,
         intro: rt(row.intro), description: rt(row.description),
         ticketLink: row.ticketLink || undefined, ticketDescription: htmlToLexical(row.ticketDescription),

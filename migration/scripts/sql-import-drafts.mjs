@@ -52,10 +52,22 @@ async function login() {
   TOKEN = r.token; if (!TOKEN) throw new Error('login failed')
 }
 async function api(p, opts = {}) {
-  const res = await fetch(`${BASE}${p}`, {
-    ...opts,
-    headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}`, ...(opts.headers || {}) },
-  })
+  // Timeout + retry: a hanging request (dead keep-alive socket) used to drain
+  // the event loop and kill the process silently mid-pass — see the same fix in
+  // sql-import-relations.mjs (root-caused 2026-08-01).
+  let res
+  for (let attempt = 1; ; attempt++) {
+    try {
+      res = await fetch(`${BASE}${p}`, {
+        ...opts,
+        headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}`, ...(opts.headers || {}) },
+        signal: AbortSignal.timeout(30_000),
+      })
+      break
+    } catch (e) {
+      if (attempt >= 3 || !['TimeoutError', 'AbortError'].includes(e.name)) throw e
+    }
+  }
   const json = await res.json().catch(() => ({}))
   if (!res.ok) throw new Error(`${opts.method || 'GET'} ${p} -> ${res.status}: ${JSON.stringify(json).slice(0, 200)}`)
   return json
