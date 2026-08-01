@@ -41,22 +41,24 @@ Create the backend repository in the **Kulturhuset-Ostre-AS** organization if it
 
 ## Status & roadmap
 
-### Snapshot (2026-06-29)
+### Snapshot (2026-08-01)
 
-Quick meeting snapshot across backend + frontend repos:
+The Craft→Payload replacement (branch `feat/payload-cloud-deploy`, both repos)
+is feature-complete and running on test domains; Craft still serves production
+until cutover:
 
-- **Backend repo (`ostre-ekko-web-backend`)**
-   - Branch: `main` (aligned with `origin/main`).
-   - Local uncommitted changes: `README.md`, `docker/README.md`.
-   - Recent focus: GCP/VM deploy hardening, Cloudflare forwarded-header trust, GCS volume migration, and deployment pipeline updates.
-- **Frontend repo (`ostre-ekko-web-frontend`)**
-   - Branch: `test/craft5-local-api` (tracking `origin/test/craft5-local-api`).
-   - Local uncommitted/untracked work includes: `.github/workflows/ci.yml`, `README.md`, `docs/monitoring.md`, `.github/workflows/deploy.yml`, `.dev.vars.local`, `.dev.vars.online`, `AGENTS.md`, `package-lock.json`.
-   - Recent focus: Craft 5 API compatibility and festival/navigation stability fixes.
-- **Issue trackers**
-   - Backend tracker (`Kulturhuset-Ostre-AS/ostre-ekko-web-backend`): **0 open issues** (public view).
-   - Frontend tracker at current `origin` (`Kulturhuset-Ostre-AS/ostre-ekko-web-frontend`): returned **404** when checked publicly.
-   - Alternate legacy remote (`JanineZielman/new-ekko-final`): **0 open / 8 closed** issues.
+- **Payload CMS live** at https://admin.ekko.no (Cloud Run, permanent domain);
+  test frontend at https://framtid.ekko.no (Cloudflare Pages, password-gated,
+  noindex). Full content re-import verified incl. drafts/versions, Live
+  Preview, and (from 2026-08-01) the Verbb navigation menus.
+- **Commerce implemented** (mock payments until a Vipps MobilePay agreement
+  exists): season-based memberships (frontend #7 + client doc) and a ticket
+  shop — ticket types on events/festivals with venue-capacity defaults,
+  customer accounts, signed QR tickets, door-scan endpoint, Apple Wallet
+  prepared. See [docs/medlemskapssalg-plan.md](docs/medlemskapssalg-plan.md).
+- **Remaining before cutover:** Vipps agreement (KYC lead time), Resend email
+  account (password resets + receipts), editor accounts/roles + comms, EN form
+  texts, final re-dump/re-import, DNS switch.
 
 Snapshot of where the backend stands. Items map to git history in this repo and to issues in the sibling **frontend** repo (this repo currently has no issues of its own — backend tasks are tracked there with the **`backend`** label).
 

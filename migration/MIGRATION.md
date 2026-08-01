@@ -95,6 +95,19 @@ entry). Craft *provisional* drafts (per-user autosave buffers) are skipped.
 Throughout all passes, Craft's `enabled` flag maps to `_status`
 (`published`/`draft`), so Craft-disabled entries import as drafts.
 
+### 5b. Import navigation (pass 4)
+
+```bash
+node scripts/sql-import-navigation.mjs
+```
+Verbb Navigation → `navigationNodes` (this pass was missing from the original
+migration — added 2026-08-01). Imports the four live menus (festival, ostre,
+about, toggle) straight from the craft3 docker db; legacy menus and nodes
+without a Norwegian title are skipped. Idempotent on nav+order, so it can run
+independently of the other passes and against an already-populated DB. Note:
+the "Medlemskap" toggle node is native Payload content (not from Craft) — a
+re-import after `sql-reset` must re-add it (see docs/medlemskapssalg-plan.md).
+
 ### 6. Verify
 
 ```bash
@@ -116,6 +129,7 @@ node scripts/sql-reset.mjs          # wipe content, keep media + asset-map
 node scripts/sql-import.mjs         # pass 1
 node scripts/sql-import-relations.mjs   # pass 2
 node scripts/sql-import-drafts.mjs  # pass 3 (drafts — always last)
+node scripts/sql-import-navigation.mjs  # pass 4 (nav — independent, idempotent)
 node scripts/sql-verify.mjs
 # (add --with-media to sql-reset + re-run sql-transfer-assets.mjs to also redo media)
 ```

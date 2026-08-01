@@ -216,6 +216,14 @@ Billettbutikken er bygget oppå samme fundament og verifisert e2e lokalt:
   QR → 400, kunde kan ikke skanne (403). NB: cookie-auth krever Origin-header
   (CSRF) — nettlesere sender den alltid; framtid.ekko.no står i listene.
 
+**DEPLOYET I SKY 2026-07-31/08-01:** hele commerce-laget kjører på
+https://admin.ekko.no; membership-config seedet (salg åpent, 300/200 kr);
+frontend på https://framtid.ekko.no (passordgate, persistent cookie, noindex).
+Gjenstår før reell drift: Vipps-avtale → ekte provider, RESEND_API_KEY i
+terraform (e-post er ellers stille), EN-tekster i skjemaene, CSV-knapp i
+admin-UI (endepunktet finnes), rolleskille i Users, og Medlemskap-lenke i
+menyen (navigasjonen importeres med pass 4, se migration/MIGRATION.md).
+
 ## Status (2026-07-31): M1 + M2 (mock) + M3 IMPLEMENTERT
 
 Bygget og verifisert lokalt (dev-miljø, hele kjøpsflyten testet med curl):

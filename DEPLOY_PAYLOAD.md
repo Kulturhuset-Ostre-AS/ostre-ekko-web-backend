@@ -9,7 +9,7 @@ Nothing here touches Craft.
 ```
                           ┌──────────────────────────────────────────┐
   Editors / public ─────► │  Cloud Run: ekko-payload  (Payload 3)     │
-   cms-payload.ekko.no    │    - Next server on $PORT (8080)          │
+   admin.ekko.no    │    - Next server on $PORT (8080)          │
                           │    - GraphQL at /api/graphql              │
                           │    - admin at /admin                      │
                           └───────┬───────────────────────┬──────────┘
@@ -20,7 +20,7 @@ Nothing here touches Craft.
                    (db "payload")                 (uploaded media)
 
   Cloudflare Pages: ostre-ekko-web-frontend
-    GRAPHQL_API_URL ──► https://cms-payload.ekko.no/api/graphql
+    GRAPHQL_API_URL ──► https://admin.ekko.no/api/graphql
 ```
 
 ## Isolation from Craft production (the safety story)
@@ -49,7 +49,7 @@ Prereqs (already exist for the Craft module — reused): GitHub repo secrets
 build/deploy: `roles/run.admin`, `roles/artifactregistry.writer`,
 `roles/cloudbuild.builds.editor`, `roles/iam.serviceAccountUser`,
 `roles/storage.admin`. Set repo var `PAYLOAD_PUBLIC_SERVER_URL`
-(`https://cms-payload.ekko.no`) and `PAYLOAD_CORS` (the frontend origins).
+(`https://admin.ekko.no`) and `PAYLOAD_CORS` (the frontend origins).
 
 1. **Provision infra** (creates AR repo, Postgres, bucket, secrets, Cloud Run with
    a placeholder image):
@@ -69,11 +69,11 @@ build/deploy: `roles/run.admin`, `roles/artifactregistry.writer`,
    Cloud Run service to the real image.
 4. **Import data**: run the migration toolkit (`migration/MIGRATION.md`) against the
    cloud Payload URL instead of `localhost:3000` (set `PAYLOAD_URL`).
-5. **DNS / domain**: map `cms-payload.ekko.no` to the Cloud Run service (Cloud Run
+5. **DNS / domain**: map `admin.ekko.no` to the Cloud Run service (Cloud Run
    custom domain, or a Cloudflare CNAME/tunnel). Then update `PAYLOAD_PUBLIC_SERVER_URL`
    and re-apply.
 6. **Point the frontend**: in Cloudflare Pages (project `ostre-ekko-web-frontend`),
-   set `GRAPHQL_API_URL=https://cms-payload.ekko.no/api/graphql`. No code change —
+   set `GRAPHQL_API_URL=https://admin.ekko.no/api/graphql`. No code change —
    the endpoint is fully env-driven (see the frontend's `.dev.vars.example`).
 
 ## Subsequent image rollouts
