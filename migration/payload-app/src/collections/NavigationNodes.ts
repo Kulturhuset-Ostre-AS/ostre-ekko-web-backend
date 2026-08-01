@@ -16,7 +16,10 @@ export const NavigationNodes: CollectionConfig = {
       type: 'select',
       required: true,
       defaultValue: 'main',
-      options: ['main', 'festival', 'ostre', 'footer'],
+      // Matches the Craft/Verbb nav handles the frontend filters on:
+      // toggle = the top site switcher, festival/ostre = section anchor menus,
+      // about = Foreningen Ekko (empty in Craft, kept for parity).
+      options: ['main', 'festival', 'ostre', 'footer', 'toggle', 'about'],
       admin: { description: 'Which menu this node belongs to' },
     },
     { name: 'order', type: 'number', defaultValue: 0 },
