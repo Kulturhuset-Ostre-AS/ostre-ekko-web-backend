@@ -56,7 +56,8 @@ function inlineChildren(node, format = 0) {
         out.push(...inlineChildren(child, format | IS_ITALIC))
         break
       case 'a': {
-        const url = child.getAttribute('href') || '#'
+        // trim: stray whitespace in Craft hrefs fails Payload's link-url validation
+        const url = (child.getAttribute('href') || '#').trim() || '#'
         const newTab = (child.getAttribute('target') || '') === '_blank'
         out.push({
           type: 'link', version: 2, fields: { url, newTab, linkType: 'custom' },
