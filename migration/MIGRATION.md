@@ -95,18 +95,18 @@ entry). Craft *provisional* drafts (per-user autosave buffers) are skipped.
 Throughout all passes, Craft's `enabled` flag maps to `_status`
 (`published`/`draft`), so Craft-disabled entries import as drafts.
 
-### 5b. Import navigation (pass 4)
+### 5b. Import navigation (pass 4) — LEGACY, no longer needed
 
 ```bash
-node scripts/sql-import-navigation.mjs
+node scripts/sql-import-navigation.mjs   # optional; frontend ignores the data
 ```
-Verbb Navigation → `navigationNodes` (this pass was missing from the original
-migration — added 2026-08-01). Imports the four live menus (festival, ostre,
-about, toggle) straight from the craft3 docker db; legacy menus and nodes
-without a Norwegian title are skipped. Idempotent on nav+order, so it can run
-independently of the other passes and against an already-populated DB. Note:
-the "Medlemskap" toggle node is native Payload content (not from Craft) — a
-re-import after `sql-reset` must re-add it (see docs/medlemskapssalg-plan.md).
+Verbb Navigation → `navigationNodes`. **As of 2026-08-01 the frontend no longer
+reads this collection** — menus are code-owned and translated
+(app/utils/navigationFallback.ts + uiText in the frontend repo), because the
+menu items mirror code-defined sections/routes and CMS-editability only caused
+drift (stale festival links, missing EN titles). The pass and collection are
+kept for reference and can be removed in a cleanup; running the pass is
+harmless but pointless.
 
 ### 5c. Import globals/singles (pass 5)
 
