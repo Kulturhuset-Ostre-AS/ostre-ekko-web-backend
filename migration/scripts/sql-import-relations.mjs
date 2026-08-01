@@ -69,10 +69,22 @@ async function login() {
   TOKEN = r.token; if (!TOKEN) throw new Error('login failed')
 }
 async function patch(col, id, data, locale, { draft = false } = {}) {
-  const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}${draft ? '&draft=true' : ''}`, {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}` },
-    body: JSON.stringify(data) })
-  if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 150)}`)
+  // Timeout + retry: without a timeout an occasionally-hanging request (dead
+  // keep-alive socket against Cloud Run) left main() awaiting forever — node's
+  // event loop drained and the process exited 0 with NO output and the pass
+  // silently un-run (the long-mysterious "pass 2 no-opped in the background"
+  // bug, root-caused 2026-08-01 via an unsettled-top-level-await warning).
+  for (let attempt = 1; ; attempt++) {
+    try {
+      const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}${draft ? '&draft=true' : ''}`, {
+        method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}` },
+        body: JSON.stringify(data), signal: AbortSignal.timeout(30_000) })
+      if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 150)}`)
+      return
+    } catch (e) {
+      if (attempt >= 3 || !['TimeoutError', 'AbortError'].includes(e.name)) throw e
+    }
+  }
 }
 
 async function main() {
