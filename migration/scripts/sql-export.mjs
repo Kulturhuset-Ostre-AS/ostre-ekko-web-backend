@@ -34,9 +34,18 @@ function sql(query, { json = false } = {}) {
   )
   const lines = out.split('\n').map((l) => l.replace(/\r$/, '')).filter((l) => l.length)
   if (!json) return lines
-  return lines.map((l) => { try { return JSON.parse(l) } catch { return null } }).filter(Boolean)
+  // Rows arrive base64-wrapped (see b64json) so the mysql client's batch
+  // escaping can never corrupt them (double-encoded \" in content used to make
+  // rows silently unparseable — that's how the singles went missing).
+  return lines.map((l) => {
+    try { return JSON.parse(Buffer.from(l, 'base64').toString('utf8')) }
+    catch (e) { console.warn(`  ! dropped unparseable row: ${e.message}`); return null }
+  }).filter(Boolean)
 }
 const shellQuote = (s) => `'${s.replace(/'/g, `'\\''`)}'`
+
+// Wrap a JSON expression in newline-free base64 for safe line-based transport.
+const b64json = (expr) => `REPLACE(TO_BASE64(${expr}), '\\n', '')`
 
 function writeJSON(name, obj) {
   const p = path.join(OUT, name)
@@ -91,7 +100,7 @@ function entriesQuery(sectionHandle, siteId, fieldCols) {
   const fieldPairs = fieldCols.map((col) => `'${cleanFieldName(col)}', c.${col}`)
   const jsonObj = `JSON_OBJECT(${[...base, ...fieldPairs].join(', ')})`
   return `
-    SELECT ${jsonObj}
+    SELECT ${b64json(jsonObj)}
     FROM craft_entries e
     JOIN craft_elements el ON el.id=e.id
       AND el.dateDeleted IS NULL
@@ -120,7 +129,7 @@ function draftsQuery(sectionHandle, siteId, fieldCols) {
   const fieldPairs = fieldCols.map((col) => `'${cleanFieldName(col)}', c.${col}`)
   const jsonObj = `JSON_OBJECT(${[...base, ...fieldPairs].join(', ')})`
   return `
-    SELECT ${jsonObj}
+    SELECT ${b64json(jsonObj)}
     FROM craft_entries e
     JOIN craft_elements el ON el.id=e.id
       AND el.dateDeleted IS NULL
@@ -139,7 +148,7 @@ function draftsQuery(sectionHandle, siteId, fieldCols) {
 function exportRelations() {
   // (sourceId, fieldHandle, [targetIds in sortOrder])
   const rows = sql(
-    `SELECT JSON_OBJECT('source', r.sourceId, 'field', f.handle, 'target', r.targetId, 'sort', r.sortOrder)
+    `SELECT ${b64json(`JSON_OBJECT('source', r.sourceId, 'field', f.handle, 'target', r.targetId, 'sort', r.sortOrder)`)}
      FROM craft_relations r JOIN craft_fields f ON r.fieldId=f.id
      ORDER BY r.sourceId, f.handle, r.sortOrder;`,
     { json: true },
@@ -157,11 +166,11 @@ function exportMatrix(fieldHandle, table) {
   const cols = contentColumns(table) // field_<blocktype>_<subfield>
   const colPairs = cols.map((c) => `'${c.replace(/^field_/, '')}', mc.${c}`)
   const rows = sql(
-    `SELECT JSON_OBJECT(
+    `SELECT ${b64json(`JSON_OBJECT(
        'ownerId', mb.ownerId, 'blockType', bt.handle, 'sort', mb.sortOrder,
        'id', mb.id, 'siteId', mc.siteId
        ${colPairs.length ? ',' + colPairs.join(',') : ''}
-     )
+     )`)}
      FROM craft_matrixblocks mb
      JOIN craft_matrixblocktypes bt ON mb.typeId=bt.id
      JOIN craft_elements el ON el.id=mb.id AND el.dateDeleted IS NULL
@@ -232,9 +241,9 @@ function main() {
   const roomCol = findCol('room')
   for (const site of SITES) {
     const rows = sql(`
-      SELECT JSON_OBJECT('id', cat.id, 'uid', cat.uid, 'group', g.handle,
+      SELECT ${b64json(`JSON_OBJECT('id', cat.id, 'uid', cat.uid, 'group', g.handle,
         'title', c.title, 'slug', es.slug,
-        'fullTitle', c.field_fullTitle, 'venue', c.${venueCol}, 'room', c.${roomCol})
+        'fullTitle', c.field_fullTitle, 'venue', c.${venueCol}, 'room', c.${roomCol})`)}
       FROM craft_categories cat
       JOIN craft_elements el ON el.id=cat.id
         AND el.dateDeleted IS NULL AND el.revisionId IS NULL AND el.draftId IS NULL
@@ -248,10 +257,10 @@ function main() {
 
   // Assets
   const assets = sql(`
-    SELECT JSON_OBJECT('id', a.id, 'uid', a.uid, 'filename', a.filename,
+    SELECT ${b64json(`JSON_OBJECT('id', a.id, 'uid', a.uid, 'filename', a.filename,
       'volume', v.handle, 'folderPath', f.path, 'kind', a.kind,
       'width', a.width, 'height', a.height, 'size', a.size,
-      'title', c.title)
+      'title', c.title)`)}
     FROM craft_assets a
     JOIN craft_elements el ON el.id=a.id AND el.dateDeleted IS NULL
     JOIN craft_volumes v ON a.volumeId=v.id

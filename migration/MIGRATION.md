@@ -108,6 +108,20 @@ independently of the other passes and against an already-populated DB. Note:
 the "Medlemskap" toggle node is native Payload content (not from Craft) — a
 re-import after `sql-reset` must re-add it (see docs/medlemskapssalg-plan.md).
 
+### 5c. Import globals/singles (pass 5)
+
+```bash
+node scripts/sql-import-globals.mjs [globalSlug]
+```
+Craft singles → Payload globals (about, legal, archive, homepage, oestre,
+ekko_festival_info): title, rich text, pagePhoto/gallery, linkedFestival and
+`sections` blocks. Added 2026-08-01 — the sql toolkit previously had NO globals
+pass, and the export silently dropped rows containing double-encoded quotes
+(`\"` in content HTML). The export now base64-wraps rows (immune to the mysql
+client's escaping) and WARNS on dropped rows instead of hiding them. NOTE: that
+export bug affected ALL sections — a full re-export recovered ~614 rows, so the
+cutover re-import must run from a fresh export with the fixed script.
+
 ### 6. Verify
 
 ```bash
