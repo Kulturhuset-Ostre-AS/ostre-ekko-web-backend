@@ -10,8 +10,12 @@
 // are deliberately skipped. Nodes are flat (no parents in the data) and have no
 // element references (all anchor/URL links), so this is a single pass.
 //
-// The stale `/festival/ekko-xxii` toggle URL is imported AS-IS: nav.tsx rewrites
-// /festival* to the newest festival path (frontend issue #18 handling).
+// The Craft toggle node pointed at a HARDCODED festival edition
+// (`/festival/ekko-xxii`) — the yearly-stale-link problem from frontend issue
+// #18 (nav.tsx derives its festival target from this very node, so importing
+// it as-is resurrects the bug). Normalized here: toggle links under /festival/
+// become the evergreen `/festival` (the index route redirects to the current
+// edition via ekko_festival_info) and the title drops the edition suffix.
 //
 // Idempotent: a node is skipped when one with the same nav+order already exists.
 //
@@ -91,6 +95,10 @@ for (const node of byNode.values()) {
   const nav = NAVS[node.navId]
   if (!nav || !node.titles.nb) continue
   if (seen.has(`${nav}:${node.lft}`)) continue
+  if (nav === 'toggle' && node.url?.startsWith('/festival/')) {
+    node.url = '/festival' // evergreen — see header note (issue #18)
+    for (const loc of Object.keys(node.titles)) node.titles[loc] = node.titles[loc].replace(/\s+X+[IVX]*$/i, '')
+  }
   const doc = await api('/navigationNodes?locale=nb', {
     method: 'POST',
     body: JSON.stringify({
