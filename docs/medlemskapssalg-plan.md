@@ -190,6 +190,31 @@ Vipps-portalen + statusendring i admin i fase 1).
 
 Sum fase 1: **~10–15 utviklingsdager** pluss Vipps-ledetid.
 
+## Status (2026-08-02): RAPPORTER, FELLES KONTO, WALLET OG SKANNER
+
+E2e-verifisert i skyen (mock-betaling):
+- **Salgsrapporter**: admin-view **/admin/rapporter** (forhåndsvalg: denne
+  måneden, hittil i år, kalenderår + fritt tidsrom) over
+  `/api/commerce/reports/sales` — billetter per arrangement/billettype +
+  medlemskap, CSV-eksport.
+- **Felles konto**: medlemskjøp lenkes til innlogget kunde, /medlemskap
+  forhåndsutfylles, og Min side (/konto) viser medlemsstatus (type,
+  aktiv/utløpt, medlems-ID) sammen med billettene.
+- **Dør-skanner**: /skann på frontenden — admin-innlogging (CMS-kontoen),
+  kamera-QR (jsQR), grønn/rød validering, slipp-inn, manuell kode-fallback.
+- **Wallet**: komplette kodestier for Apple Wallet (.pkpass) og Google Wallet
+  (save-lenke), ENV-GATET og utestet til credentials finnes. Skaff:
+  1) **Apple Developer Program** ($99/år) → Pass Type ID-sertifikat →
+     env APPLE_PASS_CERT_B64/APPLE_PASS_KEY_B64/APPLE_WWDR_B64/
+     APPLE_PASS_TYPE_ID/APPLE_TEAM_ID;
+  2) **Google Wallet API issuer-konto** (gratis, onboarding i Google Pay &
+     Wallet Console) → GOOGLE_WALLET_ISSUER_ID + service-account-nøkkel
+     (GOOGLE_WALLET_SA_KEY_B64) + opprett EventTicket-klassen `ekko_tickets`.
+  Frontenden viser knappene automatisk når /commerce/wallet/status melder
+  aktivt. Merk: pass-generering MÅ testes ved aktivering.
+- Demo-data i skyen: kunde e2e-test@ekko.no med 2 billetter (1 brukt) +
+  medlemskap EKKO-2026-0002 — synlig i /admin/rapporter.
+
 ## Status (2026-07-31 kveld): FASE 2 (billetter) OGSÅ IMPLEMENTERT (mock)
 
 Billettbutikken er bygget oppå samme fundament og verifisert e2e lokalt:
