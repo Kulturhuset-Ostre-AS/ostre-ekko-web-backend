@@ -47,6 +47,9 @@ const checkout: Endpoint = {
         amountOre: Math.round(priceKr * 100),
         currency: 'NOK',
         provider: provider.name,
+        // Same-account: link the purchase to the logged-in customer when present
+        // (guest checkout stays supported — email remains the renewal key).
+        ...(req.user && req.user.collection === 'customers' ? { customer: req.user.id } : {}),
         membershipType: membershipType as 'ordinary' | 'student',
         season: season.key,
         buyerName: name,

@@ -23,13 +23,16 @@
     "@payloadcms/storage-gcs": "3.85.1",
     "cross-env": "^7.0.3",
     "graphql": "^16.9.0",
+    "jsonwebtoken": "^9.0.3",
     "next": "^16.2.7",
+    "passkit-generator": "^3.5.7",
     "payload": "3.85.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sharp": "^0.34.0"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.5.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",

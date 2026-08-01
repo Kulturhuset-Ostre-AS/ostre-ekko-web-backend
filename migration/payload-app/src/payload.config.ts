@@ -23,6 +23,8 @@ import { Tickets } from './collections/Tickets'
 import { globals } from './globals'
 import { commerceEndpoints } from './commerce/endpoints'
 import { ticketEndpoints } from './commerce/ticket-endpoints'
+import { reportEndpoints } from './commerce/reports'
+import { walletEndpoints } from './commerce/wallet'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -62,6 +64,12 @@ export default buildConfig({
     user: Users.slug,
     // Where Payload generates/reads the admin importMap (matches create-payload-app).
     importMap: { baseDir: path.resolve(dirname) },
+    components: {
+      views: {
+        // Salgsrapporter (billetter + medlemskap) — /admin/rapporter.
+        salesReports: { Component: '/components/SalesReports', path: '/rapporter' },
+      },
+    },
   },
   editor: lexicalEditor(),
 
@@ -91,8 +99,9 @@ export default buildConfig({
   globals,
 
   // Commerce: membership (checkout, mock payment, status, CSV) + ticket shop
-  // (availability, checkout, my-tickets, door scanning, wallet placeholder).
-  endpoints: [...commerceEndpoints, ...ticketEndpoints],
+  // (availability, checkout, my-tickets, door scanning) + sales reports +
+  // wallet passes (env-gated on Apple/Google credentials).
+  endpoints: [...commerceEndpoints, ...ticketEndpoints, ...reportEndpoints, ...walletEndpoints],
 
   // Transactional email (password resets, membership receipts). Without
   // RESEND_API_KEY (local dev) Payload falls back to the console adapter —

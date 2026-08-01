@@ -189,14 +189,30 @@ const scanHandler = (consume: boolean): Endpoint['handler'] => async (req) => {
 const scanCheck: Endpoint = { path: '/commerce/scan/:payload', method: 'get', handler: scanHandler(false) }
 const scanConsume: Endpoint = { path: '/commerce/scan/:payload', method: 'post', handler: scanHandler(true) }
 
-// Apple Wallet: prepared, not implemented — .pkpass generation requires an Apple
-// Developer Pass Type ID certificate. The QR payload above is what the pass
-// barcode will carry, so tickets need no re-issuing when this lands.
-const walletPass: Endpoint = {
-  path: '/commerce/tickets/:code/pass',
-  method: 'get',
-  handler: async (req) =>
-    json(req, 501, { error: 'Apple Wallet-pass er forberedt, men krever Apple Developer-sertifikat (Pass Type ID) før det kan aktiveres' }),
-}
+// Wallet passes (Apple/Google) live in wallet.ts — env-gated on credentials.
 
-export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, scanCheck, scanConsume, walletPass]
+export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, scanCheck, scanConsume]
+
+// ---------------------------------------------------------------------------
+// Same-account: membership status for the logged-in customer (email is the
+// join key between customer accounts and the member register).
+const myMembership: Endpoint = {
+  path: '/commerce/my/membership',
+  method: 'get',
+  handler: async (req) => {
+    if (!isCustomer(req)) return json(req, 401, { error: 'ikke innlogget' })
+    const email = String((req.user as any).email || '').toLowerCase()
+    const r = await req.payload.find({ collection: 'members', where: { email: { equals: email } }, limit: 1, depth: 0 })
+    const m = r.docs[0] as any
+    if (!m) return json(req, 200, { member: null })
+    return json(req, 200, {
+      member: {
+        memberId: m.memberId,
+        membershipType: m.membershipType,
+        validUntil: m.validUntil,
+        active: Boolean(m.validUntil && new Date(m.validUntil) >= new Date()),
+      },
+    })
+  },
+}
+ticketEndpoints.push(myMembership)
