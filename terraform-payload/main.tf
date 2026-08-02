@@ -362,6 +362,27 @@ resource "google_cloud_run_v2_service" "payload" {
         value = var.frontend_url
       }
 
+      dynamic "env" {
+        for_each = var.resend_api_key == "" ? [] : [1]
+        content {
+          name = "RESEND_API_KEY"
+          value_source {
+            secret_key_ref {
+              secret  = google_secret_manager_secret.resend_api_key[0].secret_id
+              version = "latest"
+            }
+          }
+        }
+      }
+
+      dynamic "env" {
+        for_each = var.resend_api_key == "" ? [] : [1]
+        content {
+          name  = "EMAIL_FROM"
+          value = var.email_from
+        }
+      }
+
       env {
         name  = "GCS_BUCKET"
         value = google_storage_bucket.media.name
@@ -384,7 +405,34 @@ resource "google_cloud_run_v2_service" "payload" {
     google_secret_manager_secret_iam_member.payload_secret_accessor,
     google_secret_manager_secret_iam_member.db_password_accessor,
     google_secret_manager_secret_iam_member.preview_secret_accessor,
+    google_secret_manager_secret_iam_member.resend_api_key_accessor,
   ]
+}
+
+# Resend API key for transactional email — external secret (from tfvars),
+# same shape as preview_secret. Created only when the key is set.
+resource "google_secret_manager_secret" "resend_api_key" {
+  count     = var.resend_api_key == "" ? 0 : 1
+  project   = var.project_id
+  secret_id = "${var.name_prefix}-resend-api-key"
+  replication {
+    auto {}
+  }
+  depends_on = [google_project_service.apis]
+}
+
+resource "google_secret_manager_secret_version" "resend_api_key" {
+  count       = var.resend_api_key == "" ? 0 : 1
+  secret      = google_secret_manager_secret.resend_api_key[0].id
+  secret_data = var.resend_api_key
+}
+
+resource "google_secret_manager_secret_iam_member" "resend_api_key_accessor" {
+  count     = var.resend_api_key == "" ? 0 : 1
+  project   = var.project_id
+  secret_id = google_secret_manager_secret.resend_api_key[0].id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${google_service_account.run.email}"
 }
 
 # Custom domain for the Payload service (admin + API). Cloud Run domain mapping:

@@ -111,6 +111,19 @@ variable "frontend_url" {
   default     = ""
 }
 
+variable "resend_api_key" {
+  description = "Resend API key for transactional email (password resets, receipts). Stored in Secret Manager, exposed as RESEND_API_KEY. Empty = email disabled (Payload logs to console)."
+  type        = string
+  sensitive   = true
+  default     = ""
+}
+
+variable "email_from" {
+  description = "Default from-address for transactional email (must be on the Resend-verified domain)."
+  type        = string
+  default     = "medlem@send.ekko.no"
+}
+
 variable "admin_domain" {
   description = "Custom domain for the Payload service (admin + API), e.g. admin.ekko.no. Requires the domain verified for the applying account (Search Console) and a DNS-only (grey-cloud) CNAME to ghs.googlehosted.com. Empty = no mapping."
   type        = string
