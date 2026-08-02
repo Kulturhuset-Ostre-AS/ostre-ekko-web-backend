@@ -70,6 +70,8 @@ export default buildConfig({
         // Salgsrapporter (billetter + medlemskap) — /admin/rapporter.
         salesReports: { Component: '/components/SalesReports', path: '/rapporter' },
       },
+      // Personal-lenker i navigasjonen: rapporter, skanner, medlemskort.
+      afterNavLinks: ['/components/StaffNavLinks'],
     },
   },
   editor: lexicalEditor(),

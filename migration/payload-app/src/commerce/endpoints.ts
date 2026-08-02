@@ -157,4 +157,11 @@ const membersCsv: Endpoint = {
   },
 }
 
-export const commerceEndpoints: Endpoint[] = [checkout, mockPay, mockPayComplete, orderStatus, membersCsv]
+// Liten offentlig config for admin-UI-komponenter (frontend-URL for lenker).
+const uiConfig: Endpoint = {
+  path: '/commerce/config',
+  method: 'get',
+  handler: async (req) => json(req, 200, { frontendUrl: FRONTEND }),
+}
+
+export const commerceEndpoints: Endpoint[] = [checkout, mockPay, mockPayComplete, orderStatus, membersCsv, uiConfig]
