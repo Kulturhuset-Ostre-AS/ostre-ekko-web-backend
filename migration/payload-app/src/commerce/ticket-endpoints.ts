@@ -36,6 +36,15 @@ const availability: Endpoint = {
     if (!ref) return json(req, 400, { error: 'event param required' })
     const event = await findEvent(req, ref)
     if (!event) return json(req, 404, { error: 'event not found' })
+    // TicketCo-lenke OVERSTYRER internt billettsystem (glidende overgang):
+    // eksterne arrangementer eksponerer ingen interne billettyper.
+    if (event.ticketLink) {
+      return json(req, 200, {
+        event: { id: event.id, slug: event.slug, title: event.title, entryType: event.entryType },
+        external: event.ticketLink,
+        types: [],
+      })
+    }
     const types = []
     for (const row of event.ticketTypes || []) {
       if (!row.onSale) continue
@@ -64,6 +73,8 @@ const checkout: Endpoint = {
 
     const event = await req.payload.findByID({ collection: 'events', id: d.eventId, depth: 0 }).catch(() => null)
     if (!event) return json(req, 404, { error: 'event not found' })
+    // TicketCo-lenken overstyrer internt salg — håndheves server-side.
+    if (event.ticketLink) return json(req, 409, { error: 'Arrangementet selges via ekstern billettleverandør' })
 
     // Server-side price + stock validation per row.
     const lines = []
