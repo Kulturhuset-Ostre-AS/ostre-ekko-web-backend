@@ -269,6 +269,16 @@ Gjenstår før prod: Vipps-provider (når avtale + signaturrett), RESEND_API_KEY
 terraform, seeding av membership-config, EN-oversettelse av skjematekster,
 admin-knapp for CSV (endpoint finnes).
 
+## Opprydding ved cutover (skjemaendringer som er gratis ved fersk re-import)
+
+- **Splitt `categories` i `locations` og `organizers`** — delt liste er
+  Craft-arv; steder har egne felter (venue/room/capacity) og driftsbetydning
+  for billettkapasitet. Endres i skjema + importpass FØR cutover-importen, så
+  fyller den ferske importen to rene collections uten datamigrering. Husk:
+  events-relasjonene og frontendens LocationFields-fragment følger med.
+- Vurder samtidig: fjerne `navigationNodes`-collectionen (legacy, frontenden
+  leser den ikke lenger).
+
 ## 11. Avklaringer med Olav (lukkes i M0)
 
 1. **Sesong (docen) vs. +12 mnd (#7)** — planen antar sesong. Bekreft.
