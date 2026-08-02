@@ -13,6 +13,7 @@ export const Artists: CollectionConfig = {
   admin: { useAsTitle: 'title', defaultColumns: ['title', 'artistName'] },
   fields: [
     craftId,
+    { name: 'translateHelper', type: 'ui', admin: { components: { Field: '/components/TranslateButton' } } },
     { name: 'title', type: 'text', required: true, localized: true },
     slugField,
     { name: 'artistName', type: 'text' },
@@ -20,7 +21,7 @@ export const Artists: CollectionConfig = {
     { name: 'shortTitle', type: 'text', localized: true },
     { name: 'artistFeaturedPhoto', type: 'upload', relationTo: 'media' },
     { name: 'images', type: 'upload', relationTo: 'media', hasMany: true },
-    { name: 'bio', type: 'richText', editor: lexicalEditor() },
+    { name: 'bio', type: 'richText', editor: lexicalEditor(), localized: true },
     { name: 'openingTimes', type: 'text' },
     { name: 'isFeatured', type: 'checkbox' },
     { name: 'isVisible', type: 'checkbox', defaultValue: true },

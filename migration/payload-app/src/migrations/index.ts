@@ -4,6 +4,7 @@ import * as migration_20260731_155654_membership_commerce from './20260731_15565
 import * as migration_20260731_205842_ticket_shop from './20260731_205842_ticket_shop';
 import * as migration_20260801_100054_nav_menu_options from './20260801_100054_nav_menu_options';
 import * as migration_20260801_212743_member_customer_link from './20260801_212743_member_customer_link';
+import * as migration_20260802_120000_localize_richtext from './20260802_120000_localize_richtext';
 
 export const migrations = [
   {
@@ -35,5 +36,10 @@ export const migrations = [
     up: migration_20260801_212743_member_customer_link.up,
     down: migration_20260801_212743_member_customer_link.down,
     name: '20260801_212743_member_customer_link'
+  },
+  {
+    up: migration_20260802_120000_localize_richtext.up,
+    down: migration_20260802_120000_localize_richtext.down,
+    name: '20260802_120000_localize_richtext'
   },
 ];

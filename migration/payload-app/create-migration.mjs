@@ -6,5 +6,5 @@ import config from './src/payload.config.ts'
 
 const name = process.argv[2] || 'migration'
 const payload = await getPayload({ config })
-await payload.db.createMigration({ migrationName: name, payload })
+await payload.db.createMigration({ migrationName: name, payload, forceAcceptWarning: true })
 process.exit(0)

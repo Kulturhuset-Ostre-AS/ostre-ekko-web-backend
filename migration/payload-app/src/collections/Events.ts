@@ -53,6 +53,7 @@ export const Events: CollectionConfig = {
   },
   fields: [
     craftId,
+    { name: 'translateHelper', type: 'ui', admin: { components: { Field: '/components/TranslateButton' } } },
     {
       name: 'entryType',
       type: 'select',
@@ -85,11 +86,11 @@ export const Events: CollectionConfig = {
       hasMany: true,
     },
     { name: 'layout', type: 'text', admin: { description: 'Craft layout variant' } },
-    { name: 'intro', type: 'richText', editor: lexicalEditor() },
-    { name: 'description', type: 'richText', editor: lexicalEditor() },
+    { name: 'intro', type: 'richText', editor: lexicalEditor(), localized: true },
+    { name: 'description', type: 'richText', editor: lexicalEditor(), localized: true },
     { name: 'ticketLink', type: 'text' },
     // richText so multi-line ticket tiers (Craft <br>-separated HTML) keep their breaks.
-    { name: 'ticketDescription', type: 'richText', editor: lexicalEditor() },
+    { name: 'ticketDescription', type: 'richText', editor: lexicalEditor(), localized: true },
 
     // ---- own ticket shop (phase 2 commerce) ----
     // Ticket types sold through OUR shop (as opposed to ticketLink/tickets which

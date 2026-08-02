@@ -26,6 +26,7 @@ import { ticketEndpoints } from './commerce/ticket-endpoints'
 import { reportEndpoints } from './commerce/reports'
 import { walletEndpoints } from './commerce/wallet'
 import { cardEndpoints } from './commerce/cards'
+import { translateEndpoints } from './commerce/translate'
 
 const dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -104,7 +105,7 @@ export default buildConfig({
   // Commerce: membership (checkout, mock payment, status, CSV) + ticket shop
   // (availability, checkout, my-tickets, door scanning) + sales reports +
   // wallet passes (env-gated on Apple/Google credentials).
-  endpoints: [...commerceEndpoints, ...ticketEndpoints, ...reportEndpoints, ...walletEndpoints, ...cardEndpoints],
+  endpoints: [...commerceEndpoints, ...ticketEndpoints, ...reportEndpoints, ...walletEndpoints, ...cardEndpoints, ...translateEndpoints],
 
   // Transactional email (password resets, membership receipts). Without
   // RESEND_API_KEY (local dev) Payload falls back to the console adapter —

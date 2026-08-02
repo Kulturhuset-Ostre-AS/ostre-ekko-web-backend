@@ -10,6 +10,7 @@ locals {
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com",
     "vpcaccess.googleapis.com",
+    "translate.googleapis.com",
   ])
 }
 
@@ -139,6 +140,13 @@ resource "google_service_account" "run" {
   project      = var.project_id
 
   depends_on = [google_project_service.apis]
+}
+
+# Maskinoversettelse i admin (nb <-> en utkast) bruker Cloud Translation.
+resource "google_project_iam_member" "run_translate_user" {
+  project = var.project_id
+  role    = "roles/cloudtranslate.user"
+  member  = "serviceAccount:${google_service_account.run.email}"
 }
 
 resource "google_project_iam_member" "run_sql_client" {
