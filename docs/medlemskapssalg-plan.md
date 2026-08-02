@@ -46,6 +46,12 @@ oppå og TicketCo på sikt fases ut.
 Nytt utenfor stacken: Vipps MobilePay-bedriftsavtale (KYC, **kritisk sti —
 søk først**) og Resend-konto med DKIM/SPF i Cloudflare DNS.
 
+**E-POST I DRIFT 2026-08-02:** Resend-konto opprettet, domenet `send.ekko.no`
+verifisert (EU-region; apex-SPF-en urørt — return-path ligger på
+`send.send.ekko.no`, DMARC-alignment via DKIM). `RESEND_API_KEY`/`EMAIL_FROM`
+via terraform. Verifisert: medlemskvittering levert (Resend-logg: delivered)
+og passord-reset for redaktører fungerer.
+
 **Forutsetninger (gjøres FØR dette prosjektet, sammen med cutover):**
 1. Payload-cutover fullført (commerce bygges ikke mot Craft).
 2. **E-postadapter konfigurert** — trengs uansett til passord-reset for
