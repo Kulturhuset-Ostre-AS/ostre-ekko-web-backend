@@ -255,19 +255,27 @@ terraform (e-post er ellers stille), EN-tekster i skjemaene, CSV-knapp i
 admin-UI (endepunktet finnes), rolleskille i Users, og Medlemskap-lenke i
 menyen (navigasjonen importeres med pass 4, se migration/MIGRATION.md).
 
-## Status (2026-07-31): M1 + M2 (mock) + M3 IMPLEMENTERT
+## Status (2026-08-03): ALT UNNTATT VIPPS I DRIFT PÅ TESTMILJØET
 
-Bygget og verifisert lokalt (dev-miljø, hele kjøpsflyten testet med curl):
-collections/global/endpoints i `migration/payload-app/src/{commerce,collections,globals}`,
-Resend-adapter (aktiveres av `RESEND_API_KEY`), frontend-ruter
-`/medlemskap` + `/medlemskap/takk` i frontend-repoet. Betaling bruker en
-**mock-provider** (Vipps har ingen sandbox uten kundeforhold) — tydelig merket
-testside, samme fulfilment-kodesti som ekte webhook, sperret når
-`PAYMENT_PROVIDER=vipps` settes. Migrasjon generert
-(`20260731_155654_membership_commerce`), kjøres i skyen ved neste deploy.
-Gjenstår før prod: Vipps-provider (når avtale + signaturrett), RESEND_API_KEY i
-terraform, seeding av membership-config, EN-oversettelse av skjematekster,
-admin-knapp for CSV (endpoint finnes).
+Hele systemet kjører i skyen (admin.ekko.no + framtid.ekko.no) og er
+e2e-verifisert der: medlemskjøp med mock-betaling, billettbutikk med signerte
+QR-billetter, felles kundekonto for medlemskap + billetter (`customers`,
+eksplisitt member↔customer-kobling med e-post-fallback), dørskanner på
+`/skann`, utskrivbare CR80-medlemskort fra admin, salgsrapporter på
+`/admin/rapporter` (per arrangement + medlemskap, presets måned/hittil i
+år/kalenderår, CSV), Apple/Google Wallet forberedt (env-gatet — venter på
+Apple Developer Program + Google Wallet-utsteder). **E-post er i drift** via
+Resend (domene `send.ekko.no`, EU-region; kvitteringer og passord-reset
+verifisert levert; nøkkel via terraform/Secret Manager). Membership-config er
+seedet (salg åpent, 300/200 kr). UI-tekstene finnes på nb + en.
+
+Betaling bruker fortsatt **mock-provider** (Vipps har ingen sandbox uten
+kundeforhold) — tydelig merket testside, samme fulfilment-kodesti som ekte
+webhook, sperret når `PAYMENT_PROVIDER=vipps` settes.
+
+Gjenstår før prod: Vipps-provider (når avtale + signaturrett foreligger),
+wallet-legitimasjon, GDPR-samtykke-avkrysning ved kjøp (venter på
+personvernerklæring), roller i Users (admin/redaktør/dør).
 
 ## Opprydding ved cutover (skjemaendringer som er gratis ved fersk re-import)
 

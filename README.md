@@ -41,7 +41,7 @@ Create the backend repository in the **Kulturhuset-Ostre-AS** organization if it
 
 ## Status & roadmap
 
-### Snapshot (2026-08-01)
+### Snapshot (2026-08-03)
 
 The Craft→Payload replacement (branch `feat/payload-cloud-deploy`, both repos)
 is feature-complete and running on test domains; Craft still serves production
@@ -50,15 +50,33 @@ until cutover:
 - **Payload CMS live** at https://admin.ekko.no (Cloud Run, permanent domain);
   test frontend at https://framtid.ekko.no (Cloudflare Pages, password-gated,
   noindex). Full content re-import verified incl. drafts/versions, Live
-  Preview, and (from 2026-08-01) the Verbb navigation menus.
+  Preview, and code-owned translated menus.
 - **Commerce implemented** (mock payments until a Vipps MobilePay agreement
   exists): season-based memberships (frontend #7 + client doc) and a ticket
   shop — ticket types on events/festivals with venue-capacity defaults,
-  customer accounts, signed QR tickets, door-scan endpoint, Apple Wallet
-  prepared. See [docs/medlemskapssalg-plan.md](docs/medlemskapssalg-plan.md).
-- **Remaining before cutover:** Vipps agreement (KYC lead time), Resend email
-  account (password resets + receipts), editor accounts/roles + comms, EN form
-  texts, final re-dump/re-import, DNS switch.
+  customer accounts (shared member/ticket account, member↔customer link),
+  signed QR tickets, door scanner at `/skann`, printable CR80 member cards,
+  sales reports at `/admin/rapporter`, Apple/Google Wallet prepared
+  (env-gated, awaiting credentials). See
+  [docs/medlemskapssalg-plan.md](docs/medlemskapssalg-plan.md).
+- **Transactional email live** via Resend (domain `send.ekko.no`, EU region):
+  membership receipts and admin password resets verified delivered.
+- **Localization done**: nb/en locales with localized rich text, plus an
+  editor-triggered machine-translation button («Oversett fra norsk (utkast)»,
+  Google Cloud Translation) that saves EN as a draft only (frontend #17).
+- **Client design wishes (Olav's Miro board) implemented 2026-08-03** — see
+  [docs/design/miro-ekkonettside/README.md](docs/design/miro-ekkonettside/README.md):
+  structured event info (doors open / start / end / age limit / practical
+  info), free-text set-times field («spilleplan»), per-venue doors-open rows
+  in festival schedules, the festival ticket page grouped into three
+  dropdowns (festival pass / day pass / single tickets) with structured
+  fields, and the archive with year sorting + fanzine image view. Editors
+  fill the new fields in admin; demo values live on framtid.
+- **Remaining before cutover:** Vipps agreement (KYC lead time), editor
+  accounts/roles + comms, final re-dump/re-import (with the fixed base64
+  export), DNS switch, `categories` → locations/organizers split (see the
+  cleanup section of the membership plan), Workers Paid plan for the heavy
+  SSR pages (Cloudflare error 1102).
 
 Snapshot of where the backend stands. Items map to git history in this repo and to issues in the sibling **frontend** repo (this repo currently has no issues of its own — backend tasks are tracked there with the **`backend`** label).
 
