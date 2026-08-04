@@ -184,7 +184,7 @@ export async function sendTickets(
     // QR: vises INLINE i tabellen via det offentlige QR-endepunktet (payloaden
     // er selv adgangsbeviset og HMAC-validert der), og ligger i tillegg VEDLAGT
     // som PNG — reserve for klienter som blokkerer eksterne bilder.
-    const { qrPayloadFor } = await import('./qr')
+    const { qrPayloadFor, qrUrlFor } = await import('./qr')
     const QRCode = (await import('qrcode')).default
     const serverURL = (payload.config.serverURL || '').replace(/\/$/, '')
     const qrImgUrl = (code: string) =>
@@ -192,7 +192,7 @@ export async function sendTickets(
     const attachments = await Promise.all(
       tickets.map(async (t, i) => ({
         filename: `billett-${i + 1}${t.typeName ? `-${String(t.typeName).replace(/[^a-zA-Z0-9æøåÆØÅ-]+/g, '_')}` : ''}.png`,
-        content: await QRCode.toBuffer(qrPayloadFor(t.code), { width: 480, margin: 2 }),
+        content: await QRCode.toBuffer(qrUrlFor(t.code), { width: 480, margin: 2 }),
       })),
     )
 

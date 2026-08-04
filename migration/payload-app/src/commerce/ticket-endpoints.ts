@@ -2,7 +2,7 @@ import type { Endpoint, PayloadRequest } from 'payload'
 import { addDataAndFileToRequest, headersWithCors } from 'payload'
 import { getProvider } from './provider'
 import { remainingFor } from './fulfil'
-import { verifyQrPayload } from './qr'
+import { verifyQrPayload, qrUrlFor, normalizeQrScan } from './qr'
 import { sendTickets } from './email'
 
 // Ticket shop endpoints (mounted under /api):
@@ -152,11 +152,13 @@ const qrImage: Endpoint = {
   path: '/commerce/tickets/qr/:payload',
   method: 'get',
   handler: async (req) => {
-    const raw = String((req.routeParams as any)?.payload ?? '').replace(/\.png$/, '')
+    const raw = normalizeQrScan(String((req.routeParams as any)?.payload ?? '').replace(/\.png$/, ''))
     const code = verifyQrPayload(raw)
     if (!code) return json(req, 404, { error: 'ukjent QR' })
     const QRCode = (await import('qrcode')).default
-    const png = await QRCode.toBuffer(raw, { width: 480, margin: 2 })
+    // QR-innholdet er URL-en til billettstatus-siden (/t/<payload>) —
+    // iPhone-kameraet åpner den, og dørskanneren normaliserer URL → payload.
+    const png = await QRCode.toBuffer(qrUrlFor(code), { width: 480, margin: 2 })
     return new Response(new Uint8Array(png), {
       status: 200,
       headers: {
@@ -164,6 +166,29 @@ const qrImage: Endpoint = {
         // Innholdet er deterministisk for payloaden — cache hardt.
         'Cache-Control': 'public, max-age=31536000, immutable',
       },
+    })
+  },
+}
+
+// Offentlig billettstatus for /t/<payload>-siden (det QR-en peker på når
+// publikum skanner den med kameraet). HMAC-validert; viser aldri mer enn det
+// innehaveren av QR-en allerede vet. Konsumerer ALDRI billetten.
+const ticketStatus: Endpoint = {
+  path: '/commerce/tickets/status/:payload',
+  method: 'get',
+  handler: async (req) => {
+    const raw = normalizeQrScan(String(req.routeParams?.payload || ''))
+    const code = verifyQrPayload(raw)
+    if (!code || code.startsWith('MEM:')) return json(req, 404, { error: 'ukjent billett' })
+    const r = await req.payload.find({ collection: 'tickets', where: { ticketCode: { equals: code } }, limit: 1, depth: 1, overrideAccess: true })
+    const t = r.docs[0] as any
+    if (!t) return json(req, 404, { error: 'ukjent billett' })
+    const ev = typeof t.event === 'object' ? t.event : null
+    return json(req, 200, {
+      status: t.status,
+      typeName: t.typeName,
+      code: t.ticketCode,
+      event: ev ? { title: ev.title, date: ev.date, doorsOpenTime: ev.doorsOpenTime, openingTime: ev.openingTime } : null,
     })
   },
 }
@@ -221,7 +246,8 @@ const emailMyTickets: Endpoint = {
 // GET = check without consuming; POST = mark used (idempotent + informative).
 const scanHandler = (consume: boolean): Endpoint['handler'] => async (req) => {
   if (!isAdmin(req)) return json(req, 403, { error: 'krever admin-innlogging' })
-  const payloadStr = decodeURIComponent(String(req.routeParams?.payload || ''))
+  // Godtar både rå payload (gamle QR-er) og URL-formen /t/<payload>.
+  const payloadStr = normalizeQrScan(String(req.routeParams?.payload || ''))
   const code = verifyQrPayload(payloadStr)
   if (!code) return json(req, 400, { valid: false, error: 'ugyldig/forfalsket QR' })
   // Medlemskort-QR (MEM:<memberId>): vis medlemsstatus for rabatt i døren.
@@ -264,7 +290,7 @@ const scanConsume: Endpoint = { path: '/commerce/scan/:payload', method: 'post',
 
 // Wallet passes (Apple/Google) live in wallet.ts — env-gated on credentials.
 
-export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, qrImage, scanCheck, scanConsume]
+export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, qrImage, ticketStatus, scanCheck, scanConsume]
 
 // ---------------------------------------------------------------------------
 // Same-account: membership status for the logged-in customer (email is the

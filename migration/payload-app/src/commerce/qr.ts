@@ -27,3 +27,18 @@ export function verifyQrPayload(payload: string): string | null {
   const code = payload.slice(0, i)
   return payload.slice(i + 1) === signTicketCode(code) ? code : null
 }
+
+/** QR-innholdet er en URL (iPhone-kameraet gjør ingenting med ren tekst):
+ * åpner billettstatus-siden /t/<payload> for publikum, mens dørskanneren
+ * plukker payloaden ut av URL-en (normalizeQrScan). */
+export function qrUrlFor(code: string): string {
+  const frontend = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '')
+  return `${frontend}/t/${qrPayloadFor(code)}`
+}
+
+/** Godtar både rå payload (gamle QR-er) og URL-formen /t/<payload>. */
+export function normalizeQrScan(text: string): string {
+  const t = decodeURIComponent(String(text || '').trim())
+  const m = /\/t\/([^/?#]+)/.exec(t)
+  return m ? m[1] : t
+}
