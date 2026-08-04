@@ -33,6 +33,15 @@ export const Orders: CollectionConfig = {
     { name: 'provider', type: 'select', required: true, options: ['mock', 'vipps', 'door'] },
     // Provider payment reference — unique: doubles as the webhook idempotency key.
     { name: 'providerRef', type: 'text', unique: true, index: true },
+    {
+      // Bokføringsforskriften § 5-1-1: salgsdokument skal ha maskinelt tildelt,
+      // fortløpende nummer. Tildeles fra receipt_number_seq ved FULLFØRT
+      // betaling (fulfil.ts) — aldri manuelt.
+      name: 'receiptNumber',
+      type: 'number',
+      index: true,
+      admin: { readOnly: true, description: 'Kvitteringsnummer — tildeles automatisk ved betaling' },
+    },
     { name: 'membershipType', type: 'select', options: ['ordinary', 'student'] },
     { name: 'season', type: 'text', admin: { description: 'F.eks. 2027-var' } },
     // Buyer snapshot at purchase time (the member doc may be updated later).

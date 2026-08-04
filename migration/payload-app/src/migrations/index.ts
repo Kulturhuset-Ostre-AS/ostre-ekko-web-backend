@@ -7,6 +7,7 @@ import * as migration_20260801_212743_member_customer_link from './20260801_2127
 import * as migration_20260802_120000_localize_richtext from './20260802_120000_localize_richtext';
 import * as migration_20260803_090000_miro_event_info from './20260803_090000_miro_event_info';
 import * as migration_20260804_150000_categories_split from './20260804_150000_categories_split';
+import * as migration_20260804_170000_receipt_numbers from './20260804_170000_receipt_numbers';
 
 export const migrations = [
   {
@@ -53,5 +54,10 @@ export const migrations = [
     up: migration_20260804_150000_categories_split.up,
     down: migration_20260804_150000_categories_split.down,
     name: '20260804_150000_categories_split'
+  },
+  {
+    up: migration_20260804_170000_receipt_numbers.up,
+    down: migration_20260804_170000_receipt_numbers.down,
+    name: '20260804_170000_receipt_numbers'
   },
 ];

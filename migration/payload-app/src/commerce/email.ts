@@ -1,5 +1,24 @@
 import type { Payload } from 'payload'
 
+// Selger på salgsdokumentene (bokføringsforskriften § 5-1-1: selgers navn og
+// organisasjonsnummer). Miljøstyrt: billetter selges av Kulturhuset Østre AS,
+// medlemskap av Foreningen Ekko — begge slått opp i Enhetsregisteret
+// 2026-08-04; bekreft fordelingen med regnskapsfører.
+const ticketSeller = () => ({
+  name: process.env.SELLER_NAME || 'Kulturhuset Østre AS',
+  orgnr: process.env.SELLER_ORGNR || '913 106 695',
+})
+const membershipSeller = () => ({
+  name: process.env.MEMBERSHIP_SELLER_NAME || 'Foreningen Ekko',
+  orgnr: process.env.MEMBERSHIP_SELLER_ORGNR || '987 215 933',
+})
+const sellerFooter = (s: { name: string; orgnr: string }) => `
+  <p style="font-size: 12px; color: #777; margin-top: 28px; border-top: 1px solid #ddd; padding-top: 12px;">
+    ${s.name} — org.nr. ${s.orgnr}<br/>
+    Østre — hus for lydkunst og elektronisk musikk<br/>
+    Østre Skostredet 3, 5017 Bergen · post@oestre.no
+  </p>`
+
 const TYPE_LABELS: Record<string, string> = {
   ordinary: 'Ordinært medlemskap',
   student: 'Studentmedlemskap',
@@ -19,9 +38,13 @@ export async function sendReceipt(
     seasonLabel: string
     validUntil: Date
     amountOre: number
+    receiptNumber?: number | null
+    orderId?: number | string
+    createdAt?: string | null
+    provider?: string | null
   },
 ): Promise<void> {
-  const { to, name, memberId, membershipType, seasonLabel, validUntil, amountOre } = args
+  const { to, name, memberId, membershipType, seasonLabel, validUntil, amountOre, receiptNumber, orderId, createdAt, provider } = args
   const kr = (amountOre / 100).toFixed(0)
   const untilStr = validUntil.toLocaleDateString('nb-NO', { day: 'numeric', month: 'long', year: 'numeric' })
 
@@ -38,11 +61,17 @@ export async function sendReceipt(
             <tr><td><strong>Type</strong></td><td>${TYPE_LABELS[membershipType] ?? membershipType}</td></tr>
             <tr><td><strong>Gyldig til</strong></td><td>${untilStr} (${escapeHtml(seasonLabel)})</td></tr>
             <tr><td><strong>Beløp</strong></td><td>${kr} kr</td></tr>
+            <tr><td><strong>Herav mva.</strong></td><td>0 kr (medlemskontingent, unntatt mva.)</td></tr>
+            ${receiptNumber ? `<tr><td><strong>Kvitteringsnr.</strong></td><td>${receiptNumber}</td></tr>` : ''}
+            ${orderId ? `<tr><td><strong>Ordrenr.</strong></td><td>${escapeHtml(String(orderId))}</td></tr>` : ''}
+            ${createdAt ? `<tr><td><strong>Kjøpsdato</strong></td><td>${new Intl.DateTimeFormat('nb-NO', { timeZone: 'Europe/Oslo', dateStyle: 'long', timeStyle: 'short' }).format(new Date(createdAt))}</td></tr>` : ''}
+            ${provider ? `<tr><td><strong>Betaling</strong></td><td>${escapeHtml(provider === 'mock' ? 'Testbetaling (mock)' : provider)}</td></tr>` : ''}
           </table>
           <p>Hent medlemsbeviset ditt på Østre ved ditt neste besøk — vis denne
           e-posten i døren. Medlemskapet gir rabatt på billetter til konserter og
           klubbkvelder, rabatt på Ekkofestivalen og utvalgte tilbud i baren.</p>
           <p>Vi sees!<br>Ekko / Østre</p>
+          ${sellerFooter(membershipSeller())}
         </div>
       `,
     })
@@ -79,6 +108,7 @@ export async function sendTickets(
     tickets: { code: string; typeName: string | null | undefined }[]
     order?: {
       id: number | string
+      receiptNumber?: number | null
       createdAt?: string | null
       items?: { name?: string | null; quantity?: number | null; unitPriceOre?: number | null }[] | null
       amountOre?: number | null
@@ -127,6 +157,7 @@ export async function sendTickets(
     ? `
       <h2 style="font-size: 16px; margin: 28px 0 8px; border-top: 2px solid #111; padding-top: 20px;">Kvittering</h2>
       <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        ${order.receiptNumber ? `<tr><td style="${label}">Kvitteringsnr.</td><td style="${value}"><strong>${order.receiptNumber}</strong></td></tr>` : ''}
         <tr><td style="${label}">Ordrenummer</td><td style="${value}">${escapeHtml(String(order.id))}</td></tr>
         ${order.createdAt ? `<tr><td style="${label}">Kjøpsdato</td><td style="${value}; text-transform: capitalize;">${escapeHtml(longDate(order.createdAt))} kl. ${hhmm(order.createdAt)}</td></tr>` : ''}
         <tr><td style="${label}">Kjøper</td><td style="${value}">${escapeHtml(name || to)} &lt;${escapeHtml(to)}&gt;</td></tr>
@@ -143,13 +174,21 @@ export async function sendTickets(
           </tr>`).join('')}
         <tr><td colspan="3" style="padding: 10px 12px; text-align: right; font-weight: bold;">Totalt</td>
             <td style="padding: 10px 12px; text-align: right; font-weight: bold; border-top: 2px solid #111;">${kr(order.amountOre)}</td></tr>
-      </table>`
+        <tr><td colspan="3" style="padding: 2px 12px; text-align: right; color: #555; font-size: 13px;">Herav mva.</td>
+            <td style="padding: 2px 12px; text-align: right; color: #555; font-size: 13px;">0 kr</td></tr>
+      </table>
+      <p style="font-size: 12px; color: #777; margin: 6px 0 0;">Adgang til kulturarrangement er unntatt merverdiavgift (mval. § 3-7).</p>`
     : ''
 
   try {
-    // QR-vedlegg: samme signerte payload som Min side/skanneren bruker.
+    // QR: vises INLINE i tabellen via det offentlige QR-endepunktet (payloaden
+    // er selv adgangsbeviset og HMAC-validert der), og ligger i tillegg VEDLAGT
+    // som PNG — reserve for klienter som blokkerer eksterne bilder.
     const { qrPayloadFor } = await import('./qr')
     const QRCode = (await import('qrcode')).default
+    const serverURL = (payload.config.serverURL || '').replace(/\/$/, '')
+    const qrImgUrl = (code: string) =>
+      `${serverURL}/api/commerce/tickets/qr/${encodeURIComponent(qrPayloadFor(code))}.png`
     const attachments = await Promise.all(
       tickets.map(async (t, i) => ({
         filename: `billett-${i + 1}${t.typeName ? `-${String(t.typeName).replace(/[^a-zA-Z0-9æøåÆØÅ-]+/g, '_')}` : ''}.png`,
@@ -170,23 +209,25 @@ export async function sendTickets(
 
           <h2 style="font-size: 16px; margin: 20px 0 8px;">Billetter</h2>
           <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-            <tr><th style="${th}">Type</th><th style="${th}">Kode</th><th style="${th}">QR</th></tr>
+            <tr><th style="${th}">Billett</th><th style="${th}; text-align: center;">QR — vis i døren</th></tr>
             ${tickets.map((t, i) => `
               <tr>
-                <td style="${td}">${escapeHtml(t.typeName || 'Billett')}</td>
-                <td style="${td}"><code style="font-size: 13px;">${escapeHtml(t.code)}</code></td>
-                <td style="${td}">vedlegg <strong>billett-${i + 1}</strong></td>
+                <td style="${td}; vertical-align: middle;">
+                  <strong>${escapeHtml(t.typeName || 'Billett')}</strong><br/>
+                  <code style="font-size: 12px; color: #555;">${escapeHtml(t.code)}</code>
+                </td>
+                <td style="${td}; text-align: center;">
+                  <img src="${qrImgUrl(t.code)}" width="140" height="140" alt="QR for billett ${i + 1}"
+                       style="display: inline-block; width: 140px; height: 140px; border: 0;"/>
+                </td>
               </tr>`).join('')}
           </table>
-          <p style="font-size: 14px; background: #f4f4f4; padding: 10px 12px; border-radius: 4px;">
-            <strong>QR-kodene ligger vedlagt</strong> — vis dem i døren.
-            Du finner dem også på <a href="${frontend}/konto" style="color: #111;">Min side</a>.
+          <p style="font-size: 14px; background: #f4f4f4; color: #111111; padding: 10px 12px; border-radius: 4px;">
+            Ser du ikke QR-kodene? De ligger også som <strong>vedlegg</strong>,
+            og på <a href="${frontend}/konto" style="color: #111;">Min side</a>.
           </p>
           ${receiptSection}
-          <p style="font-size: 12px; color: #777; margin-top: 28px; border-top: 1px solid #ddd; padding-top: 12px;">
-            Østre — hus for lydkunst og elektronisk musikk<br/>
-            Østre Skostredet 3, 5017 Bergen · post@oestre.no
-          </p>
+          ${sellerFooter(ticketSeller())}
         </div>
       `,
     })

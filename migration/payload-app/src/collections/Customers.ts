@@ -11,6 +11,27 @@ export const Customers: CollectionConfig = {
     tokenExpiration: 60 * 60 * 24 * 14, // 14 days
     maxLoginAttempts: 10,
     lockTime: 10 * 60 * 1000,
+    // Glemt passord: lenken må gå til FRONTENDEN (/konto/nytt-passord), ikke
+    // Payload-admin — kundene har ingen admin-tilgang. Frontend-ruten poster
+    // token + nytt passord til /api/customers/reset-password.
+    forgotPassword: {
+      generateEmailSubject: () => 'Nullstill passordet ditt – Østre / EKKO',
+      generateEmailHTML: (args) => {
+        const frontend = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '')
+        const url = `${frontend}/konto/nytt-passord?token=${args?.token ?? ''}`
+        return `
+          <div style="background: #ffffff; padding: 24px; font-family: Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #111111;">
+            <p style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid #111; padding-bottom: 10px;">Østre&nbsp;/&nbsp;EKKO</p>
+            <h1 style="font-size: 22px; margin: 18px 0 8px;">Nullstill passordet ditt</h1>
+            <p style="font-size: 15px;">Noen (forhåpentligvis du) ba om å nullstille passordet for kontoen din.
+            Lenken er gyldig i én time.</p>
+            <p style="margin: 24px 0;">
+              <a href="${url}" style="background: #111; color: #fff; padding: 12px 24px; text-decoration: none; border-radius: 4px; font-size: 15px;">Velg nytt passord</a>
+            </p>
+            <p style="font-size: 13px; color: #777;">Ba du ikke om dette, kan du se bort fra e-posten — passordet er uendret.</p>
+          </div>`
+      },
+    },
   },
   admin: {
     group: 'Medlemskap',

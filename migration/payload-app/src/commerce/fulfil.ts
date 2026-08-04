@@ -17,6 +17,21 @@ export async function nextMemberId(payload: Payload, year: number): Promise<stri
   return `${prefix}${String(totalDocs + 1).padStart(4, '0')}`
 }
 
+/** Fortløpende kvitteringsnummer fra receipt_number_seq — tildeles kun ved
+ * fullført betaling (bokføringsforskriften § 5-1-1). */
+async function assignReceiptNumber(payload: Payload, orderId: number | string): Promise<number | null> {
+  try {
+    const res: any = await (payload.db as any).drizzle.execute(`SELECT nextval('receipt_number_seq') AS n`)
+    const n = Number(res?.rows?.[0]?.n ?? res?.[0]?.n)
+    if (!Number.isFinite(n)) return null
+    await payload.update({ collection: 'orders', id: orderId, data: { receiptNumber: n } })
+    return n
+  } catch (err) {
+    payload.logger.error({ err, orderId }, 'receipt number assignment failed')
+    return null
+  }
+}
+
 export async function completePayment(
   payload: Payload,
   orderId: number | string,
@@ -75,6 +90,7 @@ export async function completePayment(
     },
   })
 
+  const receiptNumber = await assignReceiptNumber(payload, order.id)
   await sendReceipt(payload, {
     to: email,
     name: String(order.buyerName),
@@ -83,6 +99,10 @@ export async function completePayment(
     seasonLabel: season.label,
     validUntil: season.validUntil,
     amountOre: Number(order.amountOre),
+    receiptNumber,
+    orderId: order.id,
+    createdAt: (order as any).createdAt ?? null,
+    provider: (order as any).provider ?? null,
   })
 
   return { ok: true }
@@ -157,6 +177,7 @@ async function fulfilTickets(
     },
   })
 
+  const receiptNumber = await assignReceiptNumber(payload, order.id)
   const loc0 = Array.isArray((eventDoc as any).location) ? (eventDoc as any).location[0] : null
   const venue = loc0 && typeof loc0 === 'object' ? [loc0.venue || loc0.title, loc0.room].filter(Boolean).join(', ') : null
   await sendTickets(payload, {
@@ -171,6 +192,7 @@ async function fulfilTickets(
     // Kvitteringsdelen: ordrenr, kjøpstidspunkt, varelinjer, sum, betalingsmåte.
     order: {
       id: order.id,
+      receiptNumber,
       createdAt: (order as any).createdAt ?? null,
       items: (order.items ?? []).map((l: any) => ({ name: l.name, quantity: l.quantity, unitPriceOre: l.unitPriceOre })),
       amountOre: (order as any).amountOre ?? null,

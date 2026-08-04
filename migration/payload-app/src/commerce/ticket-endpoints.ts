@@ -144,6 +144,30 @@ const myTickets: Endpoint = {
   },
 }
 
+// Offentlig QR-PNG for en billett — brukes som <img> i billett-e-posten
+// (eksterne bilder rendrer inline i tabellen; vedleggene er reserve). Den
+// signerte payloaden ER adgangsbeviset (samme innhold som vedlegget), og
+// HMAC-valideringen avviser alt som ikke er utstedt av oss.
+const qrImage: Endpoint = {
+  path: '/commerce/tickets/qr/:payload',
+  method: 'get',
+  handler: async (req) => {
+    const raw = String((req.routeParams as any)?.payload ?? '').replace(/\.png$/, '')
+    const code = verifyQrPayload(raw)
+    if (!code) return json(req, 404, { error: 'ukjent QR' })
+    const QRCode = (await import('qrcode')).default
+    const png = await QRCode.toBuffer(raw, { width: 480, margin: 2 })
+    return new Response(new Uint8Array(png), {
+      status: 200,
+      headers: {
+        'Content-Type': 'image/png',
+        // Innholdet er deterministisk for payloaden — cache hardt.
+        'Cache-Control': 'public, max-age=31536000, immutable',
+      },
+    })
+  },
+}
+
 const emailMyTickets: Endpoint = {
   path: '/commerce/my/tickets/email',
   method: 'post',
@@ -240,7 +264,7 @@ const scanConsume: Endpoint = { path: '/commerce/scan/:payload', method: 'post',
 
 // Wallet passes (Apple/Google) live in wallet.ts — env-gated on credentials.
 
-export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, scanCheck, scanConsume]
+export const ticketEndpoints: Endpoint[] = [availability, checkout, myTickets, emailMyTickets, qrImage, scanCheck, scanConsume]
 
 // ---------------------------------------------------------------------------
 // Same-account: membership status for the logged-in customer (email is the
