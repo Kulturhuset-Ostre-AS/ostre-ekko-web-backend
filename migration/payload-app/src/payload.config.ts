@@ -7,7 +7,8 @@ import { gcsStorage } from '@payloadcms/storage-gcs'
 
 import { resendAdapter } from '@payloadcms/email-resend'
 import { Media } from './collections/Media'
-import { Categories } from './collections/Categories'
+import { Locations } from './collections/Locations'
+import { Organizers } from './collections/Organizers'
 import { Tags } from './collections/Tags'
 import { Performance } from './collections/Performance'
 import { Artists } from './collections/Artists'
@@ -73,6 +74,9 @@ export default buildConfig({
       },
       // Personal-lenker i navigasjonen: rapporter, skanner, medlemskort.
       afterNavLinks: ['/components/StaffNavLinks'],
+      // Stor «Østre / EKKO»-overskrift over innloggingsskjemaet, så brukeren
+      // ser umiddelbart hvor de er (Payload-logoen alene sier ingenting).
+      beforeLogin: ['/components/LoginTitle'],
     },
   },
   editor: lexicalEditor(),
@@ -90,7 +94,8 @@ export default buildConfig({
     Arena,
     Artists,
     Performance,
-    Categories,
+    Locations,
+    Organizers,
     Tags,
     Media,
     NavigationNodes,

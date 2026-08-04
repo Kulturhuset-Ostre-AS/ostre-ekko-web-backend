@@ -14,7 +14,8 @@ const json = (req: PayloadRequest, status: number, body: unknown) =>
 
 // Oversettbare felter per collection: [rene tekstfelter, lexical-riktekstfelter]
 const FIELDS: Record<string, { plain: string[]; lexical: string[] }> = {
-  events: { plain: ['title'], lexical: ['intro', 'description', 'ticketDescription'] },
+  // spilleplan holdes utenfor MT — den er tider/artistnavn, ikke prosa.
+  events: { plain: ['title', 'ageLimit'], lexical: ['intro', 'description', 'ticketDescription', 'practicalInfo'] },
   news: { plain: ['title'], lexical: ['intro', 'newsContent'] },
   artists: { plain: ['title', 'shortTitle'], lexical: ['bio'] },
   arena: { plain: ['title', 'projectTitle'], lexical: ['pageContent'] },

@@ -7,7 +7,10 @@ import type { CollectionConfig } from 'payload'
 export const NavigationNodes: CollectionConfig = {
   slug: 'navigationNodes',
   access: { read: () => true },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'nav', 'order'], group: 'Navigation' },
+  // AVVIKLET 2026-08-04: menyene er kodeeide i frontenden (navigationFallback +
+  // uiText) og collectionen leses ikke lenger — skjult for redaktørene, slettes
+  // helt ved cutover (importpass 4 er sperret i sql-import-navigation.mjs).
+  admin: { useAsTitle: 'title', defaultColumns: ['title', 'nav', 'order'], group: 'Navigation', hidden: true },
   defaultSort: 'order',
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },

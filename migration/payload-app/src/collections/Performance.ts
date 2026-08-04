@@ -21,8 +21,7 @@ export const Performance: CollectionConfig = {
     {
       name: 'location',
       type: 'relationship',
-      relationTo: 'categories',
-      filterOptions: { group: { equals: 'locations' } },
+      relationTo: 'locations',
       hasMany: true,
     },
     { name: 'artist', type: 'relationship', relationTo: 'artists', hasMany: true },
