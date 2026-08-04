@@ -39,6 +39,10 @@ export const Customers: CollectionConfig = {
     defaultColumns: ['email', 'name', 'createdAt'],
     description: 'Kundekontoer (billett-/medlemskjøp på nettsiden). Ikke admin-brukere.',
   },
+  // Engangskode-flyt for glemt passord (commerce/auth-otp.ts): koden hashes,
+  // og under panseret gjenbrukes Payloads reset-token. Feltene er skjult og
+  // utilgjengelige utenfra — kun local API med overrideAccess rører dem.
+  // (Feltdefinisjonene ligger i fields-listen nederst.)
   access: {
     create: () => true, // open registration
     read: ({ req }) => {
@@ -53,5 +57,12 @@ export const Customers: CollectionConfig = {
     },
     delete: ({ req }) => Boolean(req.user && req.user.collection !== 'customers'),
   },
-  fields: [{ name: 'name', type: 'text' }],
+  fields: [
+    { name: 'name', type: 'text' },
+    // OTP-feltene (se kommentar over): aldri lesbare/skrivbare via API.
+    { name: 'otpCodeHash', type: 'text', hidden: true, access: { read: () => false, update: () => false } },
+    { name: 'otpResetToken', type: 'text', hidden: true, access: { read: () => false, update: () => false } },
+    { name: 'otpExpiresAt', type: 'date', hidden: true, access: { read: () => false, update: () => false } },
+    { name: 'otpAttempts', type: 'number', hidden: true, access: { read: () => false, update: () => false } },
+  ],
 }

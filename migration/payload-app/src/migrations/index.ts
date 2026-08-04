@@ -8,6 +8,7 @@ import * as migration_20260802_120000_localize_richtext from './20260802_120000_
 import * as migration_20260803_090000_miro_event_info from './20260803_090000_miro_event_info';
 import * as migration_20260804_150000_categories_split from './20260804_150000_categories_split';
 import * as migration_20260804_170000_receipt_numbers from './20260804_170000_receipt_numbers';
+import * as migration_20260804_190000_customer_otp from './20260804_190000_customer_otp';
 
 export const migrations = [
   {
@@ -59,5 +60,10 @@ export const migrations = [
     up: migration_20260804_170000_receipt_numbers.up,
     down: migration_20260804_170000_receipt_numbers.down,
     name: '20260804_170000_receipt_numbers'
+  },
+  {
+    up: migration_20260804_190000_customer_otp.up,
+    down: migration_20260804_190000_customer_otp.down,
+    name: '20260804_190000_customer_otp'
   },
 ];
