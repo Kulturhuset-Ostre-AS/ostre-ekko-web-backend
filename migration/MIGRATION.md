@@ -11,7 +11,9 @@ tables directly and does NOT use Craft's GraphQL.
 ## What you get
 
 The full dataset migrated with real slugs/titles: events, festivals (with program /
-tickets / sections), news, artists, performances, categories, and ~2500 asset files —
+tickets / sections), news, artists, performances, locations + organizers (Craft's
+two category groups land in each their own collection since the 2026-08-04 split —
+the export files are still named `categories.*.json`), and ~2500 asset files —
 relations resolved, rich text converted to Payload lexical (formatting preserved).
 
 ## Prerequisites
@@ -95,18 +97,18 @@ entry). Craft *provisional* drafts (per-user autosave buffers) are skipped.
 Throughout all passes, Craft's `enabled` flag maps to `_status`
 (`published`/`draft`), so Craft-disabled entries import as drafts.
 
-### 5b. Import navigation (pass 4) — LEGACY, no longer needed
+### 5b. Import navigation (pass 4) — AVVIKLET, sperret
 
-```bash
-node scripts/sql-import-navigation.mjs   # optional; frontend ignores the data
-```
 Verbb Navigation → `navigationNodes`. **As of 2026-08-01 the frontend no longer
 reads this collection** — menus are code-owned and translated
 (app/utils/navigationFallback.ts + uiText in the frontend repo), because the
 menu items mirror code-defined sections/routes and CMS-editability only caused
-drift (stale festival links, missing EN titles). The pass and collection are
-kept for reference and can be removed in a cleanup; running the pass is
-harmless but pointless.
+drift (stale festival links, missing EN titles). 2026-08-04 the imported data
+was additionally found to be actively WRONG (duplicate «English» entries, the
+intro section mislabeled «English» so its body never matched), so the script
+now **refuses to run** unless `FORCE_NAV_IMPORT=1` is set. Do NOT include it in
+the cutover pipeline. The `navigationNodes` collection is deleted at cutover
+(see the cleanup list in docs/medlemskapssalg-plan.md).
 
 ### 5c. Import globals/singles (pass 5)
 
@@ -143,7 +145,7 @@ node scripts/sql-reset.mjs          # wipe content, keep media + asset-map
 node scripts/sql-import.mjs         # pass 1
 node scripts/sql-import-relations.mjs   # pass 2
 node scripts/sql-import-drafts.mjs  # pass 3 (drafts — always last)
-node scripts/sql-import-navigation.mjs  # pass 4 (nav — independent, idempotent)
+# pass 4 (nav) er AVVIKLET og sperret — se 5b; skal IKKE kjøres
 node scripts/sql-verify.mjs
 # (add --with-media to sql-reset + re-run sql-transfer-assets.mjs to also redo media)
 ```

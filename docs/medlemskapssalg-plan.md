@@ -279,13 +279,18 @@ personvernerklæring), roller i Users (admin/redaktør/dør).
 
 ## Opprydding ved cutover (skjemaendringer som er gratis ved fersk re-import)
 
-- **Splitt `categories` i `locations` og `organizers`** — delt liste er
-  Craft-arv; steder har egne felter (venue/room/capacity) og driftsbetydning
-  for billettkapasitet. Endres i skjema + importpass FØR cutover-importen, så
-  fyller den ferske importen to rene collections uten datamigrering. Husk:
-  events-relasjonene og frontendens LocationFields-fragment følger med.
-- Vurder samtidig: fjerne `navigationNodes`-collectionen (legacy, frontenden
-  leser den ikke lenger).
+- ~~Splitt `categories` i `locations` og `organizers`~~ — **GJORT 2026-08-04**
+  (fremskyndet fra cutover på brukerens ønske): egne collections `locations`
+  (venue/rom/kapasitet) og `organizers`, migrasjon
+  `20260804_150000_categories_split` (id-ene bevart så relasjonene overlevde),
+  importpassene/verify/reset omskrevet til de nye collections, frontendens
+  LocationFields-fragment peker på `Location`. `categories` er slettet.
+- **Fjern `navigationNodes`-collectionen** (besluttet 2026-08-04): frontenden
+  leser den ikke lenger (spørringen fjernet, kodeeide menyer overalt),
+  importpass 4 er sperret (`FORCE_NAV_IMPORT=1` kreves), og collectionen er
+  skjult i admin. Ved cutover: slett collectionen fra payload.config +
+  migrasjon som dropper tabellene. De importerte nodene hadde aktive feil
+  (duplisert «English», intro-seksjon feilmerket «English»).
 
 ## 11. Avklaringer med Olav (lukkes i M0)
 
