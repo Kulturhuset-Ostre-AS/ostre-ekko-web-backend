@@ -74,22 +74,29 @@ async function main() {
   const assetMap = exists('asset-map.json') ? read('asset-map.json') : {} // craftAssetId -> payloadMediaId
   if (!Object.keys(assetMap).length) console.warn('⚠ asset-map.json empty — run 04-transfer-assets first (upload fields will be empty).')
 
-  // ---------- categories ----------
-  if (!only || only === 'categories') {
-    idMap.categories ||= {}
+  // ---------- locations + organizers (splittet fra Craft-kategoriene) ----------
+  // Craft-gruppene locationsCategory/organizersCategory går i hver sin
+  // collection (splitten 2026-08-04) — `categories` finnes ikke lenger.
+  if (!only || only === 'categories' || only === 'locations' || only === 'organizers') {
+    idMap.locations ||= {}
+    idMap.organizers ||= {}
     for (const { site, locale } of LOCALES) {
       if (!exists(`categories.${site}.json`)) continue
       for (const cat of read(`categories.${site}.json`)) {
-        const data = {
-          craftId: Number(cat.id), title: cat.title || '(untitled)', slug: cat.slug || `cat-${cat.id}`,
-          group: cat.group === 'organizersCategory' ? 'organizers' : 'locations',
-          fullTitle: cat.fullTitle || undefined, venue: cat.venue || undefined, room: cat.room || undefined,
-        }
-        await upsert('categories', cat.id, data, locale, idMap)
+        const isOrganizer = cat.group === 'organizersCategory'
+        if (only === 'locations' && isOrganizer) continue
+        if (only === 'organizers' && !isOrganizer) continue
+        const data = isOrganizer
+          ? { craftId: Number(cat.id), title: cat.title || '(untitled)', slug: cat.slug || `cat-${cat.id}` }
+          : {
+              craftId: Number(cat.id), title: cat.title || '(untitled)', slug: cat.slug || `cat-${cat.id}`,
+              fullTitle: cat.fullTitle || undefined, venue: cat.venue || undefined, room: cat.room || undefined,
+            }
+        await upsert(isOrganizer ? 'organizers' : 'locations', cat.id, data, locale, idMap)
       }
     }
     save(idMap)
-    console.log(`✓ categories: ${Object.keys(idMap.categories).length}`)
+    console.log(`✓ locations: ${Object.keys(idMap.locations).length}, organizers: ${Object.keys(idMap.organizers).length}`)
   }
 
   // ---------- content collections (pass 1: scalars) ----------

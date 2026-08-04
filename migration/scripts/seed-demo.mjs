@@ -79,7 +79,7 @@ async function main() {
   console.log('✓ logged in')
 
   // Clean previous demo content (order: dependents first).
-  for (const c of ['events', 'news', 'performance', 'artists', 'categories', 'media']) await wipe(token, c)
+  for (const c of ['events', 'news', 'performance', 'artists', 'locations', 'organizers', 'media']) await wipe(token, c)
   console.log('✓ wiped previous demo content')
 
   // Real production images (downloaded from api.ekko.no into migration/scratch-img).
@@ -96,10 +96,10 @@ async function main() {
   ])
   console.log('✓ uploaded 7 real production images')
 
-  const loc = await api('/categories', { method: 'POST', body: JSON.stringify({ title: 'Røkeriet', slug: 'rokeriet', group: 'locations', fullTitle: 'USF Røkeriet', venue: 'USF Verftet', room: 'Røkeriet' }) }, token)
-  const loc2 = await api('/categories', { method: 'POST', body: JSON.stringify({ title: 'Studio', slug: 'studio-usf', group: 'locations', fullTitle: 'USF Studio', venue: 'USF Verftet', room: 'Studio' }) }, token)
-  const org = await api('/categories', { method: 'POST', body: JSON.stringify({ title: 'EKKO', slug: 'ekko-org', group: 'organizers' }) }, token)
-  console.log('✓ categories')
+  const loc = await api('/locations', { method: 'POST', body: JSON.stringify({ title: 'Røkeriet', slug: 'rokeriet', fullTitle: 'USF Røkeriet', venue: 'USF Verftet', room: 'Røkeriet' }) }, token)
+  const loc2 = await api('/locations', { method: 'POST', body: JSON.stringify({ title: 'Studio', slug: 'studio-usf', fullTitle: 'USF Studio', venue: 'USF Verftet', room: 'Studio' }) }, token)
+  const org = await api('/organizers', { method: 'POST', body: JSON.stringify({ title: 'EKKO', slug: 'ekko-org' }) }, token)
+  console.log('✓ locations + organizers')
 
   // Artists — each gets a distinct real production photo.
   const artistDefs = [

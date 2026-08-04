@@ -46,7 +46,7 @@ for (const section of ['events', 'news', 'arena', 'artists', 'performance']) {
 }
 
 // Which Payload collection holds a given craftId (search content collections).
-const CONTENT_COLLECTIONS = ['events', 'news', 'arena', 'artists', 'performance', 'categories']
+const CONTENT_COLLECTIONS = ['events', 'news', 'arena', 'artists', 'performance', 'locations', 'organizers']
 function findPayloadId(craftId) {
   for (const col of CONTENT_COLLECTIONS) {
     const id = idMap[col]?.[craftId]

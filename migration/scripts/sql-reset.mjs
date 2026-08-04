@@ -1,6 +1,6 @@
 // Reset migrated CONTENT so the import can be re-run cleanly, WITHOUT re-transferring
 // assets. Truncates the content collection tables (events/news/arena/artists/
-// performance/categories) and clears the content half of data/sql/id-map.json.
+// performance/locations/organizers) and clears the content half of data/sql/id-map.json.
 //
 // KEEPS: media (+ its files on the volume), users, and data/sql/asset-map.json — so a
 // re-import reuses the already-uploaded assets. To also wipe media, pass --with-media.
@@ -17,7 +17,7 @@ const SQL = path.resolve(__dirname, '..', 'data', 'sql')
 const COMPOSE = path.resolve(__dirname, '..', 'docker', 'docker-compose.payload.yml')
 const withMedia = process.argv.includes('--with-media')
 
-const CONTENT_TABLES = ['events', 'news', 'arena', 'artists', 'performance', 'categories']
+const CONTENT_TABLES = ['events', 'news', 'arena', 'artists', 'performance', 'locations', 'organizers']
 const CONTENT_IDMAP_KEYS = [...CONTENT_TABLES]
 const tables = withMedia ? [...CONTENT_TABLES, 'media'] : CONTENT_TABLES
 

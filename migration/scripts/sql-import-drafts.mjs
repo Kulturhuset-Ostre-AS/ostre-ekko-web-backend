@@ -32,7 +32,7 @@ const assetMap = exists('asset-map.json') ? read('asset-map.json') : {}
 const relations = read('_relations.json') // sourceId -> field -> [targetId]
 const matrix = read('_matrix.json') // field -> ownerId -> siteId -> [blocks]
 
-const CONTENT_COLLECTIONS = ['events', 'news', 'arena', 'artists', 'performance', 'categories']
+const CONTENT_COLLECTIONS = ['events', 'news', 'arena', 'artists', 'performance', 'locations', 'organizers']
 function findPayloadId(craftId) {
   for (const col of CONTENT_COLLECTIONS) {
     const id = idMap[col]?.[craftId]

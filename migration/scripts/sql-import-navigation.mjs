@@ -25,6 +25,19 @@ import path from 'node:path'
 import { execFileSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
+// SPERRE (2026-08-04): Frontenden leser ikke navigationNodes lenger (kodeeide
+// menyer), og de importerte nodene hadde aktive datafeil (duplisert «English»,
+// intro-seksjon feilmerket). Collectionen slettes ved cutover. Dette passet må
+// derfor IKKE kjøres som del av pipelinen — det gjeninnfører død/feil data.
+if (process.env.FORCE_NAV_IMPORT !== '1') {
+  console.error(
+    'sql-import-navigation.mjs er AVVIKLET: frontenden leser ikke navigationNodes ' +
+      '(kodeeide menyer siden 2026-08-01). Kjør med FORCE_NAV_IMPORT=1 hvis du ' +
+      'absolutt må gjenimportere for arkeologi.',
+  )
+  process.exit(1)
+}
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 const COMPOSE = path.join(ROOT, 'docker', 'docker-compose.craft3.yml')

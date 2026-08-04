@@ -56,10 +56,14 @@ async function main() {
     console.log(`${collection.padEnd(14)} ${String(want).padStart(6)} ${String(got).padStart(8)}  ${flag}`)
   }
 
-  // categories + media
-  const catWant = exists('categories.nb.json') ? read('categories.nb.json').length : 0
-  const catGot = (await api('/categories?limit=0&depth=0')).totalDocs
-  console.log(`${'categories'.padEnd(14)} ${String(catWant).padStart(6)} ${String(catGot).padStart(8)}`)
+  // locations/organizers (splittet fra Craft-kategoriene) + media
+  const catRows = exists('categories.nb.json') ? read('categories.nb.json') : []
+  const locWant = catRows.filter((c) => c.group !== 'organizersCategory').length
+  const orgWant = catRows.filter((c) => c.group === 'organizersCategory').length
+  const locGot = (await api('/locations?limit=0&depth=0')).totalDocs
+  const orgGot = (await api('/organizers?limit=0&depth=0')).totalDocs
+  console.log(`${'locations'.padEnd(14)} ${String(locWant).padStart(6)} ${String(locGot).padStart(8)}  ${locGot === locWant ? '✓' : '⚠'}`)
+  console.log(`${'organizers'.padEnd(14)} ${String(orgWant).padStart(6)} ${String(orgGot).padStart(8)}  ${orgGot === orgWant ? '✓' : '⚠'}`)
   const assetWant = exists('assets.json') ? read('assets.json').length : 0
   const mediaGot = (await api('/media?limit=0&depth=0')).totalDocs
   console.log(`${'media'.padEnd(14)} ${String(assetWant).padStart(6)} ${String(mediaGot).padStart(8)}`)
