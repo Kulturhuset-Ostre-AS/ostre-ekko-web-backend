@@ -160,6 +160,9 @@ async function fulfilTickets(
     to: String(order.buyerEmail),
     name: String(order.buyerName || ''),
     eventTitle: String(eventDoc.title),
+    eventDate: (eventDoc as any).date ?? null,
+    doorsOpenTime: (eventDoc as any).doorsOpenTime ?? null,
+    startTime: (eventDoc as any).openingTime ?? null,
     tickets: issued,
   })
 

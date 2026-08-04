@@ -22,9 +22,9 @@ const isAdmin = (req: PayloadRequest) => Boolean(req.user && req.user.collection
 async function findEvent(req: PayloadRequest, ref: string) {
   const byId = Number(ref)
   if (Number.isFinite(byId) && String(byId) === ref) {
-    return req.payload.findByID({ collection: 'events', id: byId, depth: 0 }).catch(() => null)
+    return req.payload.findByID({ collection: 'events', id: byId, depth: 0, fallbackLocale: 'en' }).catch(() => null)
   }
-  const r = await req.payload.find({ collection: 'events', where: { slug: { equals: ref } }, limit: 1, depth: 0 })
+  const r = await req.payload.find({ collection: 'events', where: { slug: { equals: ref } }, limit: 1, depth: 0, fallbackLocale: 'en' })
   return r.docs[0] || null
 }
 
@@ -71,7 +71,8 @@ const checkout: Endpoint = {
     const items = Array.isArray(d.items) ? d.items.filter((i) => i && i.typeId && Number(i.quantity) > 0) : []
     if (!d.eventId || items.length === 0) return json(req, 400, { error: 'eventId og items kreves' })
 
-    const event = await req.payload.findByID({ collection: 'events', id: d.eventId, depth: 0 }).catch(() => null)
+    // fallbackLocale en: billettnavn skrevet kun i EN-visning skal ikke bli null i snapshotet (jf. ordre 6).
+    const event = await req.payload.findByID({ collection: 'events', id: d.eventId, depth: 0, fallbackLocale: 'en' }).catch(() => null)
     if (!event) return json(req, 404, { error: 'event not found' })
     // TicketCo-lenken overstyrer internt salg — håndheves server-side.
     if (event.ticketLink) return json(req, 409, { error: 'Arrangementet selges via ekstern billettleverandør' })
@@ -155,17 +156,38 @@ const emailMyTickets: Endpoint = {
       limit: 200,
     })
     if (!r.docs.length) return json(req, 404, { error: 'ingen gyldige billetter' })
-    const byEvent = new Map<string, { title: string; tickets: { code: string; typeName: string }[] }>()
+    type Group = {
+      title: string
+      date?: string | null
+      doorsOpenTime?: string | null
+      startTime?: string | null
+      tickets: { code: string; typeName: string }[]
+    }
+    const byEvent = new Map<string, Group>()
     for (const t of r.docs as any[]) {
-      const title = typeof t.event === 'object' ? t.event.title : 'arrangement'
-      const g: { title: string; tickets: { code: string; typeName: string }[] } =
-        byEvent.get(title) || { title, tickets: [] }
+      const ev = typeof t.event === 'object' ? t.event : null
+      const title = ev?.title ?? 'arrangement'
+      const g: Group = byEvent.get(title) || {
+        title,
+        date: ev?.date ?? null,
+        doorsOpenTime: ev?.doorsOpenTime ?? null,
+        startTime: ev?.openingTime ?? null,
+        tickets: [],
+      }
       g.tickets.push({ code: t.ticketCode, typeName: t.typeName })
       byEvent.set(title, g)
     }
     const user = req.user as unknown as { email: string; name?: string }
     for (const g of byEvent.values()) {
-      await sendTickets(req.payload, { to: user.email, name: user.name || '', eventTitle: g.title, tickets: g.tickets })
+      await sendTickets(req.payload, {
+        to: user.email,
+        name: user.name || '',
+        eventTitle: g.title,
+        eventDate: g.date,
+        doorsOpenTime: g.doorsOpenTime,
+        startTime: g.startTime,
+        tickets: g.tickets,
+      })
     }
     return json(req, 200, { sent: true })
   },
