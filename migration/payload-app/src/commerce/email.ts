@@ -60,10 +60,12 @@ function escapeHtml(s: string | null | undefined): string {
   return String(s ?? '').replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
 }
 
-// Billettleveranse på e-post: QR-kodene ligger VEDLAGT som PNG (folk forventer
-// QR i e-posten; inline data-URI-er strippes av bl.a. Gmail, så vedlegg er den
-// robuste kanalen) + kode i klartekst + lenke til Min side. Tidspunktet står på
-// billetten (dato + dørene åpner/starttid) — jf. redaktørønske 2026-08-04.
+// Billettleveranse + KVITTERING i samme e-post (redaktørønske 2026-08-04).
+// QR-kodene ligger VEDLAGT som PNG (inline data-URI-er strippes av bl.a.
+// Gmail, så vedlegg er den robuste kanalen). Layouten bruker tabeller og
+// inline-stiler — det eneste e-postklienter rendrer forutsigbart.
+// `order` er valgfri: gjensending fra Min side har ingen kjøpskontekst og
+// sender da bare billettdelen.
 export async function sendTickets(
   payload: Payload,
   args: {
@@ -73,19 +75,27 @@ export async function sendTickets(
     eventDate?: string | null
     doorsOpenTime?: string | null
     startTime?: string | null
+    venue?: string | null
     tickets: { code: string; typeName: string | null | undefined }[]
+    order?: {
+      id: number | string
+      createdAt?: string | null
+      items?: { name?: string | null; quantity?: number | null; unitPriceOre?: number | null }[] | null
+      amountOre?: number | null
+      provider?: string | null
+    } | null
   },
 ): Promise<void> {
-  const { to, name, eventTitle, eventDate, doorsOpenTime, startTime, tickets } = args
+  const { to, name, eventTitle, eventDate, doorsOpenTime, startTime, venue, tickets, order } = args
   const frontend = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '')
 
   // «fredag 27. august 2026» i Oslo-tid; tåler både ISO og tomt felt.
-  const dateLine = (() => {
-    if (!eventDate) return ''
-    const d = new Date(eventDate)
+  const longDate = (v?: string | null) => {
+    if (!v) return ''
+    const d = new Date(v)
     if (Number.isNaN(d.getTime())) return ''
     return new Intl.DateTimeFormat('nb-NO', { timeZone: 'Europe/Oslo', weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(d)
-  })()
+  }
   const hhmm = (v?: string | null) => {
     if (!v) return ''
     const plain = /^(\d{1,2})[:.](\d{2})$/.exec(v.trim())
@@ -94,11 +104,47 @@ export async function sendTickets(
     if (Number.isNaN(d.getTime())) return ''
     return new Intl.DateTimeFormat('nb-NO', { timeZone: 'Europe/Oslo', hour: '2-digit', minute: '2-digit' }).format(d)
   }
+  const kr = (ore?: number | null) => (typeof ore === 'number' ? `${(ore / 100).toFixed(0)} kr` : '')
+
+  const dateLine = longDate(eventDate)
   const doors = hhmm(doorsOpenTime)
   const start = hhmm(startTime)
-  const timeLine = [dateLine, doors && `dørene åpner ${doors}`, !doors && start && `kl. ${start}`]
-    .filter(Boolean)
-    .join(' — ')
+
+  // Stilene gjenbrukes i begge tabellene.
+  const th = 'text-align: left; padding: 8px 12px; border-bottom: 2px solid #111; font-size: 13px; text-transform: uppercase; letter-spacing: 0.04em;'
+  const td = 'padding: 8px 12px; border-bottom: 1px solid #ddd; font-size: 14px;'
+  const label = 'padding: 4px 12px 4px 0; color: #555; font-size: 14px; vertical-align: top; white-space: nowrap;'
+  const value = 'padding: 4px 0; font-size: 14px;'
+
+  const infoRows = [
+    dateLine && `<tr><td style="${label}">Dato</td><td style="${value}; text-transform: capitalize;">${escapeHtml(dateLine)}</td></tr>`,
+    venue && `<tr><td style="${label}">Sted</td><td style="${value}">${escapeHtml(venue)}</td></tr>`,
+    doors && `<tr><td style="${label}">Dørene åpner</td><td style="${value}">${doors}</td></tr>`,
+    start && `<tr><td style="${label}">Starttid</td><td style="${value}">${start}</td></tr>`,
+  ].filter(Boolean).join('')
+
+  const receiptSection = order
+    ? `
+      <h2 style="font-size: 16px; margin: 28px 0 8px; border-top: 2px solid #111; padding-top: 20px;">Kvittering</h2>
+      <table cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        <tr><td style="${label}">Ordrenummer</td><td style="${value}">${escapeHtml(String(order.id))}</td></tr>
+        ${order.createdAt ? `<tr><td style="${label}">Kjøpsdato</td><td style="${value}; text-transform: capitalize;">${escapeHtml(longDate(order.createdAt))} kl. ${hhmm(order.createdAt)}</td></tr>` : ''}
+        <tr><td style="${label}">Kjøper</td><td style="${value}">${escapeHtml(name || to)} &lt;${escapeHtml(to)}&gt;</td></tr>
+        ${order.provider ? `<tr><td style="${label}">Betaling</td><td style="${value}">${escapeHtml(order.provider === 'mock' ? 'Testbetaling (mock)' : order.provider)}</td></tr>` : ''}
+      </table>
+      <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%; margin-top: 12px;">
+        <tr><th style="${th}">Vare</th><th style="${th}; text-align: right;">Antall</th><th style="${th}; text-align: right;">Pris</th><th style="${th}; text-align: right;">Sum</th></tr>
+        ${(order.items ?? []).map((l) => `
+          <tr>
+            <td style="${td}">${escapeHtml(l.name || 'Billett')}</td>
+            <td style="${td}; text-align: right;">${l.quantity ?? 1}</td>
+            <td style="${td}; text-align: right;">${kr(l.unitPriceOre)}</td>
+            <td style="${td}; text-align: right;">${kr((l.unitPriceOre ?? 0) * (l.quantity ?? 1))}</td>
+          </tr>`).join('')}
+        <tr><td colspan="3" style="padding: 10px 12px; text-align: right; font-weight: bold;">Totalt</td>
+            <td style="padding: 10px 12px; text-align: right; font-weight: bold; border-top: 2px solid #111;">${kr(order.amountOre)}</td></tr>
+      </table>`
+    : ''
 
   try {
     // QR-vedlegg: samme signerte payload som Min side/skanneren bruker.
@@ -113,17 +159,34 @@ export async function sendTickets(
 
     await payload.sendEmail({
       to,
-      subject: `Billettene dine – ${eventTitle}`,
+      subject: order ? `Kvittering og billetter – ${eventTitle}` : `Billettene dine – ${eventTitle}`,
       attachments,
       html: `
-        <div style="font-family: sans-serif; max-width: 540px; margin: 0 auto;">
-          <h1>Takk${name ? `, ${escapeHtml(name)}` : ''}!</h1>
-          <p>Her er billettene dine til <strong>${escapeHtml(eventTitle)}</strong>${timeLine ? `<br/><span style="text-transform: capitalize;">${escapeHtml(timeLine)}</span>` : ''}:</p>
-          <ul>
-            ${tickets.map((t, i) => `<li><strong>${escapeHtml(t.typeName || 'Billett')}</strong> — kode <code>${escapeHtml(t.code)}</code> (QR: vedlegg billett-${i + 1})</li>`).join('')}
-          </ul>
-          <p><strong>QR-kodene ligger vedlagt</strong> — vis dem i døren. Du finner dem
-          også på <a href="${frontend}/konto">Min side</a>.</p>
+        <div style="background: #ffffff; padding: 24px; font-family: Helvetica, Arial, sans-serif; max-width: 560px; margin: 0 auto; color: #111111;">
+          <p style="font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; border-bottom: 2px solid #111; padding-bottom: 10px; color: #111111;">Østre&nbsp;/&nbsp;EKKO</p>
+          <h1 style="font-size: 22px; margin: 18px 0 4px;">Takk${name ? `, ${escapeHtml(name)}` : ''}!</h1>
+          <p style="font-size: 15px; margin: 4px 0 16px;">Her er billettene dine til <strong>${escapeHtml(eventTitle)}</strong>.</p>
+          ${infoRows ? `<table cellpadding="0" cellspacing="0" style="border-collapse: collapse; margin-bottom: 8px;">${infoRows}</table>` : ''}
+
+          <h2 style="font-size: 16px; margin: 20px 0 8px;">Billetter</h2>
+          <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; width: 100%;">
+            <tr><th style="${th}">Type</th><th style="${th}">Kode</th><th style="${th}">QR</th></tr>
+            ${tickets.map((t, i) => `
+              <tr>
+                <td style="${td}">${escapeHtml(t.typeName || 'Billett')}</td>
+                <td style="${td}"><code style="font-size: 13px;">${escapeHtml(t.code)}</code></td>
+                <td style="${td}">vedlegg <strong>billett-${i + 1}</strong></td>
+              </tr>`).join('')}
+          </table>
+          <p style="font-size: 14px; background: #f4f4f4; padding: 10px 12px; border-radius: 4px;">
+            <strong>QR-kodene ligger vedlagt</strong> — vis dem i døren.
+            Du finner dem også på <a href="${frontend}/konto" style="color: #111;">Min side</a>.
+          </p>
+          ${receiptSection}
+          <p style="font-size: 12px; color: #777; margin-top: 28px; border-top: 1px solid #ddd; padding-top: 12px;">
+            Østre — hus for lydkunst og elektronisk musikk<br/>
+            Østre Skostredet 3, 5017 Bergen · post@oestre.no
+          </p>
         </div>
       `,
     })

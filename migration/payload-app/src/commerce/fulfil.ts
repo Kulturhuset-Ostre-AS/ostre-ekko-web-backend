@@ -115,7 +115,8 @@ async function fulfilTickets(
   event: Record<string, unknown>,
 ): Promise<{ ok: boolean; already?: boolean; error?: string }> {
   const eventId = typeof order.event === 'object' ? order.event?.id : order.event
-  const eventDoc = await payload.findByID({ collection: 'events', id: eventId, depth: 0 }).catch(() => null)
+  // depth 1 + en-fallback: stedsnavn til kvitteringen og billettnavn uten null.
+  const eventDoc = await payload.findByID({ collection: 'events', id: eventId, depth: 1, fallbackLocale: 'en' }).catch(() => null)
   if (!eventDoc) return { ok: false, error: 'event not found' }
 
   // Final stock check (checkout also checks, but payment takes time).
@@ -156,6 +157,8 @@ async function fulfilTickets(
     },
   })
 
+  const loc0 = Array.isArray((eventDoc as any).location) ? (eventDoc as any).location[0] : null
+  const venue = loc0 && typeof loc0 === 'object' ? [loc0.venue || loc0.title, loc0.room].filter(Boolean).join(', ') : null
   await sendTickets(payload, {
     to: String(order.buyerEmail),
     name: String(order.buyerName || ''),
@@ -163,7 +166,16 @@ async function fulfilTickets(
     eventDate: (eventDoc as any).date ?? null,
     doorsOpenTime: (eventDoc as any).doorsOpenTime ?? null,
     startTime: (eventDoc as any).openingTime ?? null,
+    venue,
     tickets: issued,
+    // Kvitteringsdelen: ordrenr, kjøpstidspunkt, varelinjer, sum, betalingsmåte.
+    order: {
+      id: order.id,
+      createdAt: (order as any).createdAt ?? null,
+      items: (order.items ?? []).map((l: any) => ({ name: l.name, quantity: l.quantity, unitPriceOre: l.unitPriceOre })),
+      amountOre: (order as any).amountOre ?? null,
+      provider: (order as any).provider ?? null,
+    },
   })
 
   return { ok: true }
