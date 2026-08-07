@@ -130,6 +130,12 @@ variable "admin_domain" {
   default     = ""
 }
 
+variable "customer_api_domain" {
+  description = "Separate hostname for the customer-facing API (same Cloud Run service), e.g. payload-api.ekko.no. Keeps the customers auth cookie on its own host so it cannot clash with the admin cookie on admin_domain — both auth collections share the payload-token cookie name, so they must not share a host. Same DNS prerequisites as admin_domain. Empty = no mapping."
+  type        = string
+  default     = ""
+}
+
 variable "deploy_service_account_email" {
   description = "Email of the WIF-federated service account GitHub Actions uses to deploy. When non-empty, run.admin + artifactregistry.writer + iam.serviceAccountUser are granted so CI can build/push images and deploy Cloud Run. Leave empty to skip."
   type        = string

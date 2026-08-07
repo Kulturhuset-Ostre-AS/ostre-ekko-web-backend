@@ -464,6 +464,26 @@ resource "google_cloud_run_domain_mapping" "admin" {
   }
 }
 
+# Second hostname on the same service, for the customer-facing API (the framtid
+# frontend's API base URL). Admin and customer logins both set a cookie named
+# payload-token on whatever host answers, so customer logins via admin.ekko.no
+# would overwrite the admin session (and vice versa); a separate host keeps the
+# two cookies apart. Same DNS setup as admin: grey-cloud CNAME to
+# ghs.googlehosted.com.
+resource "google_cloud_run_domain_mapping" "customer_api" {
+  count    = var.customer_api_domain == "" ? 0 : 1
+  location = var.region
+  name     = var.customer_api_domain
+
+  metadata {
+    namespace = var.project_id
+  }
+
+  spec {
+    route_name = google_cloud_run_v2_service.payload.name
+  }
+}
+
 # Public site: allow unauthenticated invocation. This makes the Cloud Run URL
 # world-reachable — expected for a public CMS that enforces its own auth on the
 # admin panel.
