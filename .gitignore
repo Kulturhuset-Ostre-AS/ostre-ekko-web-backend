@@ -63,5 +63,7 @@ terraform-payload/*.tfstate
 terraform-payload/*.tfstate.*
 terraform-payload/*.tfvars
 !terraform-payload/terraform.tfvars.example
+!terraform-payload/settings.auto.tfvars
+terraform-payload/tfplan*
 terraform-payload/crash.log
 terraform-payload/crash.*.log

@@ -36,12 +36,16 @@ permissions:
 
 env:
   TF_IN_AUTOMATION: true
-  TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
-  # Image ref: workflow input wins, else the repo variable, else empty (plan-only).
-  TF_VAR_payload_image: ${{ github.event.inputs.payload_image || vars.PAYLOAD_IMAGE }}
-  # Public URL + CORS for the deployed Payload; set these as repo variables.
-  TF_VAR_payload_public_server_url: ${{ vars.PAYLOAD_PUBLIC_SERVER_URL }}
-  TF_VAR_payload_cors: ${{ vars.PAYLOAD_CORS }}
+  # ALL non-secret configuration (project, domains, image, scaling, CORS...)
+  # lives in terraform-payload/settings.auto.tfvars, committed — so CI plans
+  # exactly what local runs plan. Do NOT reintroduce TF_VAR_* for values that
+  # exist there: an incomplete env once meant CI would have destroyed the
+  # admin.ekko.no/payload-api.ekko.no domain mappings (empty defaults).
+  # The only secret comes from GitHub:
+  TF_VAR_resend_api_key: ${{ secrets.RESEND_API_KEY }}
+  # Optional per-run image override (input) — passed as -var so it wins over
+  # settings.auto.tfvars; see the plan/apply steps.
+  PAYLOAD_IMAGE_OVERRIDE: ${{ github.event.inputs.payload_image }}
 
 jobs:
   terraform:
@@ -79,8 +83,8 @@ jobs:
 
       - name: Terraform plan
         if: github.event.inputs.action == 'plan'
-        run: terraform plan -input=false -no-color
+        run: terraform plan -input=false -no-color ${PAYLOAD_IMAGE_OVERRIDE:+-var=payload_image=$PAYLOAD_IMAGE_OVERRIDE}
 
       - name: Terraform apply
         if: github.event.inputs.action == 'apply'
-        run: terraform apply -input=false -no-color -auto-approve
+        run: terraform apply -input=false -no-color -auto-approve ${PAYLOAD_IMAGE_OVERRIDE:+-var=payload_image=$PAYLOAD_IMAGE_OVERRIDE}

@@ -273,6 +273,13 @@ resource "google_cloud_run_v2_service" "payload" {
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
+  # The API always echoes back an empty service-level scaling{} block that the
+  # provider then wants to remove — a perma-diff. Ignore it; the real scaling
+  # config lives in template.scaling below (not covered by this path).
+  lifecycle {
+    ignore_changes = [scaling]
+  }
+
   template {
     service_account = google_service_account.run.email
 
