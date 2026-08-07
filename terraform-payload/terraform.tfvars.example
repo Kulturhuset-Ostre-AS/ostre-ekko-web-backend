@@ -22,3 +22,9 @@ payload_image = ""
 # Run. When set, run.admin + artifactregistry.writer + iam.serviceAccountUser
 # are granted. Leave empty to skip.
 deploy_service_account_email = ""
+
+# Skalering: min 1 varm instans — med min=0 ga kaldstarter «Rate exceeded»
+# (429) og 502 gjennom framtid-gaten ved vanlige sidelastinger (30–50
+# samtidige kall: GraphQL + bildeproxy). max 4 tar unna bursts.
+cloud_run_min_instances = 1
+cloud_run_max_instances = 4
