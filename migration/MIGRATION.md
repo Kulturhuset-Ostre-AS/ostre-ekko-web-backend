@@ -150,6 +150,40 @@ node scripts/sql-verify.mjs
 # (add --with-media to sql-reset + re-run sql-transfer-assets.mjs to also redo media)
 ```
 
+### Re-import into the CLOUD Payload (beta refresh / cutover)
+
+One command, run by a person in a terminal (it asks for the Payload admin
+password; nothing is stored):
+
+```bash
+gcloud auth revoke admin@ekko.no; gcloud auth login admin@ekko.no   # session control expires it after a few hours
+bash scripts/reimport-cloud.sh --dump     # --dump = fresh mysqldump from Craft prod + export first
+```
+
+What it does, in order: preflight (gcloud session, Payload login, asset-map vs
+cloud media) → optional dump/restore/export (aborts on dropped rows) →
+**snapshot of Payload-only fields** → Cloud SQL on-demand backup (id printed, for
+rollback) → asks you to type `RESET` → `sql-reset.mjs --cloud` through a
+cloud-sql-proxy → new assets → passes 1–3 + globals → **restore of Payload-only
+fields** → verify. All gcloud-dependent steps run before the long import, which
+only uses the REST API. Log: `data/sql/reimport-cloud-<ts>.log`.
+
+**Payload-only fields** (no Craft source — the import can't bring them back) are
+listed in `scripts/payload-only-fields.mjs`: on events `doorsOpenTime`,
+`ageLimit`, `practicalInfo`, `spilleplan`, `doorsOpenByVenue`, `ticketTypes`,
+`fanzine`, plus `category`/`validFor`/`ticketAgeLimit`/`guardianInfo`/
+`accessibilityInfo`/`practicalInfo`/`relatedPerformances` on `tickets` rows; on
+locations `capacity`. Snapshot is keyed by `craftId`, relations are stored as
+craftIds (performance/locations get new ids). **When you add a Payload-only field,
+add it there** — otherwise the next re-import silently wipes it. Restore can be
+re-run on its own: `node scripts/payload-only-fields.mjs restore [file]`.
+
+The cascade of `TRUNCATE … CASCADE` in the cloud also empties `orders`,
+`orders_items`, `tickets` (they reference events) and the globals' `_rels`
+tables (re-imported by the globals pass). Members/customers/media/users are kept.
+**At cutover, real orders/tickets must not exist yet** — or they need a
+separate plan.
+
 ### 7. Point the frontend at Payload & tear down the source
 
 ```bash
@@ -212,7 +246,9 @@ Payload admin user exists). Long-running; watch the logs it writes to `data/sql/
 | `scripts/sql-import-drafts.mjs` | pass 3: Craft drafts → Payload drafts (standalone + layered) |
 | `scripts/sql-shared.mjs` | shared scalar/relation mappers for the import passes |
 | `scripts/sql-verify.mjs` | verification (counts + media-serve + unique-slug guard) |
-| `scripts/sql-reset.mjs` | wipe content for a clean re-import (keeps media) |
+| `scripts/sql-reset.mjs` | wipe content for a clean re-import (keeps media); `--cloud` via cloud-sql-proxy |
+| `scripts/reimport-cloud.sh` | full cloud reset + re-import, run by a person (see «Re-import into the CLOUD Payload») |
+| `scripts/payload-only-fields.mjs` | snapshot/restore of Payload-only fields across a re-import |
 | `scripts/html-to-lexical.mjs` | shared HTML→lexical converter |
 | `scripts/run-all.sh` | orchestrator for steps 1–5 |
 | ~~`scripts/01-06*.mjs`, `PLAN.md`~~ | **deprecated** GraphQL path — do not use |
