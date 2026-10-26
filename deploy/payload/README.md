@@ -2,7 +2,7 @@
 
 Container build + deploy assets for the **Payload 3 (Next 16)** CMS on Google
 Cloud Run. This is a **separate deployment** from the production Craft CMS
-(`deploy/vm/`, `terraform/`) and does not touch it.
+(legacy Craft 3.7 on ProISP) and does not touch it.
 
 ## What lives where
 

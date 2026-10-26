@@ -45,12 +45,10 @@ Docker Compose does not mount GCP credentials by default. Either:
 
 Without valid GCP settings, the CP **Assets** area for those volumes will not work.
 
-## Terraform
+## Terraform (removed)
 
-The **assets** bucket resource uses **`assets_bucket_uniform_bucket_level_access`** (default **`false`**). See **`terraform/variables.tf`** and **`terraform/README.md`**.
+The assets bucket was provisioned by the Craft 5 `terraform/` module, which has been removed together with the rest of the GCP deployment (see git history). Without a bucket, these volumes only work if you point the settings at one you create yourself.
 
 ## Related docs
 
-- [GCP bring-up checklist](gcp-bring-up.md) (Terraform, `gcloud storage rsync`, SQL import)
 - [Local media sync](local-media-sync.md) (disk + optional rsync — still relevant for **User Photos** and for **seeding** the bucket)
-- [GCP VM + Docker](gcp-vm-docker-deploy.md)

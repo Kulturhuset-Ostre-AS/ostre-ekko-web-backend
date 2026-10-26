@@ -11,11 +11,9 @@ Craft volumes use **`public_html/uploads/`** (see `@assetBasePath` / `@assetBase
 
 These directories are **gitignored**; copy them from a host backup or another checkout when you need real files locally.
 
-## Production copy on GCP
+## Production copy on GCP (removed)
 
-Terraform provisions a private **GCS** bucket for this tree (outputs **`media_library_bucket`** and **`assets_bucket`** — same bucket). After `terraform apply`, sync local `public_html/uploads/` to `gs://…/uploads/` as described in [`terraform/README.md`](../terraform/README.md) (section *Media library — upload uploads/ to GCS*). From there, copy or mount onto the Craft web root in your runtime (or evolve to a CDN / remote filesystem plugin if you change how URLs are generated). For a **Compute Engine VM** using the same Docker Compose stack as locally, use [`gcp-vm-docker-deploy.md`](gcp-vm-docker-deploy.md) and **`deploy/vm/bootstrap.sh`** (optional `EKKO_ASSETS_BUCKET`) to pull uploads back onto disk.
-
-Full GCP ordering (Terraform, bucket sync, SQL import): [`gcp-bring-up.md`](gcp-bring-up.md).
+The Craft 5 GCP deployment (Terraform-managed GCS bucket, Cloud SQL, VM) has been removed; see git history if you need the old Terraform and bring-up docs.
 
 ## From a legacy `api.ekko.no` tree (e.g. `~/Downloads/api.ekko.no`)
 

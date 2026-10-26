@@ -1,7 +1,7 @@
 # Deploying Payload to the cloud (GCP Cloud Run + Cloudflare frontend)
 
 This is the **new Payload stack**, deployed entirely separately from the existing
-**Craft production** (which stays on its own VM + Cloud SQL MySQL + `cms.ekko.no`).
+**Craft production** (legacy Craft 3.7 on ProISP managed hosting, `api.ekko.no`).
 Nothing here touches Craft.
 
 ## Architecture
@@ -25,21 +25,23 @@ Nothing here touches Craft.
 
 ## Isolation from Craft production (the safety story)
 
-| Concern | Craft (production) | Payload (new) |
-|---|---|---|
-| Terraform dir | `terraform/` | `terraform-payload/` |
-| Terraform state prefix | `terraform/ekko` | `terraform/ekko-payload` |
-| Resource name prefix | `ekko-*`, `ekko-app-*` | `ekko-payload-*` |
-| Database | Cloud SQL **MySQL** `ekko-mysql` | Cloud SQL **Postgres** `ekko-payload-pg` |
-| Compute | VM `ekko-craft-vm` + cloudflared | Cloud Run `ekko-payload` |
-| Media | Craft GCS buckets | `ekko-payload-media-*` |
-| CI workflows | `terraform-gcp.yml`, `deploy-cloudflared-token.yml` | `payload-terraform.yml`, `payload-build-image.yml` |
+Craft production is legacy Craft 3.7 on ProISP and is not managed from this
+repo, so there is no shared infrastructure to collide with. (An earlier Craft 5
+deployment on GCP — `terraform/`, VM `ekko-craft-vm` + cloudflared, Cloud SQL
+MySQL — was never used in production and has been removed; see git history.)
 
-The two share **only** the GCP project and the WIF credentials. They never share
-state, names, or resources, so `terraform plan` on one shows **no diff** for the
-other. There is intentionally **no second `servicenetworking` connection** (the
-`default` VPC can only have one; Craft owns it) — Cloud Run reaches Postgres over
-the Cloud SQL Auth Proxy socket, which needs no VPC peering.
+| Concern | Payload |
+|---|---|
+| Terraform dir | `terraform-payload/` |
+| Terraform state prefix | `terraform/ekko-payload` |
+| Resource name prefix | `ekko-payload-*` |
+| Database | Cloud SQL **Postgres** `ekko-payload-pg` |
+| Compute | Cloud Run `ekko-payload` |
+| Media | `ekko-payload-media-*` |
+| CI workflows | `payload-terraform.yml`, `payload-build-image.yml` |
+
+Cloud Run reaches Postgres over the Cloud SQL Auth Proxy socket, which needs no
+VPC peering.
 
 ## First-time bring-up
 

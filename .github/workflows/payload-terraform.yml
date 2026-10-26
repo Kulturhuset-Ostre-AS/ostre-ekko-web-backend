@@ -1,12 +1,11 @@
 # Terraform for the PAYLOAD cloud deployment (Cloud Run + Cloud SQL Postgres +
-# GCS media). This is SEPARATE from the Craft production module:
-#   - runs in `terraform-payload/` (not `terraform/`)
-#   - uses its OWN state prefix `terraform/ekko-payload` (Craft uses terraform/ekko)
+# GCS media):
+#   - runs in `terraform-payload/`
+#   - state prefix `terraform/ekko-payload`
 #   - creates only `ekko-payload-*` resources
-# It shares the same GCP project and the same WIF credentials as terraform-gcp.yml,
-# but never touches Craft state or resources.
 #
-# Prerequisites (reuses the ones already set for terraform-gcp.yml):
+# Prerequisites (repo secrets/variables, originally set up for the removed
+# Craft terraform-gcp.yml workflow):
 #   secrets:  GCP_WIF_PROVIDER, GCP_WIF_SERVICE_ACCOUNT, TF_STATE_BUCKET
 #   variables: GCP_PROJECT_ID
 # Additionally, to deploy an image, set the repo variable PAYLOAD_IMAGE (or pass it

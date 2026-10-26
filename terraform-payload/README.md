@@ -1,8 +1,8 @@
 # GCP baseline (Terraform) — Payload CMS (`ekko-payload`)
 
-A **separate, isolated** Terraform root module that provisions a Payload CMS
-data plane in the **same GCP project** as the Craft module (`terraform/`), but
-sharing **nothing else**.
+Terraform root module that provisions the Payload CMS data plane in the GCP
+project `ekko-payload`. (The earlier Craft 5 module `terraform/` has been
+removed; see git history.)
 
 Creates (all named `ekko-payload-*`):
 
@@ -20,12 +20,8 @@ Creates (all named `ekko-payload-*`):
 - **Cloud Run v2 service** (`ekko-payload`), publicly invokable, wired to the DB
   socket and secrets.
 
-> **WARNING — isolation.** This module and the Craft `terraform/` module share
-> the GCP **project only**. They must **never** be applied against the **same
-> Terraform state** and must not reference each other's resources. This module
-> uses its own state prefix `terraform/ekko-payload` (the Craft module uses
-> `terraform/ekko`). All resource names are prefixed `ekko-payload-` so nothing
-> collides with the Craft `ekko-*` / `ekko-app-*` resources.
+> State lives under the prefix `terraform/ekko-payload`, and all resource names
+> are prefixed `ekko-payload-`.
 
 ---
 
@@ -90,10 +86,9 @@ First apply takes a while (Cloud SQL provisioning).
 
 ### GitHub Actions
 
-Mirror `.github/workflows/terraform-gcp.yml` (WIF + GCS backend), but set
-`working-directory: terraform-payload` and
-`-backend-config="prefix=terraform/ekko-payload"`. Do **not** point the existing
-Craft workflow at this directory.
+See `.github/workflows/payload-terraform.yml` (WIF + GCS backend,
+`working-directory: terraform-payload`,
+`-backend-config="prefix=terraform/ekko-payload"`).
 
 ---
 

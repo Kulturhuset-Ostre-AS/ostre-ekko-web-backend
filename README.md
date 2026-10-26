@@ -2,7 +2,7 @@
 
 This repository contains the **Craft CMS** installation that powers content and APIs for the public **Ekko** website: the music festival, the **Østre** venue, and the wider association. It runs **headless** (no Twig templates) and serves content to the frontend over **GraphQL**. The tree keeps the **legacy hosting layout** (`cms/` application root + `public_html/` web root) so paths match the original production install.
 
-**Current stack:** Craft CMS **5.9** · PHP **8.2** · MySQL (Cloud SQL) · assets on **Google Cloud Storage** · deployed as Docker on a **GCP VM** behind a **Cloudflare Tunnel**. See [Status & roadmap](#status--roadmap) for what has been done and what remains.
+**Current state:** production (`api.ekko.no`) is still the **legacy Craft 3.7** install on ProISP managed hosting. The Craft **5.9** upgrade in this repo (PHP 8.2, assets on Google Cloud Storage) was never put into production, and its GCP VM / Cloud SQL / Cloudflare Tunnel deployment has been removed. The site is moving to **Payload** instead — see [DEPLOY_PAYLOAD.md](DEPLOY_PAYLOAD.md) and [`migration/`](migration/). See [Status & roadmap](#status--roadmap) for details.
 
 On GitHub it lives alongside the public site:
 
@@ -27,10 +27,7 @@ For local work, cloning both repos into the same parent folder is convenient (fo
 - [GraphQL frontend migration](docs/graphql-frontend-migration.md)
 - [Craft post-upgrade audit](docs/craft-post-upgrade-audit.md)
 - [Local media sync (uploads / Imager)](docs/local-media-sync.md)
-- [GCP VM: Docker same as local](docs/gcp-vm-docker-deploy.md)
 - [Google Cloud Storage + Craft (`google-cloud` plugin)](docs/gcs-craft-plugin.md)
-- [Import local MySQL dump into Cloud SQL](docs/cloud-sql-import.md)
-- [GCP bring-up checklist (Terraform + GCS + SQL + Craft)](docs/gcp-bring-up.md)
 
 ## GitHub
 
@@ -86,9 +83,7 @@ Snapshot of where the backend stands. Items map to git history in this repo and 
 - **Headless mode.** Server-rendered Twig removed; the frontend consumes content over GraphQL only (`cms/templates/` is empty, legacy URL routes dropped).
 - **GraphQL API contract stabilised.** Endpoint `POST /api`, private-token auth, `sectionId` → `sectionAnchorId` field rename, Craft 5 entry-type / matrix naming. Documented in [docs/graphql-frontend-migration.md](docs/graphql-frontend-migration.md).
 - **Assets on Google Cloud Storage.** Public asset volumes moved from local FS to GCS via the `craftcms/google-cloud` plugin. See [docs/gcs-craft-plugin.md](docs/gcs-craft-plugin.md).
-- **Database on Cloud SQL (MySQL).** Local dump import path documented in [docs/cloud-sql-import.md](docs/cloud-sql-import.md).
-- **GCP infrastructure as code.** Terraform baseline (Cloud SQL, GCS buckets, IAM, Secret Manager, VPC peering) under `terraform/`.
-- **Containerised production deploy.** Prebuilt PHP/nginx images via Cloud Build, deployed as Docker on a GCE VM (cloud-init + systemd) behind a **Cloudflare Tunnel**, with CP requests trusting Cloudflare forwarded headers. See [docs/gcp-vm-docker-deploy.md](docs/gcp-vm-docker-deploy.md) and [docs/gcp-bring-up.md](docs/gcp-bring-up.md).
+- **GCP deployment (removed).** A Cloud SQL + GCS + Docker-on-VM deployment behind a Cloudflare Tunnel (`cms.ekko.no`) was built for the Craft 5 upgrade but never went into production. It was removed in favour of the Payload migration; the Terraform, VM scripts, workflows and docs are in git history (before `chore/remove-craft-gcp-vm`).
 - **Bilingual site structure.** Two sites in the **EKKO** site group — `nb` (`nb-NO`, primary, root URL) and `en` (`en`, `/en/`) — with per-field translation settings already configured.
 
 ### In progress / planned
@@ -131,7 +126,7 @@ Craft is the **system of record** for structured content, assets, and global set
 | `cms/templates/` | Twig templates |
 | `cms/modules/` | Custom PHP modules (for example `ekkomodule`) |
 | `public_html/` | Web root (`index.php`, static assets, **volumes map under `public_html/uploads/`** on production) |
-| `terraform/` | GCP baseline (Cloud SQL, GCS, IAM); see `terraform/README.md` |
+| `terraform-payload/`, `deploy/payload/` | Payload deployment (Cloud Run + Cloud SQL Postgres + GCS); see [DEPLOY_PAYLOAD.md](DEPLOY_PAYLOAD.md) |
 
 Large or generated paths (`public_html/uploads/`, `public_html/imager/`, `public_html/cpresources/`) are **gitignored**; sync them from your backup or GCS when running locally.
 
@@ -158,7 +153,7 @@ Installed **Craft 5.9** (see `cms/composer.json` / `cms/composer.lock`). Referen
 5. Import a database dump and sync **`public_html/uploads/`** (and optionally **`public_html/imager/`**) if you need assets locally — see [`docs/database-export.md`](docs/database-export.md) and [`docs/local-media-sync.md`](docs/local-media-sync.md).
 6. Open the control panel (this project uses trigger **`admin`**, not `/cp` — see `cms/config/general.php`).
 
-**Docker on a VM:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 8.2 FPM; optional MariaDB profile for local DB). Production deploy is documented in [docs/gcp-vm-docker-deploy.md](docs/gcp-vm-docker-deploy.md).
+**Docker:** see [`docker/README.md`](docker/README.md) and root [`docker-compose.yml`](docker-compose.yml) (nginx + PHP 8.2 FPM; optional MariaDB profile for local DB).
 
 For day-to-day work, use Craft’s documented workflows for migrations, Project Config, and backups rather than editing production data directly.
 
