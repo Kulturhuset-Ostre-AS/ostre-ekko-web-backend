@@ -16,21 +16,21 @@
     "migrate": "payload migrate"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "3.85.1",
-    "@payloadcms/email-resend": "^3.85.1",
-    "@payloadcms/next": "3.85.1",
-    "@payloadcms/richtext-lexical": "3.85.1",
-    "@payloadcms/storage-gcs": "3.85.1",
+    "@payloadcms/db-postgres": "3.93.0",
+    "@payloadcms/email-resend": "3.93.0",
+    "@payloadcms/next": "3.93.0",
+    "@payloadcms/richtext-lexical": "3.93.0",
+    "@payloadcms/storage-gcs": "3.93.0",
     "cross-env": "^7.0.3",
     "graphql": "^16.9.0",
     "jsonwebtoken": "^9.0.3",
-    "next": "^16.2.7",
+    "next": "^16.4.6",
     "passkit-generator": "^3.5.7",
-    "payload": "3.85.1",
+    "payload": "3.93.0",
     "qrcode": "^1.5.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "sharp": "^0.34.0"
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.10",
@@ -45,7 +45,8 @@
     "node": ">=20.9.0"
   },
   "overrides": {
-    "tsx": "4.23.1"
+    "tsx": "4.23.1",
+    "dompurify": "^3.4.17"
   },
   "allowScripts": {
     "esbuild@0.18.20": true,

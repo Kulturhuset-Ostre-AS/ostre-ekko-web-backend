@@ -9,6 +9,7 @@ import * as migration_20260803_090000_miro_event_info from './20260803_090000_mi
 import * as migration_20260804_150000_categories_split from './20260804_150000_categories_split';
 import * as migration_20260804_170000_receipt_numbers from './20260804_170000_receipt_numbers';
 import * as migration_20260804_190000_customer_otp from './20260804_190000_customer_otp';
+import * as migration_20261118_010000_payload_3_93 from './20261118_010000_payload_3_93';
 
 export const migrations = [
   {
@@ -65,5 +66,10 @@ export const migrations = [
     up: migration_20260804_190000_customer_otp.up,
     down: migration_20260804_190000_customer_otp.down,
     name: '20260804_190000_customer_otp'
+  },
+  {
+    up: migration_20261118_010000_payload_3_93.up,
+    down: migration_20261118_010000_payload_3_93.down,
+    name: '20261118_010000_payload_3_93'
   },
 ];
