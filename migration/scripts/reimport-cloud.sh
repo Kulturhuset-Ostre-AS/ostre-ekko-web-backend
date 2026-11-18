@@ -7,14 +7,22 @@
 # Manager.
 #
 #   bash scripts/reimport-cloud.sh [--dump]
+#   bash scripts/reimport-cloud.sh --sync [--since='YYYY-MM-DD HH:MM:SS'] [--prune]
 #
 #   --dump   take a fresh mysqldump from Craft prod (ssh api.ekko.no), restore it
 #            into the local craft3 db and re-export data/sql. Without it the
 #            existing data/sql export is imported.
+#   --sync   incremental: fetch a fresh dump (implies --dump) and send only what
+#            changed in Craft since the last import — no reset, no RESET prompt,
+#            Payload-only fields untouched. «Since» comes from data/sql/last-sync.json
+#            (written by every run with a fresh dump) or --since (UTC, Craft DB time).
+#            Entries deleted in Craft are listed; --prune deletes them in Payload.
 #
-# Steps: preflight → (dump + export) → snapshot Payload-only fields → Cloud SQL
+# Full steps: preflight → (dump + export) → snapshot Payload-only fields → Cloud SQL
 # backup → confirm → reset content tables (cloud-sql-proxy) → new assets →
 # passes 1-3 + globals → restore Payload-only fields → verify.
+# Sync steps: preflight → dump + export → Cloud SQL backup → new assets →
+# passes 1-3 (changed rows only) + globals → deletions report/prune → verify.
 #
 # Everything that needs gcloud runs before the long import, so an expiring
 # gcloud session can't break the run halfway. The import itself only uses the
@@ -38,12 +46,29 @@ TS="$(date +%Y%m%d-%H%M)"
 LOG="data/sql/reimport-cloud-$TS.log"
 
 DUMP=0
+SYNC=0
+PRUNE=0
+SINCE=""
 for a in "$@"; do
   case "$a" in
     --dump) DUMP=1 ;;
+    --sync) SYNC=1; DUMP=1 ;;
+    --since=*) SINCE="${a#--since=}" ;;
+    --prune) PRUNE=1 ;;
     *) echo "unknown argument: $a" >&2; exit 2 ;;
   esac
 done
+WATERMARK=data/sql/last-sync.json
+unset SYNC_SINCE
+if [ "$SYNC" = 1 ]; then
+  if [ -z "$SINCE" ]; then
+    [ -f "$WATERMARK" ] || { echo "no $WATERMARK yet — pass --since='YYYY-MM-DD HH:MM:SS' (UTC) or run a full import with --dump" >&2; exit 2; }
+    SINCE=$(node -e 'console.log(require("./'"$WATERMARK"'").since)')
+  fi
+  [[ "$SINCE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}\ [0-9]{2}:[0-9]{2}:[0-9]{2}$ ]] || { echo "bad --since «$SINCE» (want 'YYYY-MM-DD HH:MM:SS')" >&2; exit 2; }
+elif [ -n "$SINCE" ] || [ "$PRUNE" = 1 ]; then
+  echo "--since and --prune only apply with --sync" >&2; exit 2
+fi
 
 step() { echo; echo "==================== $* ===================="; }
 die() { echo "✗ $*" >&2; exit 1; }
@@ -81,6 +106,9 @@ echo "media in Payload: $MEDIA_TOTAL, asset-map entries: $MAP_TOTAL"
 # ------------------------------------------------------------ dump + export
 if [ "$DUMP" = 1 ]; then
   step "dump Craft prod -> local craft3 db -> data/sql"
+  # Next sync's «since»: the dump start (UTC, Craft's DB time) minus a margin.
+  # Anything saved in Craft after this point is newer than the dump.
+  DUMP_STARTED=$(date -u -v-10M '+%Y-%m-%d %H:%M:%S')
   DUMPFILE="data/craft-dumps/ekko-$TS.sql.gz"
   mkdir -p data/craft-dumps
   # The DB password stays on the server: a 0600 defaults file in ~/tmp, removed on exit.
@@ -111,8 +139,10 @@ EOF
 fi
 
 # ------------------------------------------------- snapshot Payload-only data
-step "snapshot Payload-only fields"
-node scripts/payload-only-fields.mjs snapshot
+if [ "$SYNC" = 0 ]; then
+  step "snapshot Payload-only fields"
+  node scripts/payload-only-fields.mjs snapshot
+fi
 
 # ---------------------------------------------------------- backup + confirm
 step "Cloud SQL backup"
@@ -123,26 +153,32 @@ BACKUP_ID=$(gc sql backups list --instance="$INSTANCE" --filter="description='re
 [ -n "$BACKUP_ID" ] || die "backup not found"
 echo "✓ backup $BACKUP_ID — rollback: gcloud sql backups restore $BACKUP_ID --restore-instance=$INSTANCE --project=$PROJECT"
 
-echo
-echo "About to EMPTY the content tables in the CLOUD Payload ($CONNECTION):"
-echo "  events, news, arena, artists, performance, locations, organizers"
-echo "  + cascades: orders, orders_items, tickets, globals' relation tables"
-echo "Media, users, members and customers are kept."
-read -r -p "Type RESET to continue: " CONFIRM
-[ "$CONFIRM" = RESET ] || die "aborted (nothing changed besides the backup)"
+if [ "$SYNC" = 0 ]; then
+  echo
+  echo "About to EMPTY the content tables in the CLOUD Payload ($CONNECTION):"
+  echo "  events, news, arena, artists, performance, locations, organizers"
+  echo "  + cascades: orders, orders_items, tickets, globals' relation tables"
+  echo "Media, users, members and customers are kept."
+  read -r -p "Type RESET to continue: " CONFIRM
+  [ "$CONFIRM" = RESET ] || die "aborted (nothing changed besides the backup)"
 
-# -------------------------------------------------------------------- reset
-step "reset content tables (cloud)"
-cloud-sql-proxy --gcloud-auth --address 0.0.0.0 --port "$PROXY_PORT" "$CONNECTION" > "data/sql/proxy-$TS.log" 2>&1 &
-PROXY_PID=$!
-trap 'kill $PROXY_PID 2>/dev/null || true' EXIT
-for _ in $(seq 1 30); do grep -q 'ready for new connections' "data/sql/proxy-$TS.log" && break; sleep 1; done
-grep -q 'ready for new connections' "data/sql/proxy-$TS.log" || die "cloud-sql-proxy did not start (see data/sql/proxy-$TS.log)"
-PGPASSWORD="$(gc secrets versions access latest --secret=ekko-payload-db-password)" \
-PGHOST=host.docker.internal PGPORT="$PROXY_PORT" PGUSER=payload PGDATABASE=payload \
-  node scripts/sql-reset.mjs --cloud
-kill $PROXY_PID 2>/dev/null || true
-trap - EXIT
+  # ------------------------------------------------------------------ reset
+  step "reset content tables (cloud)"
+  cloud-sql-proxy --gcloud-auth --address 0.0.0.0 --port "$PROXY_PORT" "$CONNECTION" > "data/sql/proxy-$TS.log" 2>&1 &
+  PROXY_PID=$!
+  trap 'kill $PROXY_PID 2>/dev/null || true' EXIT
+  for _ in $(seq 1 30); do grep -q 'ready for new connections' "data/sql/proxy-$TS.log" && break; sleep 1; done
+  grep -q 'ready for new connections' "data/sql/proxy-$TS.log" || die "cloud-sql-proxy did not start (see data/sql/proxy-$TS.log)"
+  PGPASSWORD="$(gc secrets versions access latest --secret=ekko-payload-db-password)" \
+  PGHOST=host.docker.internal PGPORT="$PROXY_PORT" PGUSER=payload PGDATABASE=payload \
+    node scripts/sql-reset.mjs --cloud
+  kill $PROXY_PID 2>/dev/null || true
+  trap - EXIT
+else
+  echo "incremental sync: changes in Craft since $SINCE UTC (no reset)"
+  export SYNC_SINCE="$SINCE"
+fi
+rm -f data/sql/sync-touched.json
 
 # ------------------------------------------------------------------- import
 step "transfer new assets (from $CRAFT_WEB)"
@@ -152,14 +188,25 @@ step "pass 2 (relations + matrix)"; node scripts/sql-import-relations.mjs
 step "pass 3 (drafts)";             node scripts/sql-import-drafts.mjs
 step "globals";                     node scripts/sql-import-globals.mjs
 
-step "restore Payload-only fields"
-node scripts/payload-only-fields.mjs restore
+if [ "$SYNC" = 0 ]; then
+  step "restore Payload-only fields"
+  node scripts/payload-only-fields.mjs restore
+else
+  step "entries deleted in Craft"
+  if [ "$PRUNE" = 1 ]; then node scripts/sql-sync-deletions.mjs --prune; else node scripts/sql-sync-deletions.mjs; fi
+fi
 
 step "verify"
+WHAT=$([ "$SYNC" = 1 ] && echo "sync" || echo "re-import")
 if node scripts/sql-verify.mjs; then
-  echo; echo "✔ re-import complete — verification passed"
+  echo; echo "✔ $WHAT complete — verification passed"
 else
-  echo; echo "⚠ re-import complete, but verification flagged something — read the verify output above."
+  echo; echo "⚠ $WHAT complete, but verification flagged something — read the verify output above."
   echo "  (Known flag: the mixtape m4a is >32MB and can't be served through Cloud Run.)"
 fi
-echo "backup before reset: $BACKUP_ID   log: $LOG"
+# Every pass above ran under set -e, so the dump is fully in Payload: record it.
+if [ "$DUMP" = 1 ]; then
+  printf '{ "since": "%s", "dump": "%s" }\n' "$DUMP_STARTED" "$DUMPFILE" > "$WATERMARK"
+  echo "next --sync picks up Craft changes from $DUMP_STARTED UTC ($WATERMARK)"
+fi
+echo "backup before import: $BACKUP_ID   log: $LOG"

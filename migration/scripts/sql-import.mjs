@@ -8,10 +8,14 @@
 // Resumable: writes data/sql/id-map.json after pass 1 so a re-run skips created docs.
 //
 // Run: node migration/scripts/sql-import.mjs [collection]   (optional: one collection)
+//
+// Incremental: with SYNC_SINCE set only rows changed in Craft since then (or not
+// imported yet) are sent; the touched craftIds go to data/sql/sync-touched.json
+// for passes 2 and 3.
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { scalarData, statusOf } from './sql-shared.mjs'
+import { scalarData, statusOf, SYNC_SINCE, changedSince, TOUCHED_FILE } from './sql-shared.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
@@ -71,8 +75,14 @@ const SECTION_TO_COLLECTION = {
 }
 const GLOBAL_SECTIONS = { about: 'about', archive: 'archive', homepage: 'homepage', legal: 'legal', oestre: 'oestre', ekko_festival_info: 'ekko_festival_info' }
 
+// collection -> Set(craftId) created/updated in this run; skipped = unchanged rows.
+const touched = {}
+let skipped = 0
+let failed = 0
+
 async function main() {
   await login()
+  if (SYNC_SINCE) console.log(`incremental: only rows changed in Craft since ${SYNC_SINCE} UTC (or not imported yet)`)
   const only = process.argv[2]
   const idMap = exists('id-map.json') ? read('id-map.json') : {} // collection -> { craftId -> payloadId }
   const assetMap = exists('asset-map.json') ? read('asset-map.json') : {} // craftAssetId -> payloadMediaId
@@ -90,6 +100,7 @@ async function main() {
         const isOrganizer = cat.group === 'organizersCategory'
         if (only === 'locations' && isOrganizer) continue
         if (only === 'organizers' && !isOrganizer) continue
+        if (!changedSince(cat) && idMap[isOrganizer ? 'organizers' : 'locations'][cat.id]) { skipped++; continue }
         const data = isOrganizer
           ? { craftId: Number(cat.id), title: cat.title || '(untitled)', slug: cat.slug || `cat-${cat.id}` }
           : {
@@ -111,6 +122,7 @@ async function main() {
     for (const { site, locale } of LOCALES) {
       if (!exists(`${section}.${site}.json`)) continue
       for (const row of read(`${section}.${site}.json`)) {
+        if (!changedSince(row) && idMap[collection][row.id]) { skipped++; continue }
         // Craft `enabled` -> Payload `_status`. Disabled entries were hidden on the
         // Craft site; they become drafts (saved via draft=true so nothing publishes).
         const data = { ...scalarData(collection, row), _status: statusOf(row) }
@@ -120,9 +132,18 @@ async function main() {
       }
     }
     save(idMap)
-    console.log(`✓ ${collection}: ${Object.keys(idMap[collection]).length} docs`)
+    console.log(`✓ ${collection}: ${Object.keys(idMap[collection]).length} docs` +
+      (SYNC_SINCE ? `, ${touched[collection]?.size || 0} created/updated` : ''))
   }
 
+  if (SYNC_SINCE) {
+    fs.writeFileSync(path.join(SQL, TOUCHED_FILE),
+      JSON.stringify(Object.fromEntries(Object.entries(touched).map(([c, ids]) => [c, [...ids]]))))
+    console.log(`  unchanged rows skipped: ${skipped}`)
+    // A failed row would fall behind the next watermark and never be retried:
+    // fail the sync so last-sync.json stays put and the next --sync re-sends it.
+    if (failed) throw new Error(`${failed} row(s) failed — sync stopped; fix and re-run --sync (it re-sends everything since the same «since»)`)
+  }
   console.log('\nPass 1 complete. Run sql-import-relations.mjs for relations + matrix.')
 }
 
@@ -138,7 +159,9 @@ async function upsert(collection, craftId, data, locale, idMap, { draft = false 
       const r = await api(`/${collection}?${q}`, { method: 'POST', body: JSON.stringify(data) })
       ;(idMap[collection] ||= {})[craftId] = r.doc.id
     }
+    ;(touched[collection] ||= new Set()).add(String(craftId))
   } catch (e) {
+    failed++
     console.warn(`  ✗ ${collection} craft#${craftId}: ${e.message.split('\n')[0].slice(0, 120)}`)
   }
 }

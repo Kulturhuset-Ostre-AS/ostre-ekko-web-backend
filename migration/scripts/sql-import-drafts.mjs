@@ -12,11 +12,16 @@
 // Craft "provisional" drafts (per-user autosaved WIP, never explicitly saved as a
 // draft) are skipped — they are edit buffers, not content.
 //
+// Incremental (SYNC_SINCE set): only drafts changed since then, new standalone
+// drafts, and drafts on docs pass 1 just re-saved as published (that save
+// supersedes the draft layer in Payload, so it is put back). A draft discarded in
+// Craft without touching the entry stays layered in Payload until a full import.
+//
 // Run: node scripts/sql-import-drafts.mjs [collection]
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { scalarData, bool, makeBuilders } from './sql-shared.mjs'
+import { scalarData, bool, makeBuilders, SYNC_SINCE, changedSince, TOUCHED_FILE } from './sql-shared.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SQL = path.resolve(__dirname, '..', 'data', 'sql')
@@ -42,6 +47,10 @@ function findPayloadId(craftId) {
 }
 const mediaId = (craftAssetId) => assetMap[craftAssetId]
 const { buildRelationData } = makeBuilders({ relations, matrix, findPayloadId, mediaId })
+const touched = SYNC_SINCE && exists(TOUCHED_FILE)
+  ? Object.fromEntries(Object.entries(read(TOUCHED_FILE)).map(([c, ids]) => [c, new Set(ids.map(String))]))
+  : {}
+if (SYNC_SINCE && !exists(TOUCHED_FILE)) throw new Error(`SYNC_SINCE is set but ${TOUCHED_FILE} is missing — run pass 1 first`)
 
 let TOKEN = ''
 // Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
@@ -98,7 +107,7 @@ const SECTION_TO_COLLECTION = {
 async function main() {
   await login()
   const only = process.argv[2]
-  const totals = { standalone: 0, layered: 0, provisional: 0, olderSkipped: 0, missing: 0 }
+  const totals = { standalone: 0, layered: 0, provisional: 0, olderSkipped: 0, missing: 0, unchanged: 0 }
 
   for (const [section, col] of Object.entries(SECTION_TO_COLLECTION)) {
     if (only && only !== col) continue
@@ -125,6 +134,11 @@ async function main() {
 
     let n = 0
     for (const row of saved) {
+      if (SYNC_SINCE) {
+        const wanted = changedSince(row) ||
+          (row.draftOf == null ? !idMap[col]?.[row.id] : touched[col]?.has(String(row.draftOf)))
+        if (!wanted) { totals.unchanged++; continue }
+      }
       const enRow = nbIds.has(row.id) ? enById[row.id] : null
       try {
         if (row.draftOf == null) {
@@ -163,7 +177,8 @@ async function main() {
 
   fs.writeFileSync(path.join(SQL, 'id-map.json'), JSON.stringify(idMap))
   console.log(`\n✔ pass 3 complete — standalone: ${totals.standalone}, layered on published: ${totals.layered}, ` +
-    `provisional skipped: ${totals.provisional}, older drafts skipped: ${totals.olderSkipped}, missing targets: ${totals.missing}`)
+    `provisional skipped: ${totals.provisional}, older drafts skipped: ${totals.olderSkipped}, missing targets: ${totals.missing}` +
+    (SYNC_SINCE ? `, unchanged skipped: ${totals.unchanged}` : ''))
 }
 
 main().catch((e) => { console.error(e); process.exit(1) })

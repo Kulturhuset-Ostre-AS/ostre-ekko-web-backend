@@ -3,10 +3,13 @@
 //
 // Run AFTER sql-import.mjs (pass 1) and sql-transfer-assets.mjs.
 //   node scripts/sql-import-relations.mjs [collection]
+//
+// Incremental: with SYNC_SINCE set only the docs pass 1 created/updated in this
+// run (data/sql/sync-touched.json) are patched.
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { makeBuilders, statusOf } from './sql-shared.mjs'
+import { makeBuilders, statusOf, SYNC_SINCE, TOUCHED_FILE } from './sql-shared.mjs'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const SQL = path.resolve(__dirname, '..', 'data', 'sql')
@@ -21,6 +24,11 @@ const idMap = read('id-map.json') // collection -> craftId -> payloadId
 const assetMap = exists('asset-map.json') ? read('asset-map.json') : {}
 const relations = read('_relations.json') // sourceId -> field -> [targetId]
 const matrix = read('_matrix.json') // field -> ownerId -> siteId -> [blocks]
+let touched = null // collection -> Set(craftId); null = patch everything
+if (SYNC_SINCE) {
+  if (!exists(TOUCHED_FILE)) throw new Error(`SYNC_SINCE is set but ${TOUCHED_FILE} is missing — run pass 1 first`)
+  touched = Object.fromEntries(Object.entries(read(TOUCHED_FILE)).map(([c, ids]) => [c, new Set(ids.map(String))]))
+}
 
 // craftId -> { title, slug, status } per section (PATCH revalidates required title;
 // carry it. status decides whether the patch saves as draft or published).
@@ -100,6 +108,7 @@ async function main() {
     let n = 0
     const titles = titleBySection[col] || {}
     for (const [craftId, payloadId] of Object.entries(map)) {
+      if (touched && !touched[col]?.has(String(craftId))) continue
       // Carry title/slug — PATCH revalidates the required localized title field.
       const t = titles[craftId] || {}
       const data = { ...(t.title ? { title: t.title } : {}), ...(t.slug ? { slug: t.slug } : {}) }
@@ -116,7 +125,7 @@ async function main() {
         catch (e) { if (n < 20) console.warn(`  ✗ ${col}#${craftId}: ${e.message.slice(0, 110)}`) }
       }
       n++
-      if (n % 250 === 0) console.log(`  ${col}… ${n}/${Object.keys(map).length}`)
+      if (n % 250 === 0) console.log(`  ${col}… ${n}/${touched ? touched[col]?.size || 0 : Object.keys(map).length}`)
     }
     console.log(`✓ ${col}: ${n} relation-patched`)
   }

@@ -7,6 +7,21 @@ import { htmlToLexical, htmlToPlain } from './html-to-lexical.mjs'
 export const bool = (v) => v === '1' || v === 1 || v === true
 export const num = (v) => (v == null || v === '' ? undefined : Number(v))
 
+// ---- incremental sync ------------------------------------------------------------
+// SYNC_SINCE='YYYY-MM-DD HH:MM:SS' (Craft's DB time, UTC) limits the passes to
+// rows Craft changed since then, plus rows not imported yet. Unset = everything
+// (the full import). Saving an entry in Craft bumps its dateUpdated, and that
+// covers its matrix blocks and the relations it owns too. Rows from an export
+// without dateUpdated count as changed. Lexicographic compare works for this
+// timestamp format.
+export const SYNC_SINCE = process.env.SYNC_SINCE || ''
+export const changedSince = (row) => !SYNC_SINCE || row.dateUpdated == null || String(row.dateUpdated) >= SYNC_SINCE
+
+// Pass 1 records which Craft ids it created or updated (collection -> [craftId]),
+// so pass 2 patches relations and pass 3 re-layers drafts for exactly those docs
+// (a published save in pass 1 supersedes an existing draft layer in Payload).
+export const TOUCHED_FILE = 'sync-touched.json'
+
 // ---- field mapping: Craft content row -> Payload data (scalars only) -------------
 // Field handles arrive already de-UID'd from the export (sql-export cleanFieldName),
 // so scalarData reads clean handles like `venue`/`room`/`contact` regardless of the

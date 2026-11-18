@@ -90,7 +90,7 @@ function entriesQuery(sectionHandle, siteId, fieldCols) {
   const base = [
     `'id', e.id`, `'uid', e.uid`, `'typeId', e.typeId`, `'typeHandle', et.handle`,
     `'sectionHandle', s.handle`, `'title', c.title`, `'slug', es.slug`, `'uri', es.uri`,
-    `'enabled', el.enabled`, `'postDate', e.postDate`,
+    `'enabled', el.enabled`, `'postDate', e.postDate`, `'dateUpdated', el.dateUpdated`,
     `'lft', st.lft`, `'rgt', st.rgt`, `'level', st.level`, `'parentId',
       (SELECT a.elementId FROM craft_structureelements a
         WHERE a.structureId = st.structureId
@@ -242,7 +242,7 @@ function main() {
   for (const site of SITES) {
     const rows = sql(`
       SELECT ${b64json(`JSON_OBJECT('id', cat.id, 'uid', cat.uid, 'group', g.handle,
-        'title', c.title, 'slug', es.slug,
+        'title', c.title, 'slug', es.slug, 'dateUpdated', el.dateUpdated,
         'fullTitle', c.field_fullTitle, 'venue', c.${venueCol}, 'room', c.${roomCol})`)}
       FROM craft_categories cat
       JOIN craft_elements el ON el.id=cat.id
