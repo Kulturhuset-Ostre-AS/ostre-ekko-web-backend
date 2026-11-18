@@ -68,7 +68,20 @@ export default buildConfig({
     user: Users.slug,
     // Where Payload generates/reads the admin importMap (matches create-payload-app).
     importMap: { baseDir: path.resolve(dirname) },
+    // Ekko i fanetittel og favicon i stedet for Payload (filer i public/).
+    meta: {
+      titleSuffix: '– EKKO',
+      icons: [
+        { rel: 'icon', type: 'image/x-icon', url: '/favicon.ico' },
+        { rel: 'apple-touch-icon', url: '/apple-touch-icon.png' },
+      ],
+    },
     components: {
+      // Ekko-merket (sirkel + navn) i stedet for Payload-logo og -ikon.
+      graphics: {
+        Logo: '/components/EkkoLogo',
+        Icon: '/components/EkkoIcon',
+      },
       views: {
         // Salgsrapporter (billetter + medlemskap) — /admin/rapporter.
         salesReports: { Component: '/components/SalesReports', path: '/rapporter' },

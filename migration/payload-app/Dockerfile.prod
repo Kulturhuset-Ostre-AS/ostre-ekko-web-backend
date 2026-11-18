@@ -81,8 +81,8 @@ COPY --from=build --chown=node:node /app/package.json      ./package.json
 COPY --from=build --chown=node:node /app/next.config.mjs   ./next.config.mjs
 COPY --from=build --chown=node:node /app/src               ./src
 
-# There is no ./public dir in this app today. If one is added, also copy it:
-#   COPY --from=build --chown=node:node /app/public ./public
+# public/ holds the admin favicon (admin.meta.icons).
+COPY --from=build --chown=node:node /app/public            ./public
 
 USER node
 
