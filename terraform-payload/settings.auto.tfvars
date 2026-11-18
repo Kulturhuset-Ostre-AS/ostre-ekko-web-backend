@@ -12,7 +12,7 @@ region     = "europe-north1"
 
 # Built 2026-08-02 from commit caa5749 (medlemskort + konto-kobling).
 # CI can override per-run via the workflow's payload_image input (-var wins).
-payload_image = "europe-north1-docker.pkg.dev/ekko-payload/ekko-payload/payload:qrurl-538f308"
+payload_image = "europe-north1-docker.pkg.dev/ekko-payload/ekko-payload/payload:8a97dc8"
 
 # Custom domains: admin.ekko.no = permanent admin/API domain,
 # payload-api.ekko.no = customer-facing API (same service, separate host so
