@@ -14,14 +14,18 @@ const read = (f) => JSON.parse(fs.readFileSync(path.join(SQL, f), 'utf8'))
 const exists = (f) => fs.existsSync(path.join(SQL, f))
 
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   await fetch(`${BASE}/users/first-register`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD, name: 'Verify' }) }).catch(() => {})
   const r = await fetch(`${BASE}/users/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD }) }).then((x) => x.json())
   TOKEN = r.token; if (!TOKEN) throw new Error('login failed')
 }
-const api = (p) => fetch(`${BASE}${p}`, { headers: { Authorization: `JWT ${TOKEN}` } }).then((r) => r.json())
+const api = (p) => fetch(`${BASE}${p}`, { headers: { Authorization: AUTH() } }).then((r) => r.json())
 
 // distinct craftIds across locales for a section. Standalone saved drafts
 // (draftOf=null, non-provisional) become their own Payload docs, so they count.

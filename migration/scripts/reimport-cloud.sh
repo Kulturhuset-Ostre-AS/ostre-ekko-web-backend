@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Full reset + re-import of Craft content into the CLOUD Payload (ekko-payload).
-# Built for the cutover; also used to refresh the beta. Run it yourself in a
-# terminal — it asks for your Payload admin password and needs a fresh
-# `gcloud auth login admin@ekko.no` (session control expires it after a few hours).
+# Built for the cutover; also used to refresh the beta. Run it in a terminal —
+# it needs a fresh `gcloud auth login admin@ekko.no` (session control expires it
+# after a few hours) and asks you to type RESET before emptying tables. No Payload
+# password: it authenticates with the import service user's API key from Secret
+# Manager.
 #
 #   bash scripts/reimport-cloud.sh [--dump]
 #
@@ -55,18 +57,18 @@ gc auth print-access-token >/dev/null 2>&1 \
   || die "gcloud session for $GCLOUD_ACCOUNT expired — run: gcloud auth revoke $GCLOUD_ACCOUNT; gcloud auth login $GCLOUD_ACCOUNT"
 echo "✓ gcloud ($GCLOUD_ACCOUNT)"
 
-read -r -p "Payload admin email [admin@ekko.no]: " SEED_EMAIL
-export SEED_EMAIL="${SEED_EMAIL:-admin@ekko.no}"
-read -r -s -p "Payload password for $SEED_EMAIL: " SEED_PASSWORD; echo
-export SEED_PASSWORD
-node -e '
-  fetch(process.env.PAYLOAD_URL + "/users/login", { method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: process.env.SEED_EMAIL, password: process.env.SEED_PASSWORD }) })
-    .then((r) => r.json()).then((j) => process.exit(j.token ? 0 : 1)).catch(() => process.exit(1))' \
-  || die "Payload login failed at $PAYLOAD_URL"
-echo "✓ Payload login ($PAYLOAD_URL)"
+# No passwords: the import runs as the service user import@ekko.no, whose API key
+# lives in Secret Manager (reachable through the gcloud login above).
+PAYLOAD_API_KEY="$(gc secrets versions access latest --secret=ekko-payload-import-api-key 2>/dev/null)" \
+  || die "could not read secret ekko-payload-import-api-key (see deploy/payload/README.md, «Import service user»)"
+export PAYLOAD_API_KEY
+ME=$(node -e '
+  fetch(process.env.PAYLOAD_URL + "/users/me", { headers: { Authorization: "users API-Key " + process.env.PAYLOAD_API_KEY } })
+    .then((r) => r.json()).then((j) => { if (!j.user) process.exit(1); console.log(j.user.email) }).catch(() => process.exit(1))') \
+  || die "the import API key was rejected at $PAYLOAD_URL"
+echo "✓ Payload API key ($ME @ $PAYLOAD_URL)"
 
-# From here on everything is logged (the password prompt above is not).
+# From here on everything is logged (the key above is not).
 exec > >(tee -a "$LOG") 2>&1
 echo "log: $LOG"
 

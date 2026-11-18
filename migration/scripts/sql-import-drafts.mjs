@@ -44,7 +44,11 @@ const mediaId = (craftAssetId) => assetMap[craftAssetId]
 const { buildRelationData } = makeBuilders({ relations, matrix, findPayloadId, mediaId })
 
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   await fetch(`${BASE}/users/first-register`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD, name: 'Import' }) }).catch(() => {})
   const r = await fetch(`${BASE}/users/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -60,7 +64,7 @@ async function api(p, opts = {}) {
     try {
       res = await fetch(`${BASE}${p}`, {
         ...opts,
-        headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}`, ...(opts.headers || {}) },
+        headers: { 'Content-Type': 'application/json', Authorization: AUTH(), ...(opts.headers || {}) },
         signal: AbortSignal.timeout(30_000),
       })
       break

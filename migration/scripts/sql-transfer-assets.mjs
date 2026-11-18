@@ -23,7 +23,11 @@ const VOLUME_PATH = {
 }
 
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   await fetch(`${BASE}/users/first-register`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD, name: 'Import' }),
@@ -77,7 +81,7 @@ async function main() {
       fd.append('_payload', JSON.stringify({
         craftId: Number(a.id), alt: a.title || a.filename, source: a.volume,
       }))
-      const up = await fetch(`${BASE}/media`, { method: 'POST', headers: { Authorization: `JWT ${TOKEN}` }, body: fd })
+      const up = await fetch(`${BASE}/media`, { method: 'POST', headers: { Authorization: AUTH() }, body: fd })
       const j = await up.json()
       if (!up.ok) { fail++; if (fail <= 10) console.warn(`  upload ${a.filename}: ${JSON.stringify(j).slice(0,120)}`); continue }
       map[a.id] = j.doc.id

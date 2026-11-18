@@ -26,7 +26,11 @@ const RICH = {
 const SECTION = { events: 'events', news: 'news', artists: 'artists' }
 
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   await fetch(`${BASE}/users/first-register`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD, name: 'Import' }) }).catch(() => {})
   const r = await fetch(`${BASE}/users/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -35,7 +39,7 @@ async function login() {
 }
 async function patch(col, id, data, locale, { draft = false } = {}) {
   const res = await fetch(`${BASE}/${col}/${id}?locale=${locale}${draft ? '&draft=true' : ''}`, {
-    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}` },
+    method: 'PATCH', headers: { 'Content-Type': 'application/json', Authorization: AUTH() },
     body: JSON.stringify(data) })
   if (!res.ok) throw new Error(`${res.status}: ${(await res.text()).slice(0, 120)}`)
 }

@@ -73,3 +73,20 @@ port in the service config.
   (and `GCS_PROJECT_ID`) enables the `@payloadcms/storage-gcs` plugin;
   credentials come from Cloud Run's Application Default Credentials (the service
   account). These env vars are wired by Terraform.
+
+## Import service user (no passwords)
+
+The Craft → Payload import (`migration/scripts/reimport-cloud.sh` and the
+`sql-*` passes) authenticates as the service user **`import@ekko.no`** with an
+API key (`users.auth.useAPIKey`), not with anyone's password. The key lives in
+Secret Manager as **`ekko-payload-import-api-key`** (project `ekko-payload`), so
+the only login needed is `gcloud auth login admin@ekko.no` (passkey in the
+browser). The scripts send `Authorization: users API-Key <key>` whenever
+`PAYLOAD_API_KEY` is set; without it they fall back to `SEED_EMAIL` /
+`SEED_PASSWORD` for local test databases.
+
+To rotate the key: generate a new random value, set it on the user (Payload
+admin → Users → import@ekko.no → API key, or the local API with
+`enableAPIKey: true, apiKey: <key>`), and add it as a new version of the secret.
+Payload 3.90+ never shows an existing key again, so keep the value only in the
+secret.

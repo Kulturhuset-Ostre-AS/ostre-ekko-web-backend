@@ -53,13 +53,16 @@ const LOCATION_FIELDS = ['capacity']
 
 // ---- API helpers (timeout + retry, see sql-import-relations.mjs 2026-08-01) -------
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function api(p, opts = {}) {
   let res
   for (let attempt = 1; ; attempt++) {
     try {
       res = await fetch(`${BASE}${p}`, {
         ...opts,
-        headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}`, ...(opts.headers || {}) },
+        headers: { 'Content-Type': 'application/json', Authorization: AUTH(), ...(opts.headers || {}) },
         signal: AbortSignal.timeout(30_000),
       })
       break
@@ -72,6 +75,7 @@ async function api(p, opts = {}) {
   return json
 }
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   const r = await fetch(`${BASE}/users/login`, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email: EMAIL, password: PASSWORD }),

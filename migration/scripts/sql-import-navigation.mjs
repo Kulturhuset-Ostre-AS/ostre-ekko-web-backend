@@ -57,16 +57,20 @@ function sql(query) {
 }
 
 let TOKEN = ''
+// Service-user mode: with PAYLOAD_API_KEY set (reimport-cloud.sh reads it from Secret
+// Manager) every request authenticates with the API key and login() is skipped.
+const AUTH = () => (process.env.PAYLOAD_API_KEY ? `users API-Key ${process.env.PAYLOAD_API_KEY}` : `JWT ${TOKEN}`)
 async function api(p, opts = {}) {
   const res = await fetch(`${BASE}${p}`, {
     ...opts,
-    headers: { 'Content-Type': 'application/json', Authorization: `JWT ${TOKEN}`, ...(opts.headers || {}) },
+    headers: { 'Content-Type': 'application/json', Authorization: AUTH(), ...(opts.headers || {}) },
   })
   if (!res.ok) throw new Error(`${opts.method || 'GET'} ${p}: ${res.status} ${await res.text()}`)
   return res.json()
 }
 
 async function login() {
+  if (process.env.PAYLOAD_API_KEY) return
   const res = await fetch(`${BASE}/users/login`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -10,6 +10,7 @@ import * as migration_20260804_150000_categories_split from './20260804_150000_c
 import * as migration_20260804_170000_receipt_numbers from './20260804_170000_receipt_numbers';
 import * as migration_20260804_190000_customer_otp from './20260804_190000_customer_otp';
 import * as migration_20261118_010000_payload_3_93 from './20261118_010000_payload_3_93';
+import * as migration_20261118_020000_users_api_key from './20261118_020000_users_api_key';
 
 export const migrations = [
   {
@@ -71,5 +72,10 @@ export const migrations = [
     up: migration_20261118_010000_payload_3_93.up,
     down: migration_20261118_010000_payload_3_93.down,
     name: '20261118_010000_payload_3_93'
+  },
+  {
+    up: migration_20261118_020000_users_api_key.up,
+    down: migration_20261118_020000_users_api_key.down,
+    name: '20261118_020000_users_api_key'
   },
 ];
