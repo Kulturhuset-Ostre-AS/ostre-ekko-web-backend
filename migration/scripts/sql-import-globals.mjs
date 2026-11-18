@@ -76,16 +76,28 @@ const matrix = read('_matrix.json')
 const mediaId = (craftAssetId) => assetMap[craftAssetId] || assetMap[String(craftAssetId)]
 const eventId = (craftId) => idMap.events?.[craftId] || idMap.events?.[String(craftId)]
 
+// The `sections` block list is shared across locales; only `heading` is
+// localized. Build the list from the nb blocks with stable ids (the Craft block
+// id), and let the en save add English headings to the SAME blocks. Saving en
+// with its own block list used to replace the blocks and wipe every nb heading
+// (Østre's sections then matched nothing by title on the frontend). Body and
+// images come from nb, like the festival sections in pass 2.
 function buildSectionBlocks(craftId, siteId) {
-  return (matrix.sections?.[craftId]?.[siteId] || []).map((b) => {
+  const nb = matrix.sections?.[craftId]?.['1'] || []
+  const local = Object.fromEntries((matrix.sections?.[craftId]?.[siteId] || []).map((b) => [String(b.id), b]))
+  // Which blocks to keep is decided by the nb data, so both locales save the same list.
+  const keep = (b, imgs) => b.entry_sectionTitle || (b.entry_sectionBody || '').trim() || imgs.length
+  return nb.flatMap((b) => {
     const imgs = (relations[b.id]?.images || relations[b.id]?.image || []).map(mediaId).filter(Boolean)
-    return {
+    if (!keep(b, imgs)) return []
+    return [{
+      id: `craft-${b.id}`,
       blockType: 'entry',
-      heading: b.entry_sectionTitle || undefined,
+      heading: local[String(b.id)]?.entry_sectionTitle || (siteId === '1' ? b.entry_sectionTitle : undefined) || undefined,
       body: htmlToLexical(b.entry_sectionBody),
       ...(imgs.length ? { images: imgs } : {}),
-    }
-  }).filter((s) => s.heading || s.body || s.images)
+    }]
+  })
 }
 
 await login()
