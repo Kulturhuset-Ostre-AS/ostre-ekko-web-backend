@@ -90,7 +90,9 @@ export default buildConfig({
       afterNavLinks: ['/components/StaffNavLinks'],
       // Stor «Østre / EKKO»-overskrift over innloggingsskjemaet, så brukeren
       // ser umiddelbart hvor de er (Payload-logoen alene sier ingenting).
-      beforeLogin: ['/components/LoginTitle'],
+      // Deretter vår egen innlogging (passkey, eller passord + app-kode), som
+      // erstatter Payloads passordskjema (skjult i custom.scss).
+      beforeLogin: ['/components/LoginTitle', '/components/auth/EditorLogin'],
     },
   },
   editor: lexicalEditor(),

@@ -1,6 +1,8 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Field } from 'payload'
+import { editorLoginGuard, editorMfaEndpoints, editorMfaFields, stripResetSession } from '../auth/editor-mfa'
 
 // Admin users for the Payload control panel. First user is created on first boot.
+// Innlogging: passkey, eller passord + kode fra autentiseringsapp (src/auth/editor-mfa.ts).
 export const Users: CollectionConfig = {
   slug: 'users',
   auth: {
@@ -10,5 +12,19 @@ export const Users: CollectionConfig = {
     useAPIKey: true,
   },
   admin: { useAsTitle: 'email' },
-  fields: [{ name: 'name', type: 'text' }],
+  endpoints: editorMfaEndpoints,
+  hooks: {
+    beforeLogin: [editorLoginGuard],
+    afterOperation: [stripResetSession],
+  },
+  fields: [
+    { name: 'name', type: 'text' },
+    // «Sikkerhet» på kontosiden: passkeys, autentiseringsapp og reservekoder.
+    {
+      name: 'mfaSecurity',
+      type: 'ui',
+      admin: { components: { Field: '/components/auth/AccountSecurity' } },
+    },
+    ...(editorMfaFields as unknown as Field[]),
+  ],
 }

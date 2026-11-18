@@ -1,0 +1,140 @@
+// Innloggingen for redaksjonen erstattes av src/components/auth/EditorLogin.tsx
+// (passkey, eller passord + kode fra app). Payloads eget passordskjema skjules:
+// serveren avviser vanlig passordinnlogging uansett (src/auth/editor-mfa.ts).
+.login__form {
+  display: none !important;
+}
+
+.ekko-mfa {
+  width: 100%;
+  max-width: 26rem;
+  margin: 0 auto;
+}
+
+.ekko-mfa__form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-weight: 600;
+  }
+
+  input {
+    font: inherit;
+    font-weight: normal;
+    padding: 0.7rem 0.8rem;
+    border: 1px solid var(--theme-elevation-150);
+    border-radius: var(--style-radius-s, 4px);
+    background: var(--theme-input-bg, var(--theme-elevation-0));
+    color: var(--theme-text);
+
+    &:focus {
+      outline: none;
+      border-color: var(--theme-elevation-400);
+    }
+  }
+
+  p {
+    margin: 0;
+  }
+}
+
+.ekko-mfa__wide,
+.ekko-mfa .btn {
+  width: 100%;
+  margin: 0;
+}
+
+.ekko-mfa__hint {
+  margin: 0.4rem 0 0.9rem;
+  font-size: 0.9em;
+  color: var(--theme-elevation-500);
+}
+
+.ekko-mfa__error {
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--style-radius-s, 4px);
+  background: var(--theme-error-100, #fde8e8);
+  color: var(--theme-error-750, #8a1c1c);
+}
+
+.ekko-mfa__divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.2rem 0;
+  color: var(--theme-elevation-500);
+  font-size: 0.9em;
+
+  &::before,
+  &::after {
+    content: '';
+    flex: 1;
+    border-top: 1px solid var(--theme-elevation-150);
+  }
+}
+
+.ekko-mfa__links {
+  text-align: center;
+  margin: 1rem 0 0;
+}
+
+.ekko-mfa__qr {
+  align-self: center;
+  background: #fff;
+  padding: 0.5rem;
+  border-radius: 6px;
+  line-height: 0;
+
+  svg {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+.ekko-mfa__codes {
+  columns: 2;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 1.1em;
+
+  li {
+    margin: 0.2rem 0;
+  }
+}
+
+.ekko-mfa-account {
+  margin: 2rem 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--theme-elevation-150);
+
+  h4 {
+    margin: 1.5rem 0 0.5rem;
+  }
+
+  .btn {
+    margin: 0.25rem 0.5rem 0.25rem 0;
+  }
+
+  .ekko-mfa__form {
+    max-width: 24rem;
+    margin-top: 0.75rem;
+  }
+}
+
+.ekko-mfa__table {
+  border-collapse: collapse;
+  margin-bottom: 0.5rem;
+
+  th,
+  td {
+    text-align: left;
+    padding: 0.35rem 1.2rem 0.35rem 0;
+    border-bottom: 1px solid var(--theme-elevation-100);
+  }
+}

@@ -22,14 +22,16 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { default as default_abc93c6928a770ae2a8d9a60046d4e91 } from '../../../components/auth/AccountSecurity'
 import { default as default_a39e90dc907f9ada220c87f6fcc872c3 } from '../../../components/PrintCardButton'
 import { default as default_2e13af8efd3a376555ea5985a364bccb } from '../../../components/EkkoIcon'
 import { default as default_0a28c06764a3f39838786dc2e91b9f19 } from '../../../components/EkkoLogo'
 import { default as default_bfbdfd3919cccd6a396bd20078dbcfd3 } from '../../../components/StaffNavLinks'
 import { default as default_99f1f1f381056b0016bae2a25a917493 } from '../../../components/LoginTitle'
-import { GcsClientUploadHandler as GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934 } from '@payloadcms/storage-gcs/client'
+import { default as default_5290d7f9de47259cb391d7da6fb4b114 } from '../../../components/auth/EditorLogin'
 import { default as default_a239702922b09202004dc9c49e2a498b } from '../../../components/SalesReports'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
+import { GcsClientUploadHandler as GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934 } from '@payloadcms/storage-gcs/client'
 
 /** @type import('payload').ImportMap */
 export const importMap = {
@@ -57,12 +59,14 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#UnderlineFeatureClient": UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#BoldFeatureClient": BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#ItalicFeatureClient": ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  "/components/auth/AccountSecurity#default": default_abc93c6928a770ae2a8d9a60046d4e91,
   "/components/PrintCardButton#default": default_a39e90dc907f9ada220c87f6fcc872c3,
   "/components/EkkoIcon#default": default_2e13af8efd3a376555ea5985a364bccb,
   "/components/EkkoLogo#default": default_0a28c06764a3f39838786dc2e91b9f19,
   "/components/StaffNavLinks#default": default_bfbdfd3919cccd6a396bd20078dbcfd3,
   "/components/LoginTitle#default": default_99f1f1f381056b0016bae2a25a917493,
-  "@payloadcms/storage-gcs/client#GcsClientUploadHandler": GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934,
+  "/components/auth/EditorLogin#default": default_5290d7f9de47259cb391d7da6fb4b114,
   "/components/SalesReports#default": default_a239702922b09202004dc9c49e2a498b,
-  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1
+  "@payloadcms/next/rsc#CollectionCards": CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
+  "@payloadcms/storage-gcs/client#GcsClientUploadHandler": GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934
 }

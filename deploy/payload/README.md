@@ -112,3 +112,24 @@ admin → Users → import@ekko.no → API key, or the local API with
 `enableAPIKey: true, apiKey: <key>`), and add it as a new version of the secret.
 Payload 3.90+ never shows an existing key again, so keep the value only in the
 secret.
+
+## Editor login: passkey or password + app code
+
+Editors (`users`) log in on admin.ekko.no with a **passkey** (Face ID, Touch ID,
+Windows Hello) or with **password + a code from an authenticator app**. Backup
+codes cover a lost phone. The first time (no passkey or app yet) they get a code
+by email and must set up one of them before they get in. They manage passkeys,
+the app and backup codes under «Sikkerhet» on their account page. The code is in
+`migration/payload-app/src/auth/editor-mfa.ts`. The login box is
+`src/components/auth/EditorLogin.tsx`, and Payload's own password form is hidden.
+
+- Ordinary password login (`/api/users/login`, GraphQL `loginUser`) is refused.
+  «Reset password» changes the password but gives no session.
+- Passkeys are bound to the host of `PAYLOAD_PUBLIC_SERVER_URL` (admin.ekko.no).
+  Override with `WEBAUTHN_RP_ID` / `WEBAUTHN_EXTRA_ORIGINS` if that changes.
+- An editor who loses both phone and backup codes: clear their `mfa_*` columns
+  in the database. The next login then asks for an email code and a new setup.
+- Local development: `ADMIN_MFA=off` allows plain password login (for scripts
+  using `SEED_EMAIL`/`SEED_PASSWORD`). Without a Resend key, the email code is
+  written to the server log.
+- The import service user (`import@ekko.no`) uses an API key and is not affected.

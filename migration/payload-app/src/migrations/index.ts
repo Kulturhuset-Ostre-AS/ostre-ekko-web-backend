@@ -12,6 +12,7 @@ import * as migration_20260804_190000_customer_otp from './20260804_190000_custo
 import * as migration_20261118_010000_payload_3_93 from './20261118_010000_payload_3_93';
 import * as migration_20261118_020000_users_api_key from './20261118_020000_users_api_key';
 import * as migration_20261118_030000_media_object_key from './20261118_030000_media_object_key';
+import * as migration_20261118_040000_editor_mfa from './20261118_040000_editor_mfa';
 
 export const migrations = [
   {
@@ -83,5 +84,10 @@ export const migrations = [
     up: migration_20261118_030000_media_object_key.up,
     down: migration_20261118_030000_media_object_key.down,
     name: '20261118_030000_media_object_key'
+  },
+  {
+    up: migration_20261118_040000_editor_mfa.up,
+    down: migration_20261118_040000_editor_mfa.down,
+    name: '20261118_040000_editor_mfa'
   },
 ];
